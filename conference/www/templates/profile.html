@@ -1,0 +1,36 @@
+<ion-view view-title="Profile">
+    <ion-content class="has-header">
+        <div class="list card">
+            <div class="item item-avatar">
+                <img src="icon-sam.jpg">
+                <h2>{{user.name}}</h2>
+                <h2><i class="ion-calendar"></i> May 16, 1994</h2>
+            </div>
+
+            <p class="item item-icon-left">
+                <i class="icon ion-ios-telephone"></i>
+                (418) 670-8236
+            </p>
+
+            <div class="item item-body">
+                <img class="full-image" src="http://graph.facebook.com/{{user.id}}/picture?width=270&height=270">
+                <p>
+                    Hi! I my name is Samuel and I am a Software Engineer student at the University of McGill. I am also on of the founer
+                    of the App and I hope you really enjoy it.
+                </p>
+            </div>
+
+        </div>
+        <div class="button-bar">
+            <a class="button icon-right ion-social-facebook button-positive" href="#/homeMenu/home">
+                FaceBook
+            </a>
+            <a class="button icon-right ion-social-twitter button-calm" href="#/homeMenu/home">
+                Twitter
+            </a>
+            <a class="button icon-right ion-social-linkedin button-positive" href="#/homeMenu/home">
+                LinkedIn
+            </a>
+        </div>
+    </ion-content>
+</ion-view>
