@@ -1,4 +1,4 @@
-angular.module('App.controllers', ['ngOpenFB', 'ngCordova'])
+angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 .controller('LoginCtrl', function ($scope, $ionicModal, $timeout, ngFB, $ionicPlatform, $state) {
 
@@ -14,7 +14,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova'])
                 }
         });
 
-        $state.go('homeMenu.home')
+    //    $state.go('homeMenu.home')
+        $state.go('homeMenu.newsfeed')
 	};
 
 })
@@ -40,22 +41,34 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova'])
     var script = window.document.createElement('script');
     script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
     window.document.head.appendChild(script);
- 
+
 	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
- 
+
         var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
- 
+
         var mapOptions = {
             center: latLng,
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
- 
+
         $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
- 
+
 	}, function(error){
         console.log("Could not get location");
     });
 
+})
+
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService) {
+
+  var uid = 1;
+  $scope.message = "I love this conference!";
+//  var users = $http.get('https://api.backand.com/1/objects/user');
+  $scope.users = DatabaseService.list()
+// pizzaService.all().then(function(payload) {
+//      $scope.pizzas = payload;
+//   });
+  //console.log(users);
 })

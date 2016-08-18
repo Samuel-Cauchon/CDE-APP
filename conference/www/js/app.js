@@ -11,7 +11,7 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
   BackandProvider.setAppName('cdeapp');
   BackandProvider.setSignUpToken('69d128da-583c-47c8-bd58-131567dfe8c6');
   BackandProvider.setAnonymousToken('f90818f2-06a0-45e0-afa3-8a732b49ccc9');
- 
+
   $stateProvider
 
     .state('welcome', {
@@ -22,7 +22,7 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
 
 	.state('homeMenu', {
 		url: '/homeMenu',
-		abstract: true, 
+		abstract: true,
 		templateUrl: 'templates/menu.html'
 	})
 
@@ -41,6 +41,16 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
 			'menuContent': {
 			templateUrl: 'templates/profile.html',
 			controller: 'ProfileCtrl'
+			}
+		}
+	})
+
+  .state('homeMenu.newsfeed', {
+		url: '/newsfeed',
+		views: {
+			'menuContent': {
+			templateUrl: 'templates/newsfeed.html',
+			controller: 'NewsfeedCtrl'
 			}
 		}
 	})
@@ -94,4 +104,5 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
 
 // if none of the above states are matched, use this as the fallback
 $urlRouterProvider.otherwise('/welcome');
+//$urlRouterProvider.otherwise('/newsfeed');
 });
