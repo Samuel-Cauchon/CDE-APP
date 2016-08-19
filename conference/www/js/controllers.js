@@ -61,14 +61,27 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, Backand) {
 
   var uid = 1;
   $scope.message = "I love this conference!";
-//  var users = $http.get('https://api.backand.com/1/objects/user');
-  $scope.users = DatabaseService.list()
-// pizzaService.all().then(function(payload) {
-//      $scope.pizzas = payload;
-//   });
-  //console.log(users);
+  // $http.get('https://api.backand.com/1/objects/user').success(function (data) {
+  //   $scope.user = data['data'][0]['name'];
+  // });
+  DatabaseService.list().success(function(data){
+    $scope.user = data['data'][1]['name'];
+  });
+
+  DatabaseService.updateSam().success(function (data, status, headers) {
+			    $scope.ServerResponse = data;
+			    console.log("update sent");
+			})
+        .error(function (data, status, header, config) {
+            $scope.ServerResponse =  htmlDecode("Data: " + data +
+                "\n\n\n\nstatus: " + status +
+                "\n\n\n\nheaders: " + header +
+                "\n\n\n\nconfig: " + config);
+								console.log("update not sent");
+         });
+
 })
