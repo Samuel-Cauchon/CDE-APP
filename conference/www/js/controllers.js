@@ -61,27 +61,56 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, Backand) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand) {
 
-  var uid = 1;
-  $scope.message = "I love this conference!";
+  // var uid = 1;
+  // $scope.message = "I love this conference!";
   // $http.get('https://api.backand.com/1/objects/user').success(function (data) {
   //   $scope.user = data['data'][0]['name'];
   // });
-  DatabaseService.list().success(function(data){
-    $scope.user = data['data'][1]['name'];
-  });
+  // DatabaseService.list().success(function(data){
+  //   $scope.user = data['data'][1]['name'];
+  // });
 
-  DatabaseService.updateSam().success(function (data, status, headers) {
-			    $scope.ServerResponse = data;
-			    console.log("update sent");
-			})
-        .error(function (data, status, header, config) {
-            $scope.ServerResponse =  htmlDecode("Data: " + data +
-                "\n\n\n\nstatus: " + status +
-                "\n\n\n\nheaders: " + header +
-                "\n\n\n\nconfig: " + config);
-								console.log("update not sent");
-         });
+  // var data = {"date" : "2016-08-10", "uid" : "4", "content" : "Yeeeee!"};
+  // DatabaseService.newEntry('/1/objects/pushBoard', data).success(function (data, status, headers) {
+	// 		    $scope.ServerResponse = data;
+	// 		    console.log("update sent");
+	// 		})
+  //       .error(function (data, status, header, config) {
+  //           $scope.ServerResponse =  htmlDecode("Data: " + data +
+  //               "\n\n\n\nstatus: " + status +
+  //               "\n\n\n\nheaders: " + header +
+  //               "\n\n\n\nconfig: " + config);
+	// 							console.log("update not sent");
+  //        });
+  // var params = {filter: [{"fieldName":"name","operator":"equals","value":"Raluca Niti"}]};
+  $scope.users = [];
+  $scope.entry = [];
+  var uid = 3;
+  var userName = NewsfeedService.getUserName(uid);
+  console.log(userName);
+  // var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
+  // DatabaseService.getData('/1/objects/user', params).success(function(data){
+  //   console.log(data['data'][0]['name']);
+  // });
+  DatabaseService.getData('/1/objects/pushBoard').success(function(data){
+    // console.log(data['totalRows']);
+    for (i=0; i < data['totalRows']; i++){
+        $scope.entry[i] = {date:data['data'][i]['date'], user:data['data'][i]['uid'], content:data['data'][i]['content']}
+        // console.log($scope.date);
+        // console.log($scope.user);
+        // console.log($scope.cont);
+        // console.log(data['data'][i]['date']);
+        // console.log(data['data'][i]['uid']);
+        // console.log(data['data'][i]['content']);
+    }
+    // console.log($scope.entry);
+    // console.log($scope.entry[0].date);
+    // console.log($scope.entry['user']);
+    // console.log($scope.entry['content']);
+    // $scope.userRaluca = data['totalRows'];
+    // console.log($scope.user);
+  });
 
 })

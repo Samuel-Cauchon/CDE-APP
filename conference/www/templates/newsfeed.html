@@ -2,12 +2,17 @@
   <ion-content class="has-header">
         <div class="list card">
             <div class="item">
-                To Implement...
-
-                Hello World<br>
-                {{ message }}<br>
-                {{user}}<br>
-                <!-- {{newData}} -->
+              <div class="w3-card-2"><p>
+                <!-- {{userRaluca}}<br>
+                {{user}} -->
+                <ion-list>
+                  <ion-item ng-repeat="item in entry">
+                    {{item.date}}<br>
+                    {{item.user}}<br>
+                    {{item.content}}<br>
+                  </ion-item>
+                </ion-list>
+              </p></div>
             </div>
         </div>
     </ion-content>
