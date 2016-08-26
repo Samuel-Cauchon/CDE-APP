@@ -100,16 +100,18 @@ angular.module('App.services', ['backand'])
   })
 
 	.factory('NewsfeedService', function(DatabaseService){
+		var name = "";
     return {
       getUserName: function(uid){
-				var name = "";
 				var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
-				DatabaseService.getData('/1/objects/user', params).success(function(data){
-					name = data['data'][0]['name']
-					console.log(name);
-				});
-				console.log(name);
-				return name;
+				return DatabaseService.getData('/1/objects/user', params);
+				// .error(function (data, status, header, config) {
+			  //           $scope.ServerResponse =  htmlDecode("Data: " + data +
+			  //               "\n\n\n\nstatus: " + status +
+			  //               "\n\n\n\nheaders: " + header +
+			  //               "\n\n\n\nconfig: " + config);
+				// 							return null;
+			  //        });
 			}
     }
   })

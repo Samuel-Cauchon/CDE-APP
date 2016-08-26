@@ -88,8 +88,15 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   $scope.users = [];
   $scope.entry = [];
   var uid = 3;
-  var userName = NewsfeedService.getUserName(uid);
-  console.log(userName);
+  $scope.userName = "";
+  // NewsfeedService.getUserName(uid).success(function(data){
+  //   var userName = data;
+  //   console.log(userName);
+  // });
+
+
+
+
   // var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
   // DatabaseService.getData('/1/objects/user', params).success(function(data){
   //   console.log(data['data'][0]['name']);
@@ -97,7 +104,12 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   DatabaseService.getData('/1/objects/pushBoard').success(function(data){
     // console.log(data['totalRows']);
     for (i=0; i < data['totalRows']; i++){
-        $scope.entry[i] = {date:data['data'][i]['date'], user:data['data'][i]['uid'], content:data['data'][i]['content']}
+        var userName = NewsfeedService.getUserName(data['data'][i]['uid']).success(function(data){
+          return data['data'][0]['name'];
+        });
+        console.log(data['data'][i]['uid']);
+        console.log(userName);
+        $scope.entry[i] = {date:data['data'][i]['date'], user:userName, content:data['data'][i]['content']};
         // console.log($scope.date);
         // console.log($scope.user);
         // console.log($scope.cont);
