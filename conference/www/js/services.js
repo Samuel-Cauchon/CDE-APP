@@ -115,3 +115,12 @@ angular.module('App.services', ['backand'])
 			}
     }
   })
+
+.factory('MainEvents', function($http){
+  return{
+    getEventsFirstDay:function(){
+      console.log(DatabaseService.getData('/1/objects/event',{}));
+      DatabaseService.getData('/1/objects/event',{});
+    }
+  }
+})
