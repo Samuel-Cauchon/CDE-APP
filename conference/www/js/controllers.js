@@ -61,7 +61,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, asyncService, $timeout, PersonService) {
 
   // var uid = 1;
   // $scope.message = "I love this conference!";
@@ -85,16 +85,15 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	// 							console.log("update not sent");
   //        });
   // var params = {filter: [{"fieldName":"name","operator":"equals","value":"Raluca Niti"}]};
-  $scope.users = [];
+  $scope.names = [];
   $scope.entry = [];
   var uid = 3;
+
   $scope.userName = "";
-  // NewsfeedService.getUserName(uid).success(function(data){
-  //   var userName = data;
-  //   console.log(userName);
-  // });
 
-
+  NewsfeedService.getUserName(uid).success(function(data){
+    $scope.userName = data['data'][0]['name'];
+  });
 
 
   // var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
@@ -104,14 +103,24 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   DatabaseService.getData('/1/objects/pushBoard').success(function(data){
     // console.log(data['totalRows']);
     for (i=0; i < data['totalRows']; i++){
-        var userName = NewsfeedService.getUserName(data['data'][i]['uid']).success(function(data){
-          return data['data'][0]['name'];
+        var name = NewsfeedService.getUserName(data['data'][i]['uid']).success(function(data2){});
+        // console.log(data['data'][i]['uid']);
+        // console.log(userName);
+        name.success(function(data2){
+          $scope.names[i] = data2['data'][0]['name'];
         });
-        console.log(data['data'][i]['uid']);
-        console.log(userName);
-        $scope.entry[i] = {date:data['data'][i]['date'], user:userName, content:data['data'][i]['content']};
-        // console.log($scope.date);
-        // console.log($scope.user);
+        $scope.entry[i] = {date:data['data'][i]['date'],
+                          //  user:NewsfeedService.getUserName(data['data'][i]['uid']).success(function(data2){data2['data'][0]['name'];})
+                          //  ['$$state']
+                          //  ['value']
+                          //  ['data']
+                          //  ['data']
+                          //  [0]
+                          //  ['name']
+                          //  ,
+                           content:data['data'][i]['content']};
+        // console.log($scope.entry[i].content);
+
         // console.log($scope.cont);
         // console.log(data['data'][i]['date']);
         // console.log(data['data'][i]['uid']);
@@ -125,6 +134,19 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     // console.log($scope.user);
   });
 
+  $scope.items = [];
+
+  PersonService.GetFeed().then(function(items){
+    $scope.items = items;
+  });
+
+  $scope.doRefresh = function() {
+    PersonService.GetNewUser().then(function(items){
+      $scope.items = items.concat($scope.items);
+
+      //Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
+
 })
-
-

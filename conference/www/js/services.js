@@ -116,6 +116,54 @@ angular.module('App.services', ['backand'])
     }
   })
 
+	.factory('asyncService', function($http, $q, DatabaseService) {
+      return {
+        loadDataFromUrls: function() {
+          var deferred = $q.defer();
+          var urlCalls = [];
+					var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
+          urlCalls.push(DatabaseService.getData('/1/objects/pushBoard'));
+					urlCalls.push(DatabaseService.getData('/1/objects/user', params));
+          // they may, in fact, all be done, but this
+          // executes the callbacks in then, once they are
+          // completely finished.
+          $q.all(urlCalls)
+          .then(
+            function(results) {
+            deferred.resolve(
+             JSON.stringify(results))
+          },
+          function(errors) {
+            deferred.reject(errors);
+          },
+          function(updates) {
+            deferred.update(updates);
+          });
+          return deferred.promise;
+        }
+      };
+    })
+
+		.factory('PersonService', function($http){
+  var BASE_URL = "http://api.randomuser.me/";
+  var items = [];
+
+  return {
+    GetFeed: function(){
+      return $http.get(BASE_URL+'?results=5').then(function(response){
+        items = response.data.results;
+        return items;
+      });
+    },
+    GetNewUser: function(){
+      return $http.get(BASE_URL).then(function(response){
+        items = response.data.results;
+        return items;
+      });
+    }
+  }
+})
+
 .factory('MainEvents', function($http){
   return{
     getEventsFirstDay:function(){
