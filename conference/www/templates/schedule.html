@@ -65,5 +65,25 @@
       <h1 class="title">Saturday November 14, 2016</h1>
       <i class="ion-android-arrow-dropright-circle icon-size icon-right"></i>
     </div>
+    <br></br>
+    <!--<div class="button button-block paddingLarge">Padding</div>-->
+    <div class="card">
+      <div class="item item-avatar">
+        <img src="my-image.png">
+        <h2 ng-click="EventsCtrl.a">Card Name</h2>
+      </div>
+
+
+      <ion-card class="schedule-card" *ngFor="#session of group.sessions">
+        <ion-card-content class="content">
+          <ion-item-sliding>
+            <button ion-item (click)="goToSessionDetail(session)">
+              <div class="container">
+                // Removed to simplify example
+              </div>
+            </button>
+          </ion-item-sliding>
+        </ion-card-content>
+      </ion-card>
   </ion-content>
 </ion-view>

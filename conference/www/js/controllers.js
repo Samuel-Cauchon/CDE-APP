@@ -20,6 +20,10 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
+.controller('EventsCtrl', function($scope, MainEvents){
+  var a = MainEvents.getEventsFirstDay();
+})
+
 .controller('ProfileCtrl', function ($scope, ngFB) {
     ngFB.api({
         path: '/me',
