@@ -136,7 +136,7 @@ angular.module('App.services', ['backand'])
       DatabaseService.getData('/1/objects/event',{});
     }
   }
-}
+})
 
 .service('EventService', function(){
   var eventId;
@@ -149,3 +149,4 @@ angular.module('App.services', ['backand'])
       }
     }
 })
+
