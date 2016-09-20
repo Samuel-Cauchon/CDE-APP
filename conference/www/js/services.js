@@ -105,16 +105,29 @@ angular.module('App.services', ['backand'])
       getUserName: function(uid){
 				var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
 				return DatabaseService.getData('/1/objects/user', params);
-				// .error(function (data, status, header, config) {
-			  //           $scope.ServerResponse =  htmlDecode("Data: " + data +
-			  //               "\n\n\n\nstatus: " + status +
-			  //               "\n\n\n\nheaders: " + header +
-			  //               "\n\n\n\nconfig: " + config);
-				// 							return null;
-			  //        });
 			}
     }
   })
+
+		.factory('PersonService', function($http){
+  var BASE_URL = "http://api.randomuser.me/";
+  var items = [];
+
+  return {
+    GetFeed: function(){
+      return $http.get(BASE_URL+'?results=5').then(function(response){
+        items = response.data.results;
+        return items;
+      });
+    },
+    GetNewUser: function(){
+      return $http.get(BASE_URL).then(function(response){
+        items = response.data.results;
+        return items;
+      });
+    }
+  }
+})
 
 .factory('MainEvents', function(DatabaseService){
   return{
@@ -124,3 +137,16 @@ angular.module('App.services', ['backand'])
     }
   }
 })
+
+.service('EventService', function(){
+  var eventId;
+    return {
+      setEventId: function(eId){
+        eventId = eId;
+      },
+      getEventId: function(){
+        return eventId;
+      }
+    }
+})
+

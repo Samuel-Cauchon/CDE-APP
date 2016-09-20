@@ -1,19 +1,34 @@
 <ion-view view-title="NewsFeed">
   <ion-content class="has-header">
-        <div class="list card">
-            <div class="item">
-              <div class="w3-card-2"><p>
-                <!-- {{userRaluca}}<br>
-                {{user}} -->
-                <ion-list>
-                  <ion-item ng-repeat="item in entry">
-                    {{item.date}}<br>
-                    {{item.user}}<br>
-                    {{item.content}}<br>
-                  </ion-item>
-                </ion-list>
-              </p></div>
-            </div>
-        </div>
-    </ion-content>
+    <ion-refresher on-refresh="refreshNewsfeed()"></ion-refresher>
+    <div class="item">
+      <div id="userName">
+      {{userName}}
+    </div>
+			<label class="item item-input">
+				<input type="text" id="newContent" placeholder="Say Something">
+			</label>
+      <button class="button button-dark" id="postButton" ng-click="postComment()">Post</button>
+    </div>
+    <div class="list card">
+      <div class="item">
+        <ion-list>
+          <ion-item ng-repeat="item in entry">
+            {{item.date}}<br>
+            {{item.name}}<br>
+            {{item.content}}<br>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+
+          <!-- <ion-refresher on-refresh="doRefresh()"></ion-refresher>
+          <ion-list>
+            <ion-item class="item-avatar" ng-repeat="item in items">
+              {{item.user.name.first}} {{item.user.name.last}}
+              <p>{{item.user.location.city}} {{item.user.password}}</p>
+            </ion-item>
+          </ion-list> -->
+
+  </ion-content>
 </ion-view>
