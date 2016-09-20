@@ -61,92 +61,91 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, asyncService, $timeout, PersonService) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService) {
 
-  // var uid = 1;
-  // $scope.message = "I love this conference!";
-  // $http.get('https://api.backand.com/1/objects/user').success(function (data) {
-  //   $scope.user = data['data'][0]['name'];
-  // });
-  // DatabaseService.list().success(function(data){
-  //   $scope.user = data['data'][1]['name'];
-  // });
-
-  // var data = {"date" : "2016-08-10", "uid" : "4", "content" : "Yeeeee!"};
-  // DatabaseService.newEntry('/1/objects/pushBoard', data).success(function (data, status, headers) {
-	// 		    $scope.ServerResponse = data;
-	// 		    console.log("update sent");
-	// 		})
-  //       .error(function (data, status, header, config) {
-  //           $scope.ServerResponse =  htmlDecode("Data: " + data +
-  //               "\n\n\n\nstatus: " + status +
-  //               "\n\n\n\nheaders: " + header +
-  //               "\n\n\n\nconfig: " + config);
-	// 							console.log("update not sent");
-  //        });
-  // var params = {filter: [{"fieldName":"name","operator":"equals","value":"Raluca Niti"}]};
-  $scope.names = [];
   $scope.entry = [];
-  var uid = 3;
-
+  var uid = 1;
   $scope.userName = "";
 
   NewsfeedService.getUserName(uid).success(function(data){
     $scope.userName = data['data'][0]['name'];
   });
 
+  $scope.$on('$ionicView.enter', function () {
+		retrieveInfo();
+	  console.log("page opened");
+	})
 
-  // var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
-  // DatabaseService.getData('/1/objects/user', params).success(function(data){
-  //   console.log(data['data'][0]['name']);
-  // });
-  DatabaseService.getData('/1/objects/pushBoard').success(function(data){
-    // console.log(data['totalRows']);
-    for (i=0; i < data['totalRows']; i++){
-        var name = NewsfeedService.getUserName(data['data'][i]['uid']).success(function(data2){});
-        // console.log(data['data'][i]['uid']);
-        // console.log(userName);
-        name.success(function(data2){
-          $scope.names[i] = data2['data'][0]['name'];
-        });
-        $scope.entry[i] = {date:data['data'][i]['date'],
-                          //  user:NewsfeedService.getUserName(data['data'][i]['uid']).success(function(data2){data2['data'][0]['name'];})
-                          //  ['$$state']
-                          //  ['value']
-                          //  ['data']
-                          //  ['data']
-                          //  [0]
-                          //  ['name']
-                          //  ,
-                           content:data['data'][i]['content']};
-        // console.log($scope.entry[i].content);
+	$scope.refreshNewsfeed = function () {
+		retrieveInfo();
+    $scope.$broadcast('scroll.refreshComplete');
+		console.log("page refresh");
+	}
 
-        // console.log($scope.cont);
-        // console.log(data['data'][i]['date']);
-        // console.log(data['data'][i]['uid']);
-        // console.log(data['data'][i]['content']);
+  var formatNumber = function(number) {
+    if (number<10){
+      return "0"+number
+    } else {
+      return ""+number
     }
-    // console.log($scope.entry);
-    // console.log($scope.entry[0].date);
-    // console.log($scope.entry['user']);
-    // console.log($scope.entry['content']);
-    // $scope.userRaluca = data['totalRows'];
-    // console.log($scope.user);
-  });
-
-  $scope.items = [];
-
-  PersonService.GetFeed().then(function(items){
-    $scope.items = items;
-  });
-
-  $scope.doRefresh = function() {
-    PersonService.GetNewUser().then(function(items){
-      $scope.items = items.concat($scope.items);
-
-      //Stop the ion-refresher from spinning
-      $scope.$broadcast('scroll.refreshComplete');
-    });
   };
+
+  $scope.postComment = function() {
+    var comment = document.getElementById('newContent').value;
+    var timestamp = new Date();
+    var day = formatNumber(timestamp.getDate());
+    var month = formatNumber(timestamp.getMonth()+1);
+    var year = timestamp.getFullYear();
+    var hours = formatNumber(timestamp.getHours());
+    var min = formatNumber(timestamp.getMinutes());
+    var sec = formatNumber(timestamp.getSeconds());
+    var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
+    var data = {"date": date, "uid": uid, "content": comment};
+    DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
+      $scope.ServerResponse = data;
+      console.log("comment saved");
+      $scope.refreshNewsfeed();
+      document.getElementById('newContent').value = null;
+    })
+      .error(function (data, status, header, config) {
+            $scope.ServerResponse =  htmlDecode("Data: " + data +
+                "\n\n\n\nstatus: " + status +
+                "\n\n\n\nheaders: " + header +
+                "\n\n\n\nconfig: " + config);
+  							console.log("error saving comment");
+    });
+  }
+
+
+  function retrieveInfo(){
+    DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
+      for (i=0; i < data.length; i++){
+          $scope.entry[i] = {name:data[i]['name'], date:data[i]['date'], content:data[i]['content']};
+      }
+    })
+    .error(function (data, status, header, config) {
+        $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+            console.log("error getting data");
+   });
+ }
+
+
+  // $scope.items = [];
+  //
+  // PersonService.GetFeed().then(function(items){
+  //   $scope.items = items;
+  // });
+  //
+  // $scope.doRefresh = function() {
+  //   PersonService.GetNewUser().then(function(items){
+  //     $scope.items = items.concat($scope.items);
+  //
+  //     //Stop the ion-refresher from spinning
+  //     $scope.$broadcast('scroll.refreshComplete');
+  //   });
+  // };
 
 })
