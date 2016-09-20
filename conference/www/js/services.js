@@ -136,4 +136,16 @@ angular.module('App.services', ['backand'])
       DatabaseService.getData('/1/objects/event',{});
     }
   }
+}
+
+.service('EventService', function(){
+  var eventId;
+    return {
+      setEventId: function(eId){
+        eventId = eId;
+      },
+      getEventId: function(){
+        return eventId;
+      }
+    }
 })
