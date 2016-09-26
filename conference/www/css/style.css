@@ -4,9 +4,13 @@
   position: relative;
 }
 
-.icon-size {
+.icon-large-size {
   font-size: 40px
 }
+.icon-medium-size{
+  font-size:20px;
+}
+
 .icon-left{
   position:absolute;
   top:-10px;
@@ -22,3 +26,18 @@
 .paddingLarge{
   padding:12px;
 }
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.09s all linear;
+  white-space: normal;
+}
+.list .item.item-accordion.ng-hide {
+  line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+}
+

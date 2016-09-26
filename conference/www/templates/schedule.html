@@ -61,29 +61,73 @@
   <ion-content>
     <p></p>
     <div class="bar bar-header bar-calm nav-icon">
-      <i class="ion-android-arrow-dropleft-circle icon-size icon-left"></i>
-      <h1 class="title">Saturday November 14, 2016</h1>
-      <i class="ion-android-arrow-dropright-circle icon-size icon-right"></i>
+      <i class="ion-android-arrow-dropleft-circle icon-large-size icon-left"></i>
+      <h1 class="title" ng-click="">Saturday November 14, 2016</h1>
+      <i class="ion-android-arrow-dropright-circle icon-large-size icon-right"></i>
     </div>
     <br></br>
-    <!--<div class="button button-block paddingLarge">Padding</div>-->
-    <div class="card">
-      <div class="item item-avatar">
-        <img src="my-image.png">
-        <h2 ng-click="EventsCtrl.a">Card Name</h2>
+
+    <!--<div class="card" collection-repeat="entity in dayOneEvents">-->
+      <!--<div>-->
+        <!--<h2>{{ entity.name}}</h2>-->
+      <!--</div>-->
+
+      <!--<div class="item item-body">-->
+        <!--<img class="full-image" src="my-image.png">-->
+        <!--Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eget pharetra tortor. Proin quis eros imperdiet, facilisis nisi in, tincidunt orci. Nam tristique elit massa, quis faucibus augue finibus ac.-->
+      <!--</div>-->
+      <!--</div>-->
+    <!--<ion-card>-->
+      <!--<div class="card nav-icon" collection-repeat="entity in dayOneEvents">-->
+      <!--<ion-card-header>-->
+        <!--<i class="ion-calendar"></i>-->
+        <!--<i class="ion-chevron-down icon-right icon-medium-size"></i>-->
+        <!--<b>{{ entity.name }}</b>-->
+        <!--<p></p>-->
+        <!--{{entity.starttime}} - {{ entity.endtime}}-->
+
+      <!--</ion-card-header>-->
+        <!--</div>-->
+      <!--</ion-card>-->
+    <!--<ion-list>-->
+      <!--<div ng-repeat="entity in dayOneEvents">-->
+        <!--<ion-item class="item-stable"-->
+                  <!--ng-click="toggleGroup(entity)"-->
+                  <!--ng-class="{active: isGroupShown(entity)}">-->
+          <!--<i class="icon" ng-class="isGroupShown(entity) ? 'ion-minus icon-medium-size icon-right' : 'ion-plus icon-medium-size icon-right'"></i>-->
+          <!--&nbsp;-->
+          <!--<i class="ion-calendar"></i>-->
+          <!--<b>{{entity.name}}</b>-->
+          <!--<p></p>-->
+          <!--{{entity.starttime}} - {{entity.endtime}}-->
+        <!--</ion-item>-->
+        <!--<ion-item class="item-accordion"-->
+                  <!--ng-repeat="entity in dayOneEvents"-->
+                  <!--ng-show="isGroupShown(entity)">-->
+         <!--<p class="test">Description: {{entity.description}}</p>-->
+        <!--</ion-item>-->
+      <!--</div>-->
+    <!--</ion-list>-->
+    <ion-list>
+      <div ng-repeat="entity in dayOneEvents">
+        <ion-item class="item-stable"
+                  ng-click="toggleGroup(entity)"
+                  ng-class="{active: isGroupShown(entity)}">
+          <i class="icon" ng-class="isGroupShown(entity) ? 'ion-minus' : 'ion-plus'"></i>
+          &nbsp;
+          <i class="ion-calendar"></i>
+          <b>{{entity.name}}</b>
+          <p></p>
+          {{entity.starttime}} - {{entity.endtime}}
+        </ion-item>
+        <ion-item class="item-accordion"
+                  ng-if="isGroupShown(entity)">
+          Description: {{entity.description}}
+          <br>
+
+
+        </ion-item>
       </div>
-
-
-      <ion-card class="schedule-card" *ngFor="#session of group.sessions">
-        <ion-card-content class="content">
-          <ion-item-sliding>
-            <button ion-item (click)="goToSessionDetail(session)">
-              <div class="container">
-                // Removed to simplify example
-              </div>
-            </button>
-          </ion-item-sliding>
-        </ion-card-content>
-      </ion-card>
+    </ion-list>
   </ion-content>
 </ion-view>

@@ -129,12 +129,22 @@ angular.module('App.services', ['backand'])
   }
 })
 
-.factory('MainEvents', function(DatabaseService){
+.service('MainEvents', function(DatabaseService){
   return{
     getEventsFirstDay:function(){
-      console.log(DatabaseService.getData('/1/objects/event',{}));
-      DatabaseService.getData('/1/objects/event',{});
+      console.log(DatabaseService.getData('/1/query/data/getEventsDay1',{}));
+      return DatabaseService.getData('/1/query/data/getEventsDay1',{});
+    },
+    getEventsSecondDay: function(){
+      console.log(DatabaseService.getData('/1/query/data/getEventsDay2',{}));
+      return DatabaseService.getData('/1/query/data/getEventsDay2',{});
+    },
+    getEventsFinalDay: function(){
+      console.log(DatabaseService.getData('/1/query/data/getEventsDay3',{}));
+      return DatabaseService.getData('/1/query/data/getEventsDay3',{});
     }
+
+
   }
 })
 

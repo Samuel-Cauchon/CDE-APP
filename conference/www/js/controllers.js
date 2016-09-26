@@ -15,14 +15,49 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
         });
 
     //    $state.go('homeMenu.home')
-        $state.go('homeMenu.newsfeed')
+        $state.go('homeMenu.schedule')
 	};
 
 })
 
-.controller('EventsCtrl', function($scope, MainEvents){
-  var a = MainEvents.getEventsFirstDay();
-})
+.controller('EventsCtrl', function($scope, MainEvents, DatabaseService) {
+
+  var firstDay = '2016-11-18T';
+  var secondDay = '2016-11-19';
+  var lastDay = '2016-11-20';
+
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      $scope.shownGroup = null;
+    } else {
+      $scope.shownGroup = group;
+    }
+  };
+  $scope.isGroupShown = function(group) {
+    return $scope.shownGroup === group;
+  };
+
+  MainEvents.getEventsFirstDay().success(function (data) {
+    $scope.dayOneEvents = data;
+    console.log("Day One Events", data);
+    var a = data;
+    console.log(typeof(data[0].starttime));
+    console.log(data[0].starttime);
+    console.log(Date.parse(data[0].startime));
+    angular.forEach(a, function (value, key) {
+      value.starttime = new Date(Date.parse(value.starttime)).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      value.endtime = new Date(Date.parse(value.endtime)).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+
+    })
+  });
+  })
 
 .controller('ProfileCtrl', function ($scope, ngFB) {
     ngFB.api({
