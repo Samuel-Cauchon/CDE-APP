@@ -122,9 +122,30 @@
         </ion-item>
         <ion-item class="item-accordion"
                   ng-if="isGroupShown(entity)">
-          Description: {{entity.description}}
-          <br>
-
+          <table class="myTable">
+            <tr>
+              <td>Description:</td>
+              <td>{{ entity.description }}</td>
+            </tr>
+            <tr>
+              <td>Where:</td>
+              <td>{{ entity.place }}</td>
+            </tr>
+            <tr  ng-if="entity.speaker !== null">
+              <td>Speaker(s):</td>
+              <td>{{ entity.speaker }} {{entity.attending}}</td>
+            </tr>
+          </table>
+          <p></p>
+          <p></p>
+          <p></p>
+          <p></p>
+          <p></p>
+          <p></p>
+          <div>
+            <input type="button" value="Register!" style="display: block; margin: 0 auto;"
+            ng-click="registerUser(entity.id)">
+          </div>
 
         </ion-item>
       </div>

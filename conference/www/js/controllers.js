@@ -37,12 +37,13 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     return $scope.shownGroup === group;
   };
 
+
   MainEvents.getEventsFirstDay().success(function (data) {
     $scope.dayOneEvents = data;
     console.log("Day One Events", data);
     var a = data;
-    console.log(typeof(data[0].starttime));
-    console.log(data[0].starttime);
+      console.log(typeof(data[0].starttime));
+      console.log(data[0].starttime);
     console.log(Date.parse(data[0].startime));
     angular.forEach(a, function (value, key) {
       value.starttime = new Date(Date.parse(value.starttime)).toLocaleTimeString('en-GB', {
@@ -52,10 +53,14 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       value.endtime = new Date(Date.parse(value.endtime)).toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit'
-      });
+      })
 
+    });
+    $scope.registerUser= function(id){
+      console.log("Id", id);
 
-    })
+    }
+
   });
   })
 
