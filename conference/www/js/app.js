@@ -45,6 +45,12 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         }
       })
 
+      .state('register', {
+        url: '/register',
+        templateUrl: 'templates/register.html',
+        controller: 'RegisterCtrl'
+      })
+
       .state('homeMenu.newsfeed', {
         url: '/newsfeed',
         views: {
@@ -78,8 +84,7 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         url: '/schedule',
         views: {
           'menuContent': {
-            templateUrl: 'templates/schedule.html',
-            controller: 'EventsCtrl'
+            templateUrl: 'templates/schedule.html'
           }
         }
       })

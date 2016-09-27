@@ -1,23 +1,67 @@
 angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
-.controller('LoginCtrl', function ($scope, $ionicModal, $timeout, ngFB, $ionicPlatform, $state) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService) {
+  $scope.dataEntered = {
+    username : "",
+    password : "",
+  };
 
-    $scope.fbLogin = function () {
-
-        ngFB.init({appId: '1700851050186495'});
-        ngFB.login({scope: 'email,publish_actions'}).then(   // MODIFIED: read_stream,
-            function (response) {
-                if (response.status === 'connected') {
-                    console.log('Facebook login succeeded');
-                } else {
-                    alert('Facebook login failed');
+    $scope.Login = function () {
+      DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
+        //Check if the username exist...
+        if (dataUser[0] != null){
+          //Maybe an unecessary second check of the corectnes of the username...
+          if (dataUser[0]['name'] === $scope.dataEntered.username){
+            DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
+              //Maybe an unecessary check since if the user exists, then there should aslo be a password...
+              if (dataPass[0] != null){
+                //Check if the password is correct.
+                if (dataPass[0]['password'] === $scope.dataEntered.password){
+                  $state.go('homeMenu.newsfeed');
                 }
-        });
+              }
+            });
+          }
+        }
 
-    //    $state.go('homeMenu.home')
-        $state.go('homeMenu.schedule')
-	};
+      });
+     
+   };
 
+   $scope.Register = function () {
+       $state.go('register');
+   };
+
+})
+
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService){
+
+    $scope.dataEnteredRegister = {
+      username : "",
+      password : "",
+      passwordConfirmation : "",
+    };
+
+    $scope.Register = function () {
+      DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+        console.log("1");
+        //Check if the username exist...
+        if (dataUser[0] == null){
+          console.log("2");
+          DatabaseService.getMaxId().success(function(maxId){
+            console.log("3");
+            DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
+              console.log("4");
+              $state.go('homeMenu.newsfeed');
+            })
+          })
+        }
+      })
+    };
+
+   $scope.Cancel = function () {
+       $state.go('welcome');
+   };
 })
 
 .controller('EventsCtrl', function($scope, MainEvents, DatabaseService) {

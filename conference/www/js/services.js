@@ -43,6 +43,32 @@ angular.module('App.services', ['backand'])
 			// 	});
 			// },
 
+
+			searchUser: function(usernameEntered){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/searchUser',
+				  params: {
+				    parameters: {
+				      username: usernameEntered
+				    }
+				  }
+				});
+			},
+
+			searchPass: function(usernameEntered, passwordEntered){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/searchPass',
+				  params: {
+				    parameters: {
+				      user: usernameEntered,
+				      password : passwordEntered
+				    }
+				  }
+				});
+			},
+
 			getData: function(url, parameters){
 				return $http ({
 				  method: 'GET',
@@ -93,7 +119,74 @@ angular.module('App.services', ['backand'])
 					url: Backand.getApiUrl() + url,
 					data: data
 				});
+			},
+
+			createNewUser: function(data, id){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/createNewUser',
+				  params: {
+				    parameters: {
+				      id: id,
+				      username: data.username,
+				      password: data.password
+				    }
+				  }
+				});
+			},
+
+			getMaxId: function(){
+				return $http ({
+	 				method: 'GET',
+	  				url: Backand.getApiUrl() + '/1/query/data/getMaxId',
+	  				params: {
+	   					parameters: {}
+	  				}
+				});
 			}
+
+			/*uploadImage: function (filename, filedata) {
+			    // By calling the files action with POST method in will perform 
+			    // an upload of the file into Backand Storage
+			    return $http({
+			      method: 'POST',
+			      url : Backand.getApiUrl() + baseActionUrl +  objectName,
+			      params:{
+			        "name": filesActionName
+			      },
+			      headers: {
+			        'Content-Type': 'application/json'
+			      },
+			      // you need to provide the file name and the file data
+			      data: {
+			        "filename": filename,
+			        "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
+			      }
+			    });
+		  	},
+
+		  	deleteFile: function(filename){
+			    // By calling the files action with DELETE method in will perform 
+			    // a deletion of the file from Backand Storage
+			    $http({
+			      method: 'DELETE',
+			      url : Backand.getApiUrl() + baseActionUrl +  objectName,
+			      params:{
+			        "name": filesActionName
+			      },
+			      headers: {
+			        'Content-Type': 'application/json'
+			      },
+			      // you need to provide the file name 
+			      data: {
+			        "filename": filename
+			      }
+			    }).then(function(){
+			      // Reset the form
+			      $scope.imageUrl = null;
+			      document.getElementById('fileInput').value = "";
+			    });
+			}*/
 
 		}
 
