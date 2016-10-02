@@ -1,6 +1,6 @@
-angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
+angular.module('App.controllers', ['ngCordova', 'App.services'])
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
   $scope.dataEntered = {
     username : "",
     password : "",
@@ -17,6 +17,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
               if (dataPass[0] != null){
                 //Check if the password is correct.
                 if (dataPass[0]['password'] === $scope.dataEntered.password){
+                  AuthService.currentUser = $scope.dataEntered.username;
+                  console.log(AuthService.currentUser);
                   $state.go('homeMenu.newsfeed');
                 }
               }
@@ -34,7 +36,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService){
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService){
 
     $scope.dataEnteredRegister = {
       username : "",
@@ -47,11 +49,9 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
         console.log("1");
         //Check if the username exist...
         if (dataUser[0] == null){
-          console.log("2");
           DatabaseService.getMaxId().success(function(maxId){
-            console.log("3");
             DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
-              console.log("4");
+              AuthService.currentUser = $scope.dataEnteredRegister.username;
               $state.go('homeMenu.newsfeed');
             })
           })
@@ -64,7 +64,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
    };
 })
 
-.controller('EventsCtrl', function($scope, MainEvents, DatabaseService) {
+.controller('EventsCtrl', function($scope, MainEvents, DatabaseService, AuthService) {
 
   var firstDay = '2016-11-18T';
   var secondDay = '2016-11-19';
@@ -108,20 +108,29 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   });
   })
 
-.controller('ProfileCtrl', function ($scope, ngFB) {
-    ngFB.api({
-        path: '/me',
-        params: {fields: 'id,name'}
-    }).then(
-        function (user) {
-            $scope.user = user;
-        },
-        function (error) {
-            alert('Facebook error: ' + error.error_description);
-        });
+.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService) {
+
+  $scope.profile = {
+      img:"",
+      phonenumber:"",
+      birthdate:""
+  }
+
+  DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataimg){
+    DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+      DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirth){
+        DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+          $scope.profile.img = dataimg[0]['profileimage'];
+          $scope.profile.phonenumber = dataphone[0]['phonenumber'];
+          $scope.profile.birthdate = databirth[0]['birthdate'];
+          $scope.profile.description = datadescription[0]['description'];
+        })
+      })
+    })
+  })
 })
 
-.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
+.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform, AuthService) {
 
 
 	var options = {timeout: 10000, enableHighAccuracy: true};
@@ -149,7 +158,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService) {
 
   $scope.entry = [];
   var uid = 1;

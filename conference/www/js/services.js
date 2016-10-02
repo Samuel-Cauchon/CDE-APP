@@ -77,6 +77,54 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			GetPhoneNumber: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetPhoneNumber',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
+				});
+			},
+
+			GetProfileImg: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetProfileImg',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
+				});
+			}, 	
+
+			GetBirthday: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetBirthday',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
+				});
+			},
+
+			GetDescription: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetDescription',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
+				});
+			},
+
 			// Example of how to enter parameters for updating data entry
 			// updateData: function(){
 			// 	return $http ({
@@ -188,38 +236,44 @@ angular.module('App.services', ['backand'])
 			    });
 			}*/
 
-		}
+	}
 
-  })
+})
 
-	.factory('NewsfeedService', function(DatabaseService){
-		var name = "";
+.factory( 'AuthService', function() {
+  var currentUser;
+
+  return { 
+  };
+})
+
+.factory('NewsfeedService', function(DatabaseService){
+	var name = "";
     return {
       getUserName: function(uid){
 				var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
 				return DatabaseService.getData('/1/objects/user', params);
 			}
     }
-  })
+})
 
-		.factory('PersonService', function($http){
-  var BASE_URL = "http://api.randomuser.me/";
-  var items = [];
-
-  return {
-    GetFeed: function(){
-      return $http.get(BASE_URL+'?results=5').then(function(response){
-        items = response.data.results;
-        return items;
-      });
-    },
-    GetNewUser: function(){
-      return $http.get(BASE_URL).then(function(response){
-        items = response.data.results;
-        return items;
-      });
-    }
-  }
+.factory('PersonService', function($http){
+  	var BASE_URL = "http://api.randomuser.me/";
+ 	var items = [];
+  	return {
+    	GetFeed: function(){
+	      	return $http.get(BASE_URL+'?results=5').then(function(response){
+	        	items = response.data.results;
+	        	return items;
+	      	});
+    	},
+    	GetNewUser: function(){
+      		return $http.get(BASE_URL).then(function(response){
+        		items = response.data.results;
+        		return items;
+      		});
+    	}
+  	}
 })
 
 .service('MainEvents', function(DatabaseService){
