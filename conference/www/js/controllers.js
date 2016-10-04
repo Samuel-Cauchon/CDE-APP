@@ -1,23 +1,69 @@
 angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
-.controller('LoginCtrl', function ($scope, $ionicModal, $timeout, ngFB, $ionicPlatform, $state) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
+  $scope.dataEntered = {
+    username : "",
+    password : "",
+  };
 
-    $scope.fbLogin = function () {
-
-        ngFB.init({appId: '1700851050186495'});
-        ngFB.login({scope: 'email,publish_actions'}).then(   // MODIFIED: read_stream,
-            function (response) {
-                if (response.status === 'connected') {
-                    console.log('Facebook login succeeded');
-                } else {
-                    alert('Facebook login failed');
+    $scope.Login = function () {
+      DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
+        //Check if the username exist...
+        if (dataUser[0] != null){
+          //Maybe an unecessary second check of the corectnes of the username...
+          if (dataUser[0]['name'] === $scope.dataEntered.username){
+            DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
+              //Maybe an unecessary check since if the user exists, then there should aslo be a password...
+              if (dataPass[0] != null){
+                //Check if the password is correct.
+                if (dataPass[0]['password'] === $scope.dataEntered.password){
+                  AuthService.currentUser = $scope.dataEntered.username;
+                  console.log(AuthService.currentUser);
+                  $state.go('homeMenu.newsfeed');
                 }
-        });
+              }
+            });
+          }
+        }
 
-    //    $state.go('homeMenu.home')
-        $state.go('homeMenu.schedule')
-	};
+      });
+     
+   };
 
+   $scope.Register = function () {
+       $state.go('register');
+   };
+
+})
+
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService){
+
+    $scope.dataEnteredRegister = {
+      username : "",
+      password : "",
+      passwordConfirmation : "",
+    };
+
+    $scope.Register = function () {
+      DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+        console.log("1");
+        //Check if the username exist...
+        if (dataUser[0] == null){
+          console.log("2");
+          DatabaseService.getMaxId().success(function(maxId){
+            console.log("3");
+            DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
+              console.log("4");
+              $state.go('homeMenu.newsfeed');
+            })
+          })
+        }
+      })
+    };
+
+   $scope.Cancel = function () {
+       $state.go('welcome');
+   };
 })
 
 .controller('EventsCtrl', function($scope, MainEvents) {
@@ -107,17 +153,68 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
   })
 
-.controller('ProfileCtrl', function ($scope, ngFB) {
-    ngFB.api({
-        path: '/me',
-        params: {fields: 'id,name'}
-    }).then(
-        function (user) {
-            $scope.user = user;
-        },
-        function (error) {
-            alert('Facebook error: ' + error.error_description);
-        });
+.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService) {
+  $scope.editPhone = null;
+  $scope.editDescription = null;
+  $scope.editBirthdate = null;
+
+
+  $scope.startEditPhone = function(){
+    $scope.editPhone = "1";
+  }
+
+  $scope.endEditPhone= function(){
+    DatabaseService.updatePhonenumber("("+$scope.updatedProfile.newPhonenumberRegional+") "+$scope.updatedProfile.newPhonenumberFirstPart+"-"+$scope.updatedProfile.newPhonenumberSecondPart, AuthService.currentUser).success(function(){
+      DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+        $scope.profile.phonenumber = dataphone[0]['phonenumber'];
+        $scope.editPhone = null;
+      })
+    })
+  }
+
+  $scope.startEditBirthdate = function(){
+    $scope.editBirthdate = "1";
+  }
+
+  $scope.endEditBirthdate= function(){
+    DatabaseService.updateBirthdate($scope.updatedProfile.newBirthdateDay+"-"+$scope.updatedProfile.newBirthdateMonth+"-"+$scope.updatedProfile.newBirthdateYear, AuthService.currentUser).success(function(){
+      DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirthdate){
+        $scope.profile.birthdate = databirthdate[0]['birthdate'];
+        $scope.editBirthdate = null;
+      })
+    })
+  }
+
+  $scope.profile = {
+      img:"",
+      phonenumber:"",
+      birthdate:""
+  }
+
+
+  DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataimg){
+    DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+      DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirth){
+        DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+          $scope.profile.img = dataimg[0]['profileimage'];
+          $scope.profile.phonenumber = dataphone[0]['phonenumber'];
+          $scope.profile.birthdate = databirth[0]['birthdate'];
+          $scope.profile.description = datadescription[0]['description'];
+        })
+      })
+    })
+  })
+
+  $scope.updatedProfile = {
+
+    newBirthdateDay:"",
+    newBirthdateMonth:"",
+    newBirthdateYear:"",
+
+    newPhonenumberRegional:"",
+    newPhonenumberFirstPart:"",
+    newPhonenumberSecondPart:""
+  }
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
@@ -148,7 +245,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, AuthService, NewsfeedService, Backand, $timeout, PersonService) {
 
   $scope.entry = [];
   var uid = 1;
@@ -234,5 +331,83 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   //     $scope.$broadcast('scroll.refreshComplete');
   //   });
   // };
+
+})
+
+.controller('SearchCtrl', function($scope, $http, DatabaseService) {
+  $scope.searchables = "blank";
+  console.log($scope.searchables);
+  $scope.searched = [];
+  $scope.searchUsers = function() {
+    var searchItem = document.getElementById('searchContent').value;
+    if ($scope.searchables = "blank") {
+      console.log("Blank search - unsearchable")
+    }
+    else if (searchItem = "") {
+      console.log("Blank search - unsearchable")
+    }
+    else if ($scope.searchables = "user"){
+      DatabaseService.getData('/1/query/data/searchUser').success(function(data){
+      for (i=0; i < data.length; i++){
+        $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
+      }
+      })
+    .error(function (data, status, header, config) {
+      $scope.ServerResponse =  htmlDecode("Data: " + data +
+        "\n\n\n\nstatus: " + status +
+        "\n\n\n\nheaders: " + header +
+        "\n\n\n\nconfig: " + config);
+      console.log("error getting data");
+    });
+    }
+    else if ($scope.searchables = "name"){
+      DatabaseService.getData('/1/query/data/searchEventByName').success(function(data){
+        for (i=0; i < data.length; i++){
+          $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
+        }
+      })
+        .error(function (data, status, header, config) {
+          $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+          console.log("error getting data");
+        });
+    }
+    else if ($scope.searchables = "location") {
+      DatabaseService.getData('/1/query/data/searchEventByLocation').success(function(data){
+        for (i=0; i < data.length; i++){
+          $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
+        }
+      })
+        .error(function (data, status, header, config) {
+          $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+          console.log("error getting data");
+        });
+    }
+  }
+
+  $scope.getDropdownOption = function(){
+    searchopt = $scope.selectOption;
+    console.log(searchopt);
+    switch(searchopt) {
+      case 'location':
+        $scope.searchables = "location";
+        break;
+      case 'name':
+        $scope.searchables = "name";
+        break;
+      case 'user':
+        $scope.searchables = "user";
+        break;
+      default:
+        $scope.searchables = "blank";
+
+    }
+    console.log($scope.searchables);
+  }
 
 })

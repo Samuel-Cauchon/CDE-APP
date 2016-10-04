@@ -1,4 +1,4 @@
-// Ionic Starter App
+  // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -45,6 +45,12 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         }
       })
 
+      .state('register', {
+        url: '/register',
+        templateUrl: 'templates/register.html',
+        controller: 'RegisterCtrl'
+      })
+
       .state('homeMenu.newsfeed', {
         url: '/newsfeed',
         views: {
@@ -78,41 +84,10 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         url: '/schedule',
         views: {
           'menuContent': {
-            templateUrl: 'templates/schedule.html',
-            controller: 'EventsCtrl'
+            templateUrl: 'templates/schedule.html'
           }
         }
       })
-
-
-      .state('homeMenu.profileRaluca', {
-        url: '/profileRaluca',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profileRaluca.html',
-          }
-        }
-      })
-
-      .state('homeMenu.profileVasu', {
-        url: '/profileVasu',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profileVasu.html',
-          }
-        }
-      })
-
-      .state('homeMenu.profileLianna', {
-        url: '/profileLianna',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profileLianna.html',
-          }
-        }
-      })
-
-
 // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/welcome');
 //$urlRouterProvider.otherwise('/newsfeed');

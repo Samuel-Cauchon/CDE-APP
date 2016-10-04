@@ -1,34 +1,66 @@
 <ion-view view-title="NewsFeed">
-  <ion-content class="has-header">
-    <ion-refresher on-refresh="refreshNewsfeed()"></ion-refresher>
-    <div class="item">
-      <div id="userName">
-      {{userName}}
-    </div>
-			<label class="item item-input">
-				<input type="text" id="newContent" placeholder="Say Something">
-			</label>
-      <button class="button button-dark" id="postButton" ng-click="postComment()">Post</button>
-    </div>
-    <div class="list card">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-tabs class="tabs-top tabs-stable">
+    <ion-tab title="Twitter Feed">
+      <iom-header-bar class="bar-subheader bar-stable">
+        <a class="tab-item">Twitter Feed</a>
+      </iom-header-bar>
+      <ion-content>
+      </ion-content>
+    </ion-tab>
+
+    <ion-tab title="App Feed">
+      <iom-header-bar class="bar-subheader bar-stable">
+        <a class="tab-item">App Feed</a>
+      </iom-header-bar>
+      <ion-content class="has-header">
+      <ion-refresher on-refresh="refreshNewsfeed()"></ion-refresher>
       <div class="item">
-        <ion-list>
-          <ion-item ng-repeat="item in entry">
-            {{item.date}}<br>
-            {{item.name}}<br>
-            {{item.content}}<br>
-          </ion-item>
-        </ion-list>
+        <div id="userName">
+        {{userName}}
       </div>
-    </div>
-
-          <!-- <ion-refresher on-refresh="doRefresh()"></ion-refresher>
+        <label class="item item-input">
+          <input type="text" id=0 placeholder="Say Something">
+        </label>
+        <button class="button button-dark" id="postButton" ng-click="postComment(0)">Post</button>
+      </div>
+      <div class="list card">
+        <div class="item">
           <ion-list>
-            <ion-item class="item-avatar" ng-repeat="item in items">
-              {{item.user.name.first}} {{item.user.name.last}}
-              <p>{{item.user.location.city}} {{item.user.password}}</p>
-            </ion-item>
-          </ion-list> -->
+            <ion-item ng-repeat="item in entry" ng-hide="item.commentid != '0'">
+              {{item.date}}<br>
+              {{item.name}}<br>
+              {{item.content}}<br>
+              {{item.likes}}<br>
+              <!-- {{item.id}}<br>
+              {{item.commentid}}<br> -->
+              <button class="button button-dark" id="commentButton" ng-click="like(item.likes, item.id)">Like</button>
+              <button class="button button-dark" id="commentButton" ng-click="postComment({{item.id}})">Comment</button>
+              <label class="item item-input">
+                <input type="text" id={{item.id}} placeholder="Comment">
+              </label>
+                <ion-item ng-repeat="comment in entry" ng-if="item.id == comment.commentid">
+                  {{comment.date}}<br>
+                  {{comment.name}}<br>
+                  {{comment.content}}<br>
+                  <!-- {{comment.id}}<br>
+                  {{comment.commentid}}<br> -->
+                </ion-item>
+          </ion-list>
+        </div>
+      </div>
 
-  </ion-content>
+            <!-- <ion-refresher on-refresh="doRefresh()"></ion-refresher>
+            <ion-list>
+              <ion-item class="item-avatar" ng-repeat="item in items">
+                {{item.user.name.first}} {{item.user.name.last}}
+                <p>{{item.user.location.city}} {{item.user.password}}</p>
+              </ion-item>
+            </ion-list> -->
+
+    </ion-content>
+  </ion-tab>
+</ion-tabs>
 </ion-view>

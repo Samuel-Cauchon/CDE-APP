@@ -43,11 +43,85 @@ angular.module('App.services', ['backand'])
 			// 	});
 			// },
 
+
+			searchUser: function(usernameEntered){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/searchUser',
+				  params: {
+				    parameters: {
+				      username: usernameEntered
+				    }
+				  }
+				});
+			},
+
+			searchPass: function(usernameEntered, passwordEntered){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/searchPass',
+				  params: {
+				    parameters: {
+				      user: usernameEntered,
+				      password : passwordEntered
+				    }
+				  }
+				});
+			},
+
 			getData: function(url, parameters){
 				return $http ({
 				  method: 'GET',
 				  url: Backand.getApiUrl() + url,
 				  params: parameters
+				});
+			},
+
+			GetPhoneNumber: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetPhoneNumber',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
+				});
+			},
+
+			GetProfileImg: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetProfileImg',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
+				});
+			}, 	
+
+			GetBirthday: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetBirthday',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
+				});
+			},
+
+			GetDescription: function(user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/GetDescription',
+				  params: {
+				    parameters: {
+				      username: user
+				    }
+				  }
 				});
 			},
 
@@ -72,6 +146,32 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			updatePhonenumber: function(newPhoneNumber, user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/updatePhonenumber',
+				  params: {
+				    parameters: {
+				      newPhonenumber: newPhoneNumber,
+				      user: user
+				    }
+				  }
+				});
+			},
+
+			updateBirthdate: function(newBirthdate, user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/updateBirthdate',
+				  params: {
+				    parameters: {
+				      newBirthdate: newBirthdate,
+				      user: user
+				    }
+				  }
+				});
+			},
+
 			// Exaple of format in which to enter parameters for new data entry
 			// newUser: function(){
 			// 	return $http ({
@@ -93,40 +193,124 @@ angular.module('App.services', ['backand'])
 					url: Backand.getApiUrl() + url,
 					data: data
 				});
+			},
+
+			createNewUser: function(data, id){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/createNewUser',
+				  params: {
+				    parameters: {
+				      id: id,
+				      username: data.username,
+				      password: data.password
+				    }
+				  }
+				});
+			},
+
+			getMaxId: function(){
+				return $http ({
+	 				method: 'GET',
+	  				url: Backand.getApiUrl() + '/1/query/data/getMaxId',
+	  				params: {
+	   					parameters: {}
+	  				}
+				});
 			}
 
-		}
+			/*uploadImage: function (filename, filedata) {
 
-  })
+				var baseUrl = '/1/objects/';
+				var baseActionUrl = baseUrl + 'action/'
+				var objectName = 'user';
+				var filesActionName = 'img';
 
-	.factory('NewsfeedService', function(DatabaseService){
-		var name = "";
+			    // By calling the files action with POST method in will perform 
+			    // an upload of the file into Backand Storage
+			    $http({
+			      method: 'POST',
+			      url : Backand.getApiUrl() + baseActionUrl +  objectName,
+			      params:{
+			        "name": filesActionName
+			      },
+			      headers: {
+			        'Content-Type': 'application/json'
+			      },
+			      // you need to provide the file name and the file data
+			      data: {
+			        "filename": filename,
+			        "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
+			      }
+			    });
+		  	},
+
+		  	deleteImage: function(filename){
+
+		  		var baseUrl = '/1/objects/';
+			    var baseActionUrl = baseUrl + 'action/'
+			    var objectName = 'user';
+			    var filesActionName = 'img';
+			    // By calling the files action with DELETE method in will perform 
+			    // a deletion of the file from Backand Storage
+			    $http({
+			      method: 'DELETE',
+			      url : Backand.getApiUrl() + baseActionUrl +  objectName,
+			      params:{
+			        "name": filesActionName
+			      },
+			      headers: {
+			        'Content-Type': 'application/json'
+			      },
+			      // you need to provide the file name 
+			      data: {
+			        "filename": filename
+			      }
+			    }).then(function(){
+			      // Reset the form
+			      $scope.imageUrl = null;
+			      document.getElementById('fileInput').value = "";
+			    });
+			}*/
+
+	}
+
+})
+
+.factory( 'AuthService', function() {
+  var currentUser;
+
+  return { 
+  };
+})
+
+.factory('NewsfeedService', function(DatabaseService){
+	var name = "";
     return {
       getUserName: function(uid){
 				var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
 				return DatabaseService.getData('/1/objects/user', params);
 			}
     }
-  })
+})
 
-		.factory('PersonService', function($http){
-  var BASE_URL = "http://api.randomuser.me/";
-  var items = [];
-
-  return {
-    GetFeed: function(){
-      return $http.get(BASE_URL+'?results=5').then(function(response){
-        items = response.data.results;
-        return items;
-      });
-    },
-    GetNewUser: function(){
-      return $http.get(BASE_URL).then(function(response){
-        items = response.data.results;
-        return items;
-      });
-    }
-  }
+.factory('PersonService', function($http){
+  	var BASE_URL = "http://api.randomuser.me/";
+ 	var items = [];
+  	return {
+    	GetFeed: function(){
+	      	return $http.get(BASE_URL+'?results=5').then(function(response){
+	        	items = response.data.results;
+	        	return items;
+	      	});
+    	},
+    	GetNewUser: function(){
+      		return $http.get(BASE_URL).then(function(response){
+        		items = response.data.results;
+        		return items;
+      		});
+    	}
+  	}
 })
 
 .service('MainEvents', function(DatabaseService){
@@ -192,4 +376,3 @@ angular.module('App.services', ['backand'])
       }
     }
 })
-
