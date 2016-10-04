@@ -1,63 +1,12 @@
-<!--<html>-->
-<!--<head>-->
-  <!--<meta charset="utf-8">-->
-  <!--<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">-->
-
-  <!--<link href="lib/ionic/css/ionic.css" rel="stylesheet">-->
-  <!--<link href="css/style.css" rel="stylesheet">-->
-
-  <!--&lt;!&ndash; IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above-->
-  <!--<link href="css/ionic.app.css" rel="stylesheet">-->
-  <!--&ndash;&gt;-->
-
-  <!--&lt;!&ndash; ionic/angularjs js &ndash;&gt;-->
-  <!--<script src="lib/ionic/js/ionic.bundle.js"></script>-->
-
-  <!--&lt;!&ndash; cordova script (this will be a 404 during development) &ndash;&gt;-->
-  <!--<script src="cordova.js"></script>-->
-
-  <!--&lt;!&ndash; your app's js &ndash;&gt;-->
-  <!--<script src="js/app.js"></script>-->
-  <!--<script src="js/controllers.js"></script>-->
-  <!--<script src="js/services.js"></script>-->
-<!--</head>-->
-<!--<body ng-app="roo">-->
-<!--<ion-side-menus>-->
-  <!--<ion-side-menu-content ng-controller="NavCtrl">-->
-    <!--<ion-header-bar class="bar-positive">-->
-      <!--<div class="buttons">-->
-        <!--<button class="button icon button-clear ion-navicon-round"-->
-                <!--ng-click="toggleLeft()"></button>-->
-      <!--</div>-->
-      <!--<h1 class="title">Sidemenu</h1>-->
-    <!--</ion-header-bar>-->
-  <!--</ion-side-menu-content>-->
-  <!--<ion-side-menu side="left">-->
-    <!--<ion-list>-->
-      <!--<ion-item>Current Location</ion-item>-->
-    <!--</ion-list>-->
-    <!--<ion-list>-->
-      <!--<ion-item>Messages</ion-item>-->
-    <!--</ion-list>-->
-    <!--<ion-list>-->
-      <!--<ion-item>Travel</ion-item>-->
-    <!--</ion-list>-->
-    <!--<ion-list>-->
-      <!--<ion-item>Profile</ion-item>-->
-    <!--</ion-list>-->
-    <!--<ion-list>-->
-      <!--<ion-item>Interests</ion-item>-->
-    <!--</ion-list>-->
-  <!--</ion-side-menu>-->
-<!--</ion-side-menus>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-
 <ion-view view-title="Schedule">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <ion-content>
     <p></p>
     <div class="bar bar-header bar-calm nav-icon">
@@ -66,48 +15,6 @@
       <i class="ion-android-arrow-dropright-circle icon-large-size icon-right"></i>
     </div>
     <br></br>
-
-    <!--<div class="card" collection-repeat="entity in dayOneEvents">-->
-      <!--<div>-->
-        <!--<h2>{{ entity.name}}</h2>-->
-      <!--</div>-->
-
-      <!--<div class="item item-body">-->
-        <!--<img class="full-image" src="my-image.png">-->
-        <!--Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eget pharetra tortor. Proin quis eros imperdiet, facilisis nisi in, tincidunt orci. Nam tristique elit massa, quis faucibus augue finibus ac.-->
-      <!--</div>-->
-      <!--</div>-->
-    <!--<ion-card>-->
-      <!--<div class="card nav-icon" collection-repeat="entity in dayOneEvents">-->
-      <!--<ion-card-header>-->
-        <!--<i class="ion-calendar"></i>-->
-        <!--<i class="ion-chevron-down icon-right icon-medium-size"></i>-->
-        <!--<b>{{ entity.name }}</b>-->
-        <!--<p></p>-->
-        <!--{{entity.starttime}} - {{ entity.endtime}}-->
-
-      <!--</ion-card-header>-->
-        <!--</div>-->
-      <!--</ion-card>-->
-    <!--<ion-list>-->
-      <!--<div ng-repeat="entity in dayOneEvents">-->
-        <!--<ion-item class="item-stable"-->
-                  <!--ng-click="toggleGroup(entity)"-->
-                  <!--ng-class="{active: isGroupShown(entity)}">-->
-          <!--<i class="icon" ng-class="isGroupShown(entity) ? 'ion-minus icon-medium-size icon-right' : 'ion-plus icon-medium-size icon-right'"></i>-->
-          <!--&nbsp;-->
-          <!--<i class="ion-calendar"></i>-->
-          <!--<b>{{entity.name}}</b>-->
-          <!--<p></p>-->
-          <!--{{entity.starttime}} - {{entity.endtime}}-->
-        <!--</ion-item>-->
-        <!--<ion-item class="item-accordion"-->
-                  <!--ng-repeat="entity in dayOneEvents"-->
-                  <!--ng-show="isGroupShown(entity)">-->
-         <!--<p class="test">Description: {{entity.description}}</p>-->
-        <!--</ion-item>-->
-      <!--</div>-->
-    <!--</ion-list>-->
     <ion-list>
       <div ng-repeat="entity in dayOneEvents">
         <ion-item class="item-stable"
@@ -136,6 +43,34 @@
               <td>{{ entity.speaker }} {{entity.attending}}</td>
             </tr>
           </table>
+          <br>
+
+          <!--<div id="scrollable-area">-->
+            <!--<table ng-table="tableParams" class="table"  fixed-table-headers="scrollable-area">-->
+              <!--<tr ng-repeat="user in ">-->
+                <!--<td data-title="'Name'">{{user.name}}</td>-->
+                <!--<td data-title="'Age'">{{user.age}}</td>-->
+              <!--</tr>-->
+            <!--</table>-->
+          <!--</div>-->
+
+          <!--<table class="myTable">-->
+            <!--<tr>-->
+              <!--<td>-->
+            <!--</tr>Users Attending:-->
+            <!--</td>-->
+            <!--<td ng-repeat="n in getMappingOfEventToUsers(entity.id)"> {{ n }}</td>-->
+          <!--</table>-->
+          <p class="text-center">Users Attending:</p>
+            <ion-scroll style="height:100px" class="scrollVertical" direction="y">
+              <div class="list">
+                  <div ng-repeat="n in getMappingOfEventToUsers(entity.id) | orderBy"  >
+                    <div class="item item-divider" >
+                      {{ n }}
+                    </div>
+                    </div>
+              </div>
+            </ion-scroll>
           <p></p>
           <p></p>
           <p></p>

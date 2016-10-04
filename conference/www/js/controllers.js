@@ -20,11 +20,10 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('EventsCtrl', function($scope, MainEvents, DatabaseService) {
+.controller('EventsCtrl', function($scope, MainEvents) {
 
-  var firstDay = '2016-11-18T';
-  var secondDay = '2016-11-19';
-  var lastDay = '2016-11-20';
+    var peopleAttendingEachEvent = {};
+    $scope.map = {};
 
   $scope.toggleGroup = function(group) {
     if ($scope.isGroupShown(group)) {
@@ -37,15 +36,38 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     return $scope.shownGroup === group;
   };
 
-
+  MainEvents.getUserQuery().success(function(data){
+    var userArr = data;
+    console.log("User Info", data);
+    for (var i =0; i < userArr.length; i++){
+      peopleAttendingEachEvent[userArr[i].id] = {
+        name: userArr[i].name
+      };
+    }
+    console.log("IIII", peopleAttendingEachEvent);
+    MainEvents.getPeopleAttending().success(function(data){
+      var mapOfEventToUser = data.data;
+      mapOfEventToUser.forEach(function(item){
+        if(!$scope.map[item.event]){
+          $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
+          console.log("SUP", $scope.map[item.event]);
+        }
+        else{
+          $scope.map[item.event].push(peopleAttendingEachEvent[item.user].name);
+        }
+      })
+      console.log("MAP", $scope.map["1"]);
+      $scope.getMappingOfEventToUsers = function(id){
+        console.log("ID", id);
+        console.log("TRY", $scope.map[id]);
+        return $scope.map[id];
+      }
+    })
+  });
   MainEvents.getEventsFirstDay().success(function (data) {
     $scope.dayOneEvents = data;
     console.log("Day One Events", data);
-    var a = data;
-      console.log(typeof(data[0].starttime));
-      console.log(data[0].starttime);
-    console.log(Date.parse(data[0].startime));
-    angular.forEach(a, function (value, key) {
+    angular.forEach($scope.dayOneEvents, function (value) {
       value.starttime = new Date(Date.parse(value.starttime)).toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit'
@@ -53,15 +75,36 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       value.endtime = new Date(Date.parse(value.endtime)).toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit'
-      })
+      });
+    })
+  });
 
-    });
     $scope.registerUser= function(id){
       console.log("Id", id);
-
+      MainEvents.setEventId(id);
+      //MainEvents.getPeopleAttendingEvent().success(function(data){
+      //  $scope.peopleAttending = data;
+      //  console.log("peopleAttending", $scope.peopleAttending);
+      //})
+      //MainEvents.getPeopleAttending().success(function(data){
+      //  $scope.peep = data.data;
+      //  var temp = data.data;
+      //  console.log("HIIII", data.data);
+      //  temp.forEach(function(item){
+      //    if(!map[item.event]){
+      //      console.log("YOOOO");
+      //      map[item.event] = [peopleAttendingEachEvent[item.user].name];
+      //      console.log("SUP", map[item.event]);
+      //    }
+      //    else{
+      //      console.log("MY NIGGA");
+      //      map[item.event].push(peopleAttendingEachEvent[item.user].name);
+      //    }
+      //  });
+      //  console.log("MAP", map["1"]);
+      //})
     }
 
-  });
   })
 
 .controller('ProfileCtrl', function ($scope, ngFB) {

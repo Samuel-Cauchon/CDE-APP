@@ -130,10 +130,11 @@ angular.module('App.services', ['backand'])
 })
 
 .service('MainEvents', function(DatabaseService){
+  var eventId;
   return{
     getEventsFirstDay:function(){
-      console.log(DatabaseService.getData('/1/query/data/getEventsDay1',{}));
-      return DatabaseService.getData('/1/query/data/getEventsDay1',{});
+      console.log(DatabaseService.getData('/1/query/data/getEventsDay1?deep=true',{}));
+      return DatabaseService.getData('/1/query/data/getEventsDay1?deep=true', {});
     },
     getEventsSecondDay: function(){
       console.log(DatabaseService.getData('/1/query/data/getEventsDay2',{}));
@@ -142,6 +143,38 @@ angular.module('App.services', ['backand'])
     getEventsFinalDay: function(){
       console.log(DatabaseService.getData('/1/query/data/getEventsDay3',{}));
       return DatabaseService.getData('/1/query/data/getEventsDay3',{});
+    },
+    getUserQuery:function(){
+      console.log(DatabaseService.getData('/1/query/data/GetAllUsers',{}));
+      return DatabaseService.getData('/1/query/data/GetAllUsers',{});
+    },
+    getUserAttending: function(){
+      console.log(DatabaseService.getData('1/objects/event/', {}));
+      console.log("hi");
+      return DatabaseService.getData('1/objects/user', {});
+    },
+    setEventId: function(id){
+      eventId = id;
+    },
+    getEventId: function(){
+      return eventId;
+    },
+    getPeopleAttendingEvent: function(){
+      if(eventId) {
+        console.log(DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {}));
+        return DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {});
+      }
+    },
+    getBLAH: function(){
+      console.log(DatabaseService.getData('/1/objects/event?deep=true',{}));
+      return DatabaseService.getData('/1/objects/event?deep=true',{});
+    },
+    getPeopleAttending: function(){
+      console.log(DatabaseService.getData('/1/objects/relusersevents', {}));
+      return DatabaseService.getData('/1/objects/relusersevents', {});
+    },
+    updatePeopleAttending: function(){
+      return DatabaseService.newEntry('/1/objects/relusersevents', {user:16, event:eventId} )
     }
 
 
