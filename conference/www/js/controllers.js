@@ -1,4 +1,4 @@
-angular.module('App.controllers', ['ngCordova', 'App.services'])
+angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
   $scope.dataEntered = {
@@ -36,7 +36,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService){
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService){
 
     $scope.dataEnteredRegister = {
       username : "",
@@ -49,9 +49,11 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
         console.log("1");
         //Check if the username exist...
         if (dataUser[0] == null){
+          console.log("2");
           DatabaseService.getMaxId().success(function(maxId){
+            console.log("3");
             DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
-              AuthService.currentUser = $scope.dataEnteredRegister.username;
+              console.log("4");
               $state.go('homeMenu.newsfeed');
             })
           })
@@ -64,7 +66,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
    };
 })
 
-.controller('EventsCtrl', function($scope, MainEvents, DatabaseService, AuthService) {
+.controller('EventsCtrl', function($scope, MainEvents, DatabaseService) {
 
   var firstDay = '2016-11-18T';
   var secondDay = '2016-11-19';
@@ -172,7 +174,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   }
 })
 
-.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform, AuthService) {
+.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
 
 
 	var options = {timeout: 10000, enableHighAccuracy: true};
@@ -200,7 +202,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, AuthService, NewsfeedService, Backand, $timeout, PersonService) {
 
   $scope.entry = [];
   var uid = 1;
@@ -286,5 +288,83 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   //     $scope.$broadcast('scroll.refreshComplete');
   //   });
   // };
+
+})
+
+.controller('SearchCtrl', function($scope, $http, DatabaseService) {
+  $scope.searchables = "blank";
+  console.log($scope.searchables);
+  $scope.searched = [];
+  $scope.searchUsers = function() {
+    var searchItem = document.getElementById('searchContent').value;
+    if ($scope.searchables = "blank") {
+      console.log("Blank search - unsearchable")
+    }
+    else if (searchItem = "") {
+      console.log("Blank search - unsearchable")
+    }
+    else if ($scope.searchables = "user"){
+      DatabaseService.getData('/1/query/data/searchUser').success(function(data){
+      for (i=0; i < data.length; i++){
+        $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
+      }
+      })
+    .error(function (data, status, header, config) {
+      $scope.ServerResponse =  htmlDecode("Data: " + data +
+        "\n\n\n\nstatus: " + status +
+        "\n\n\n\nheaders: " + header +
+        "\n\n\n\nconfig: " + config);
+      console.log("error getting data");
+    });
+    }
+    else if ($scope.searchables = "name"){
+      DatabaseService.getData('/1/query/data/searchEventByName').success(function(data){
+        for (i=0; i < data.length; i++){
+          $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
+        }
+      })
+        .error(function (data, status, header, config) {
+          $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+          console.log("error getting data");
+        });
+    }
+    else if ($scope.searchables = "location") {
+      DatabaseService.getData('/1/query/data/searchEventByLocation').success(function(data){
+        for (i=0; i < data.length; i++){
+          $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
+        }
+      })
+        .error(function (data, status, header, config) {
+          $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+          console.log("error getting data");
+        });
+    }
+  }
+
+  $scope.getDropdownOption = function(){
+    searchopt = $scope.selectOption;
+    console.log(searchopt);
+    switch(searchopt) {
+      case 'location':
+        $scope.searchables = "location";
+        break;
+      case 'name':
+        $scope.searchables = "name";
+        break;
+      case 'user':
+        $scope.searchables = "user";
+        break;
+      default:
+        $scope.searchables = "blank";
+
+    }
+    console.log($scope.searchables);
+  }
 
 })
