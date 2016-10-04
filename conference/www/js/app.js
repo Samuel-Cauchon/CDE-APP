@@ -51,16 +51,6 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         controller: 'RegisterCtrl'
       })
 
-      .state('homeMenu.newsfeed', {
-        url: '/newsfeed',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/newsfeed.html',
-            controller: 'NewsfeedCtrl'
-          }
-        }
-      })
-
       .state('homeMenu.speakers', {
         url: '/speakers',
         views: {
@@ -113,6 +103,16 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         views: {
           'menuContent': {
             templateUrl: 'templates/profileLianna.html',
+          }
+        }
+      })
+
+      .state('homeMenu.newsfeed', {
+        url: '/newsfeed',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/newsfeed.html',
+            controller: 'NewsfeedCtrl'
           }
         }
       })

@@ -99,7 +99,7 @@ angular.module('App.services', ['backand'])
 				    }
 				  }
 				});
-			}, 	
+			},
 
 			GetBirthday: function(user){
 				return $http ({
@@ -169,6 +169,7 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+
 			createNewUser: function(data, id){
 				return $http ({
 				  method: 'GET',
@@ -194,7 +195,7 @@ angular.module('App.services', ['backand'])
 			}
 
 			/*uploadImage: function (filename, filedata) {
-			    // By calling the files action with POST method in will perform 
+			    // By calling the files action with POST method in will perform
 			    // an upload of the file into Backand Storage
 			    return $http({
 			      method: 'POST',
@@ -214,7 +215,7 @@ angular.module('App.services', ['backand'])
 		  	},
 
 		  	deleteFile: function(filename){
-			    // By calling the files action with DELETE method in will perform 
+			    // By calling the files action with DELETE method in will perform
 			    // a deletion of the file from Backand Storage
 			    $http({
 			      method: 'DELETE',
@@ -225,7 +226,7 @@ angular.module('App.services', ['backand'])
 			      headers: {
 			        'Content-Type': 'application/json'
 			      },
-			      // you need to provide the file name 
+			      // you need to provide the file name
 			      data: {
 			        "filename": filename
 			      }
@@ -242,8 +243,9 @@ angular.module('App.services', ['backand'])
 
 .factory( 'AuthService', function() {
   var currentUser;
+	var uid;
 
-  return { 
+  return {
   };
 })
 
@@ -306,4 +308,3 @@ angular.module('App.services', ['backand'])
       }
     }
 })
-
