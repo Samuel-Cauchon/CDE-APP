@@ -18,9 +18,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
                 //Check if the password is correct.
                 if (dataPass[0]['password'] === $scope.dataEntered.password){
                   AuthService.currentUser = $scope.dataEntered.username;
-                  AuthService.uid = dataUser[0]['id'];
                   console.log(AuthService.currentUser);
-                  console.log(AuthService.uid);
                   $state.go('homeMenu.newsfeed');
                 }
               }
@@ -29,7 +27,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
         }
 
       });
-
+     
    };
 
    $scope.Register = function () {
@@ -111,12 +109,43 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   })
 
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService) {
+  $scope.editPhone = null;
+  $scope.editDescription = null;
+  $scope.editBirthdate = null;
+
+
+  $scope.startEditPhone = function(){
+    $scope.editPhone = "1";
+  }
+
+  $scope.endEditPhone= function(){
+    DatabaseService.updatePhonenumber("("+$scope.updatedProfile.newPhonenumberRegional+") "+$scope.updatedProfile.newPhonenumberFirstPart+"-"+$scope.updatedProfile.newPhonenumberSecondPart, AuthService.currentUser).success(function(){
+      DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+        $scope.profile.phonenumber = dataphone[0]['phonenumber'];
+        $scope.editPhone = null;
+      })
+    })
+  }
+
+  $scope.startEditBirthdate = function(){
+    $scope.editBirthdate = "1";
+  }
+
+  $scope.endEditBirthdate= function(){
+    DatabaseService.updateBirthdate($scope.updatedProfile.newBirthdateDay+"-"+$scope.updatedProfile.newBirthdateMonth+"-"+$scope.updatedProfile.newBirthdateYear, AuthService.currentUser).success(function(){
+      DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirthdate){
+        $scope.profile.birthdate = databirthdate[0]['birthdate'];
+        $scope.editBirthdate = null;
+      })
+    })
+  }
 
   $scope.profile = {
       img:"",
       phonenumber:"",
       birthdate:""
   }
+
 
   DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataimg){
     DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
@@ -130,6 +159,17 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
       })
     })
   })
+
+  $scope.updatedProfile = {
+
+    newBirthdateDay:"",
+    newBirthdateMonth:"",
+    newBirthdateYear:"",
+
+    newPhonenumberRegional:"",
+    newPhonenumberFirstPart:"",
+    newPhonenumberSecondPart:""
+  }
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform, AuthService) {
@@ -163,8 +203,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 .controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService) {
 
   $scope.entry = [];
-  $scope.userName = AuthService.currentUser;
-  var uid = AuthService.uid;
+  var uid = 1;
+  $scope.userName = "";
+
+  NewsfeedService.getUserName(uid).success(function(data){
+    $scope.userName = data['data'][0]['name'];
+  });
 
   $scope.$on('$ionicView.enter', function () {
 		retrieveInfo();
@@ -185,26 +229,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     }
   };
 
-  var getMonth = function(monthNumber) {
-    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return months[parseInt(monthNumber) -1];
-  };
-
-  var formatDate = function(datetime) {
-    var result = datetime.split("-");
-    var year = result[0];
-    var month = getMonth(result[1]);
-    var res = result[2].split("T");
-    var day = res[0];
-    var time = res[1].split(":");
-    var hour = time[0];
-    var min = time[1];
-
-    return month+" "+day+" at "+hour+":"+min;
-  };
-
-  $scope.postComment = function(id) {
-    var comment = document.getElementById(id).value;
+  $scope.postComment = function() {
+    var comment = document.getElementById('newContent').value;
     var timestamp = new Date();
     var day = formatNumber(timestamp.getDate());
     var month = formatNumber(timestamp.getMonth()+1);
@@ -213,12 +239,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     var min = formatNumber(timestamp.getMinutes());
     var sec = formatNumber(timestamp.getSeconds());
     var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
-    var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
+    var data = {"date": date, "uid": uid, "content": comment};
     DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
       $scope.ServerResponse = data;
       console.log("comment saved");
       $scope.refreshNewsfeed();
-      document.getElementById(id).value = null;
+      document.getElementById('newContent').value = null;
     })
       .error(function (data, status, header, config) {
             $scope.ServerResponse =  htmlDecode("Data: " + data +
@@ -227,34 +253,13 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
                 "\n\n\n\nconfig: " + config);
   							console.log("error saving comment");
     });
-  };
-
-  $scope.like = function(likesCounter, entryId){
-    var data = {"likes": (parseInt(likesCounter) + 1)};
-    DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
-      $scope.ServerResponse = data;
-      console.log("likes updated");
-      $scope.refreshNewsfeed();
-    })
-      .error(function (data, status, header, config) {
-            $scope.ServerResponse =  htmlDecode("Data: " + data +
-                "\n\n\n\nstatus: " + status +
-                "\n\n\n\nheaders: " + header +
-                "\n\n\n\nconfig: " + config);
-  							console.log("error updating likes");
-    });
-  };
+  }
 
 
   function retrieveInfo(){
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
       for (i=0; i < data.length; i++){
-        $scope.entry[i] = {date:formatDate(data[i]['date']),
-                            name:data[i]['name'],
-                            content:data[i]['content'],
-                            id:data[i]['id'],
-                            commentid:data[i]['commentid'],
-                            likes: data[i]['likes']};
+          $scope.entry[i] = {name:data[i]['name'], date:data[i]['date'], content:data[i]['content']};
       }
     })
     .error(function (data, status, header, config) {
@@ -265,6 +270,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
             console.log("error getting data");
    });
  }
+
 
   // $scope.items = [];
   //

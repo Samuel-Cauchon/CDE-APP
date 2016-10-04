@@ -2,15 +2,35 @@
     <ion-content class="has-header">
         <div class="list card">
             <div class="item item-avatar">
-                <img src="icon-sam.jpg">
-                <h2><i class="ion-calendar"></i>{{profile.birthdate}}</h2>
+                <img src="blank-profile.png">
+                <div ng-show="editBirthdate == null">
+                    <h2>
+                        <i class="ion-calendar"></i>{{profile.birthdate}}
+                        <button class="button-calm" ng-click="startEditBirthdate()">Edit</button>
+                    </h2>
+                </div>
+                <div ng-show="editBirthdate != null">
+                    <input size="2" maxlength="2" ng-model="updatedProfile.newBirthdateDay">-</input>
+                    <input size="2" maxlength="2" ng-model="updatedProfile.newBirthdateMonth">-</input>
+                    <input size="4" maxlength="4" ng-model="updatedProfile.newBirthdateYear"></input>
+                    <button class="button-calm" ng-click="endEditBirthdate()">Edit</button>
+                </div>
             </div>
 
-            <p class="item item-icon-left">
+            <div class="item item-icon-left">
                 <i class="icon ion-ios-telephone"></i>
-                {{profile.phonenumber}}
-            </p>
-            <img src="{{profile.img}}" class="fullscreen-image" width=370 height=270>
+                <div ng-show="editPhone == null">
+                    {{profile.phonenumber}}
+                    <button class="button-calm" ng-click="startEditPhone()">Edit</button>
+                </div>
+                <div ng-show="editPhone != null">
+                    (<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberRegional">)</input>
+                    <input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberFirstPart">-</input>
+                    <input size="4" maxlength="4" ng-model="updatedProfile.newPhonenumberSecondPart"></input>
+                    <button class="button-calm" ng-click="endEditPhone()">Edit</button>
+                </div>
+            </div>
+            <img ng-src="blank-profile.png" height="300" width="300"/>
             <div class="item item-body">
                 <p>
                     {{profile.description}}

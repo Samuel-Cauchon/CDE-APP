@@ -51,6 +51,16 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         controller: 'RegisterCtrl'
       })
 
+      .state('homeMenu.newsfeed', {
+        url: '/newsfeed',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/newsfeed.html',
+            controller: 'NewsfeedCtrl'
+          }
+        }
+      })
+
       .state('homeMenu.speakers', {
         url: '/speakers',
         views: {
@@ -78,46 +88,6 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
           }
         }
       })
-
-
-      .state('homeMenu.profileRaluca', {
-        url: '/profileRaluca',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profileRaluca.html',
-          }
-        }
-      })
-
-      .state('homeMenu.profileVasu', {
-        url: '/profileVasu',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profileVasu.html',
-          }
-        }
-      })
-
-      .state('homeMenu.profileLianna', {
-        url: '/profileLianna',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profileLianna.html',
-          }
-        }
-      })
-
-      .state('homeMenu.newsfeed', {
-        url: '/newsfeed',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/newsfeed.html',
-            controller: 'NewsfeedCtrl'
-          }
-        }
-      })
-
-
 // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/welcome');
 //$urlRouterProvider.otherwise('/newsfeed');

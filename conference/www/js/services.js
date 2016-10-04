@@ -99,7 +99,7 @@ angular.module('App.services', ['backand'])
 				    }
 				  }
 				});
-			},
+			}, 	
 
 			GetBirthday: function(user){
 				return $http ({
@@ -146,6 +146,32 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			updatePhonenumber: function(newPhoneNumber, user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/updatePhonenumber',
+				  params: {
+				    parameters: {
+				      newPhonenumber: newPhoneNumber,
+				      user: user
+				    }
+				  }
+				});
+			},
+
+			updateBirthdate: function(newBirthdate, user){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/updateBirthdate',
+				  params: {
+				    parameters: {
+				      newBirthdate: newBirthdate,
+				      user: user
+				    }
+				  }
+				});
+			},
+
 			// Exaple of format in which to enter parameters for new data entry
 			// newUser: function(){
 			// 	return $http ({
@@ -168,7 +194,6 @@ angular.module('App.services', ['backand'])
 					data: data
 				});
 			},
-
 
 			createNewUser: function(data, id){
 				return $http ({
@@ -195,9 +220,15 @@ angular.module('App.services', ['backand'])
 			}
 
 			/*uploadImage: function (filename, filedata) {
-			    // By calling the files action with POST method in will perform
+
+				var baseUrl = '/1/objects/';
+				var baseActionUrl = baseUrl + 'action/'
+				var objectName = 'user';
+				var filesActionName = 'img';
+
+			    // By calling the files action with POST method in will perform 
 			    // an upload of the file into Backand Storage
-			    return $http({
+			    $http({
 			      method: 'POST',
 			      url : Backand.getApiUrl() + baseActionUrl +  objectName,
 			      params:{
@@ -214,8 +245,13 @@ angular.module('App.services', ['backand'])
 			    });
 		  	},
 
-		  	deleteFile: function(filename){
-			    // By calling the files action with DELETE method in will perform
+		  	deleteImage: function(filename){
+
+		  		var baseUrl = '/1/objects/';
+			    var baseActionUrl = baseUrl + 'action/'
+			    var objectName = 'user';
+			    var filesActionName = 'img';
+			    // By calling the files action with DELETE method in will perform 
 			    // a deletion of the file from Backand Storage
 			    $http({
 			      method: 'DELETE',
@@ -226,7 +262,7 @@ angular.module('App.services', ['backand'])
 			      headers: {
 			        'Content-Type': 'application/json'
 			      },
-			      // you need to provide the file name
+			      // you need to provide the file name 
 			      data: {
 			        "filename": filename
 			      }
@@ -243,9 +279,8 @@ angular.module('App.services', ['backand'])
 
 .factory( 'AuthService', function() {
   var currentUser;
-	var uid;
 
-  return {
+  return { 
   };
 })
 

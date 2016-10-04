@@ -1,12 +1,12 @@
 <ion-view view-title="NewsFeed">
-	<ion-nav-buttons side="left">
+  <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-tabs class="tabs-top tabs-stable">
     <ion-tab title="Twitter Feed">
-			<iom-header-bar class="bar-subheader bar-stable">
-				<a class="tab-item">Twitter Feed</a>
-			</iom-header-bar>
+      <iom-header-bar class="bar-subheader bar-stable">
+        <a class="tab-item">Twitter Feed</a>
+      </iom-header-bar>
       <ion-content>
       </ion-content>
     </ion-tab>
@@ -21,9 +21,9 @@
         <div id="userName">
         {{userName}}
       </div>
-  			<label class="item item-input">
-  				<input type="text" id=0 placeholder="Say Something">
-  			</label>
+        <label class="item item-input">
+          <input type="text" id=0 placeholder="Say Something">
+        </label>
         <button class="button button-dark" id="postButton" ng-click="postComment(0)">Post</button>
       </div>
       <div class="list card">
@@ -39,8 +39,8 @@
               <button class="button button-dark" id="commentButton" ng-click="like(item.likes, item.id)">Like</button>
               <button class="button button-dark" id="commentButton" ng-click="postComment({{item.id}})">Comment</button>
               <label class="item item-input">
-        				<input type="text" id={{item.id}} placeholder="Comment">
-        			</label>
+                <input type="text" id={{item.id}} placeholder="Comment">
+              </label>
                 <ion-item ng-repeat="comment in entry" ng-if="item.id == comment.commentid">
                   {{comment.date}}<br>
                   {{comment.name}}<br>
