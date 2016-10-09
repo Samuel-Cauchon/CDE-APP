@@ -32,9 +32,14 @@
             </div>
             <img ng-src="blank-profile.png" height="300" width="300"/>
             <div class="item item-body">
-                <p>
-                    {{profile.description}}
-                </p>
+                <div ng-show="editDescription == null">
+                    <p>{{profile.description}}</p>
+                    <button class="button-calm" ng-click="startEditDescription()">Edit</button>
+                </div>
+                <div ng-show="editDescription != null">
+                    <textarea ng-model="updatedProfile.newDescription"></textarea>
+                    <button class="button-calm" ng-click="endEditDescription()">Edit</button>
+                </div>
             </div>
             <div class="button-bar">
                 <!-- <button class="button button-block button-positive">Facebook</button>

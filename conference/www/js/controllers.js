@@ -1,42 +1,67 @@
-angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
+angular.module('App.controllers', ['ngCordova', 'App.services'])
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice) {
+  
+  var init = function () {
+    try{
+      $scope.UUID = $cordovaDevice.getUUID();
+      DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
+        if (dataUUID[0] != null){
+          AuthService.currentUser = dataUser[0]['user'];
+          $state.go('homeMenu.newsfeed');
+        }
+      })
+    }
+    catch (err){
+      console.log("Error " + err.message);
+    }
+  }
+
   $scope.dataEntered = {
     username : "",
     password : "",
   };
 
-    $scope.Login = function () {
-      DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
-        //Check if the username exist...
-        if (dataUser[0] != null){
-          //Maybe an unecessary second check of the corectnes of the username...
-          if (dataUser[0]['name'] === $scope.dataEntered.username){
-            DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
-              //Maybe an unecessary check since if the user exists, then there should aslo be a password...
-              if (dataPass[0] != null){
-                //Check if the password is correct.
-                if (dataPass[0]['password'] === $scope.dataEntered.password){
-                  AuthService.currentUser = $scope.dataEntered.username;
-                  console.log(AuthService.currentUser);
-                  $state.go('homeMenu.newsfeed');
-                }
-              }
-            });
-          }
+  $scope.Login = function () {
+    DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
+      //Check if the username exist...
+      if (dataUser[0] != null){
+        //Maybe an unecessary second check of the corectnes of the username...
+        if (dataUser[0]['name'] === $scope.dataEntered.username){
+          DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
+            //Check if the password is correct.
+            if (dataPass[0]['password'] === $scope.dataEntered.password){
+              AuthService.currentUser = $scope.dataEntered.username;
+              DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+              console.log(AuthService.currentUser);
+              $state.go('homeMenu.newsfeed');
+            }
+          });
         }
-
-      });
-     
+      }
+    });
    };
 
    $scope.Register = function () {
        $state.go('register');
    };
 
+   ionic.Platform.ready(function(){
+      init();
+   });
+
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService){
+.controller('LogoutCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
+ 
+  $scope.Logout = function () {
+      DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
+      AuthService.currentUser = "";
+      $state.go('welcome');
+   };
+})
+
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService){
 
     $scope.dataEnteredRegister = {
       username : "",
@@ -49,11 +74,9 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
         console.log("1");
         //Check if the username exist...
         if (dataUser[0] == null){
-          console.log("2");
           DatabaseService.getMaxId().success(function(maxId){
-            console.log("3");
             DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
-              console.log("4");
+              AuthService.currentUser = $scope.dataEnteredRegister.username;
               $state.go('homeMenu.newsfeed');
             })
           })
@@ -151,12 +174,14 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       //})
     }
 
-  })
+})
 
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService) {
   $scope.editPhone = null;
   $scope.editDescription = null;
   $scope.editBirthdate = null;
+  $scope.editDescription = null;
+
 
 
   $scope.startEditPhone = function(){
@@ -185,10 +210,25 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     })
   }
 
+
+  $scope.startEditDescription = function(){
+    $scope.editDescription = "1";
+  }
+
+  $scope.endEditDescription= function(){
+    DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
+      DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+        $scope.profile.description = datadescription[0]['description'];
+        $scope.editDescription = null;
+      })
+    })
+  }
+
   $scope.profile = {
       img:"",
       phonenumber:"",
-      birthdate:""
+      birthdate:"",
+      description:""
   }
 
 
@@ -213,20 +253,23 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
     newPhonenumberRegional:"",
     newPhonenumberFirstPart:"",
-    newPhonenumberSecondPart:""
+    newPhonenumberSecondPart:"",
+
+    newDescription:""
+
   }
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
 
 
-	var options = {timeout: 10000, enableHighAccuracy: true};
+  var options = {timeout: 10000, enableHighAccuracy: true};
 
     var script = window.document.createElement('script');
     script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
     window.document.head.appendChild(script);
 
-	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
 
         var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -239,7 +282,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
         $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-	}, function(error){
+  }, function(error){
         console.log("Could not get location");
     });
 
@@ -256,15 +299,15 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   });
 
   $scope.$on('$ionicView.enter', function () {
-		retrieveInfo();
-	  console.log("page opened");
-	})
+    retrieveInfo();
+    console.log("page opened");
+  })
 
-	$scope.refreshNewsfeed = function () {
-		retrieveInfo();
+  $scope.refreshNewsfeed = function () {
+    retrieveInfo();
     $scope.$broadcast('scroll.refreshComplete');
-		console.log("page refresh");
-	}
+    console.log("page refresh");
+  }
 
   var formatNumber = function(number) {
     if (number<10){
@@ -296,7 +339,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
                 "\n\n\n\nstatus: " + status +
                 "\n\n\n\nheaders: " + header +
                 "\n\n\n\nconfig: " + config);
-  							console.log("error saving comment");
+                console.log("error saving comment");
     });
   }
 

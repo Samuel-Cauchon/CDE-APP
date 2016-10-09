@@ -43,6 +43,17 @@ angular.module('App.services', ['backand'])
 			// 	});
 			// },
 
+			searchUUID: function(UUID){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/searchUUID',
+				  params: {
+				    parameters: {
+				      UUID: UUID
+				    }
+				  }
+				});
+			},
 
 			searchUser: function(usernameEntered){
 				return $http ({
@@ -74,6 +85,19 @@ angular.module('App.services', ['backand'])
 				  method: 'GET',
 				  url: Backand.getApiUrl() + url,
 				  params: parameters
+				});
+			},
+
+			updateUUID: function(UUID, name){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/updateUUID',
+				  params: {
+				    parameters: {
+				      UUID: UUID,
+				      name: name
+				    }
+				  }
 				});
 			},
 
@@ -167,6 +191,19 @@ angular.module('App.services', ['backand'])
 				    parameters: {
 				      newBirthdate: newBirthdate,
 				      user: user
+				    }
+				  }
+				});
+			},
+
+			updateDescription: function(user, newDescription){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/UpdateDescription',
+				  params: {
+				    parameters: {
+				      user: user,	
+				      description: newDescription
 				    }
 				  }
 				});

@@ -70,6 +70,16 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         }
       })
 
+      .state('homeMenu.logout', {
+        url: '/logout',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/logout.html',
+            controller: 'LogoutCtrl'
+          }
+        }
+      })
+
       .state('homeMenu.map', {
         url: '/map',
         views: {
