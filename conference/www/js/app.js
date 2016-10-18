@@ -98,6 +98,23 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
           }
         }
       })
+	  .state('homeMenu.search', {
+        url: '/search',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/search.html',
+            controller: 'SearchCtrl'
+          }
+        }
+      })
+	  .state('homeMenu.sponsors', {
+        url: '/sponsors',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/popup.html',
+          }
+        }
+      })
 // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/welcome');
 //$urlRouterProvider.otherwise('/newsfeed');
