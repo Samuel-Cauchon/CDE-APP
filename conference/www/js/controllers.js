@@ -1,7 +1,7 @@
 angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice) {
-  
+
   /*var init = function () {
     try{
       $scope.UUID = $cordovaDevice.getUUID();
@@ -32,6 +32,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
             //Check if the password is correct.
             if (dataPass[0]['password'] === $scope.dataEntered.password){
               AuthService.currentUser = $scope.dataEntered.username;
+              AuthService.uid = dataUser[0]['id'];
+              console.log(AuthService.uid);
               DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
               console.log(AuthService.currentUser);
               $state.go('homeMenu.newsfeed');
@@ -53,7 +55,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 })
 
 .controller('LogoutCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
- 
+
   $scope.Logout = function () {
       DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
       AuthService.currentUser = "";
@@ -183,7 +185,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   $scope.editDescription = null;
 
 
-
   $scope.startEditPhone = function(){
     $scope.editPhone = "1";
   }
@@ -257,6 +258,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
     newDescription:""
 
+
   }
 })
 
@@ -288,23 +290,29 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, AuthService, NewsfeedService, Backand, $timeout, PersonService) {
+
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
+
+
 
   $scope.entry = [];
-  var uid = 1;
-  $scope.userName = "";
-
-  NewsfeedService.getUserName(uid).success(function(data){
-    $scope.userName = data['data'][0]['name'];
-  });
+  var uid = AuthService.uid;
+  $scope.userName = AuthService.currentUser;
 
   $scope.$on('$ionicView.enter', function () {
-    retrieveInfo();
-    console.log("page opened");
-  })
+    retrieveTwitterFeed();
+		retrieveInfo();
+	  console.log("page opened");
+	})
 
-  $scope.refreshNewsfeed = function () {
-    retrieveInfo();
+  $scope.refreshTwitterfeed = function () {
+		retrieveTwitterFeed();
+    $scope.$broadcast('scroll.refreshComplete');
+		console.log("page refresh");
+	}
+
+	$scope.refreshNewsfeed = function () {
+		retrieveInfo();
     $scope.$broadcast('scroll.refreshComplete');
     console.log("page refresh");
   }
@@ -317,8 +325,38 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     }
   };
 
-  $scope.postComment = function() {
-    var comment = document.getElementById('newContent').value;
+
+  var getMonth = function(monthNumber) {
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return months[parseInt(monthNumber) -1];
+  };
+
+  var formatDate = function(datetime) {
+    var result = datetime.split("-");
+    var year = result[0];
+    var month = getMonth(result[1]);
+    var res = result[2].split("T");
+    var day = res[0];
+    var time = res[1].split(":");
+    var hour = time[0];
+    var min = time[1];
+
+    return month+" "+day+" at "+hour+":"+min;
+  };
+
+  function retrieveTwitterFeed(){
+    TwitterREST.sync().then(function(tweets){
+          console.log(tweets);
+          $scope.tweets = tweets.statuses;
+      });
+
+      $scope.innapBrowser = function (value) {
+          window.open(value, '_blank');
+      };
+    }
+
+  $scope.postComment = function(id) {
+    var comment = document.getElementById(id).value;
     var timestamp = new Date();
     var day = formatNumber(timestamp.getDate());
     var month = formatNumber(timestamp.getMonth()+1);
@@ -327,12 +365,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     var min = formatNumber(timestamp.getMinutes());
     var sec = formatNumber(timestamp.getSeconds());
     var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
-    var data = {"date": date, "uid": uid, "content": comment};
+    var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
     DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
       $scope.ServerResponse = data;
       console.log("comment saved");
       $scope.refreshNewsfeed();
-      document.getElementById('newContent').value = null;
+      document.getElementById(id).value = null;
     })
       .error(function (data, status, header, config) {
             $scope.ServerResponse =  htmlDecode("Data: " + data +
@@ -343,11 +381,32 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     });
   }
 
+  $scope.like = function(likesCounter, entryId){
+     var data = {"likes": (parseInt(likesCounter) + 1)};
+     DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
+       $scope.ServerResponse = data;
+       console.log("likes updated");
+       $scope.refreshNewsfeed();
+     })
+       .error(function (data, status, header, config) {
+             $scope.ServerResponse =  htmlDecode("Data: " + data +
+                 "\n\n\n\nstatus: " + status +
+                 "\n\n\n\nheaders: " + header +
+                 "\n\n\n\nconfig: " + config);
+   							console.log("error updating likes");
+     });
+   };
+
 
   function retrieveInfo(){
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
       for (i=0; i < data.length; i++){
-          $scope.entry[i] = {name:data[i]['name'], date:data[i]['date'], content:data[i]['content']};
+          $scope.entry[i] = {name:data[i]['name'],
+                            date:data[i]['date'],
+                            content:data[i]['content'],
+                            commentid: data[i]['commentid'],
+                            id: data[i]['id'],
+                            likes: data[i]['likes']};
       }
     })
     .error(function (data, status, header, config) {
