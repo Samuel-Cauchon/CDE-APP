@@ -318,7 +318,8 @@ angular.module('App.services', ['backand'])
 
 .factory( 'AuthService', function() {
   var currentUser;
-	var uid;
+  var uid;
+  var currentLanguage = "English";
   return {
   };
 })

@@ -36,7 +36,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
               console.log(AuthService.uid);
               DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
               console.log(AuthService.currentUser);
-              $state.go('homeMenu.newsfeed');
+              //if (AuthService.currentLanguage == "English"){
+                $state.go('homeMenu.newsfeed');
+              //}
+              //else{
+                //$state.go('homeMenu.newsfeedFrench');
+              //}
             }
           });
         }
@@ -45,7 +50,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
    };
 
    $scope.Register = function () {
-       $state.go('register');
+      if (AuthService.currentLanguage == "English"){
+        $state.go('register');
+      }
+      else{
+        $state.go('registerFrench');
+      }
    };
 
    /*ionic.Platform.ready(function(){
@@ -59,8 +69,26 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   $scope.Logout = function () {
       DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
       AuthService.currentUser = "";
-      $state.go('welcome');
+      if (AuthService.currentLanguage == "English"){
+        $state.go('welcome');
+      }
+      else{
+        $state.go('welcomeFrench');
+      }
    };
+})
+
+.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
+
+  $scope.goFrench = function() {
+      AuthService.currentLanguage = "French";
+      $state.go('homeMenuFrench.optionsFrench');
+  };
+
+  $scope.goEnglish = function() {
+      AuthService.currentLanguage = "English";
+      $state.go('homeMenu.options');
+  };
 })
 
 .controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService){
@@ -79,7 +107,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
           DatabaseService.getMaxId().success(function(maxId){
             DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
               AuthService.currentUser = $scope.dataEnteredRegister.username;
-              $state.go('homeMenu.newsfeed');
+              if (AuthService.currentLanguage == "English"){
+                $state.go('homeMenu.newsfeed');
+              }
+              else{
+                $state.go('homeMenuFrench.newsfeedFrench');
+              }
             })
           })
         }
@@ -87,7 +120,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     };
 
    $scope.Cancel = function () {
-       $state.go('welcome');
+       if (AuthService.currentLanguage == "English"){
+         $state.go('welcome');
+       }
+       else{
+        $state.go('homeMenuFrench.welcomeFrench');
+      }
    };
 })
 
