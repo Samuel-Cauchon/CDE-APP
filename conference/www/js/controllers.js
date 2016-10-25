@@ -1,6 +1,15 @@
 angular.module('App.controllers', ['ngCordova', 'App.services'])
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice) {
+.run(function($rootScope) {
+  $rootScope.currentLanguage = "english";
+})
+
+.controller('menuController', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope) {
+
+})
+
+
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope) {
 
   /*var init = function () {
     try{
@@ -37,6 +46,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
               DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
               console.log(AuthService.currentUser);
               //if (AuthService.currentLanguage == "English"){
+                console.log($rootScope.currentLanguage);
                 $state.go('homeMenu.newsfeed');
               //}
               //else{
@@ -50,12 +60,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
    };
 
    $scope.Register = function () {
-      if (AuthService.currentLanguage == "English"){
         $state.go('register');
-      }
-      else{
-        $state.go('registerFrench');
-      }
    };
 
    /*ionic.Platform.ready(function(){
@@ -64,34 +69,28 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('LogoutCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
+.controller('LogoutCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
 
   $scope.Logout = function () {
       DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
       AuthService.currentUser = "";
-      if (AuthService.currentLanguage == "English"){
         $state.go('welcome');
-      }
-      else{
-        $state.go('welcomeFrench');
-      }
    };
 })
 
-.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
+.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
 
   $scope.goFrench = function() {
-      AuthService.currentLanguage = "French";
-      $state.go('homeMenuFrench.optionsFrench');
+      $rootScope.currentLanguage = "french";
+      console.log($rootScope.currentLanguage);
   };
 
   $scope.goEnglish = function() {
-      AuthService.currentLanguage = "English";
-      $state.go('homeMenu.options');
+      $rootScope.currentLanguage = "english";
   };
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService){
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
 
     $scope.dataEnteredRegister = {
       username : "",
@@ -107,12 +106,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
           DatabaseService.getMaxId().success(function(maxId){
             DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
               AuthService.currentUser = $scope.dataEnteredRegister.username;
-              if (AuthService.currentLanguage == "English"){
-                $state.go('homeMenu.newsfeed');
-              }
-              else{
-                $state.go('homeMenuFrench.newsfeedFrench');
-              }
+              $state.go('homeMenu.newsfeed');
             })
           })
         }
@@ -120,12 +114,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     };
 
    $scope.Cancel = function () {
-       if (AuthService.currentLanguage == "English"){
-         $state.go('welcome');
-       }
-       else{
-        $state.go('homeMenuFrench.welcomeFrench');
-      }
+      $state.go('welcome');
    };
 })
 
@@ -216,7 +205,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService) {
+.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
   $scope.editPhone = null;
   $scope.editDescription = null;
   $scope.editBirthdate = null;

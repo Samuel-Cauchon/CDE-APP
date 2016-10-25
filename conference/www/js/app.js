@@ -23,8 +23,10 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
       .state('homeMenu', {
         url: '/homeMenu',
         abstract: true,
-        templateUrl: 'templates/menu.html'
+        templateUrl: 'templates/menu.html',
+        controller: 'menuController'
       })
+
 
       .state('homeMenu.home', {
         url: '/home',
@@ -125,113 +127,6 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         }
       })
 
-
-
-
-
-
-    .state('welcomeFrench', {
-        url: '/welcomeFrench',
-        templateUrl: 'templates/loginFrench.html',
-        controller: 'LoginCtrl'
-      })
-
-      .state('homeMenuFrench', {
-        url: '/homeMenuFrench',
-        abstract: true,
-        templateUrl: 'templates/menuFrench.html'
-      })
-
-      .state('homeMenuFrench.profileFrench', {
-        url: '/profileFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/profileFrench.html',
-            controller: 'ProfileCtrl'
-          }
-        }
-      })
-
-      .state('registerFrench', {
-        url: '/registerFrench',
-        templateUrl: 'templates/registerFrench.html',
-        controller: 'RegisterCtrl'
-      })
-
-      .state('homeMenuFrench.newsfeedFrench', {
-        url: '/newsfeedFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/newsfeedFrench.html',
-            controller: 'NewsfeedCtrl'
-          }
-        }
-      })
-
-      .state('homeMenuFrench.speakersFrench', {
-        url: '/speakersFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/speakersFrench.html',
-          }
-        }
-      })
-
-      .state('homeMenuFrench.logoutFrench', {
-        url: '/logoutFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/logoutFrench.html',
-            controller: 'LogoutCtrl'
-          }
-        }
-      })
-
-      .state('homeMenuFrench.mapFrench', {
-        url: '/mapFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/mapFrench.html',
-            controller: 'MapCtrl'
-          }
-        }
-      })
-
-      .state('homeMenuFrench.scheduleFrench', {
-        url: '/scheduleFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/scheduleFrench.html'
-          }
-        }
-      })
-    .state('homeMenuFrench.searchFrench', {
-        url: '/searchFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/searchFrench.html',
-            controller: 'SearchCtrl'
-          }
-        }
-      })
-    .state('homeMenuFrench.sponsorsFrench', {
-        url: '/sponsorsFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/popupFrench.html',
-          }
-        }
-      })
-    .state('homeMenuFrench.optionsFrench', {
-        url: '/optionsFrench',
-        views: {
-          'menuContentFrench': {
-            templateUrl: 'templates/optionsFrench.html',
-            controller: 'OptionCtrl'
-          }
-        }
-      })
 // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/welcome');
-//$urlRouterProvider.otherwise('/newsfeed');
+      $urlRouterProvider.otherwise('/welcome');
   });

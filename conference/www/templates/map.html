@@ -1,5 +1,14 @@
-<ion-view view-title="Map">
-  <ion-content>
-    <div id="map" data-tap-disabled="true"></div>
-  </ion-content>
-</ion-view>
+<div ng-show="language != french">
+	<ion-view view-title="Map">
+	  <ion-content>
+	    <div id="map" data-tap-disabled="true"></div>
+	  </ion-content>
+	</ion-view>
+</div>
+<div ng-show="language == french">
+	<ion-view view-title="Carte">
+	  <ion-content>
+	    <div id="map" data-tap-disabled="true"></div>
+	  </ion-content>
+	</ion-view>
+</div>

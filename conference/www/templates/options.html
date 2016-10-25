@@ -2,7 +2,14 @@
   <ion-header-bar>
     <h1 class="title">Options</h1>
   </ion-header-bar>
-  <ion-content class="padding">
-  	<button class="button button-block button-calm col text-center" ng-click="goFrench()">Press to go French!</button>
-  </ion-content>
+  	<div ng-show="currentLanguage != 'french'">
+	  <ion-content class="padding">
+	  	<button class="button button-block button-calm col text-center" ng-click="goFrench()">Press to go French!</button>
+	  </ion-content>
+	</div>
+	<div ng-show="currentLanguage == 'french'">
+	  <ion-content class="padding">
+	  	<button class="button button-block button-calm col text-center" ng-click="goEnglish()">Appuyer pour continuer en Anglais!</button>
+	  </ion-content>
+	</div>
 </ion-modal-view>

@@ -18,33 +18,65 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu_close href="#/homeMenu/search">
-          Search
-        </ion-item>
-        <ion-item menu-close href="#/homeMenu/newsfeed">
-          Newsfeed
-        </ion-item>
-        <ion-item menu-close href="#/homeMenu/profile">
-          Profile
-        </ion-item>
-		    <ion-item menu-close href="#/homeMenu/schedule">
-          Schedule
-        </ion-item>
-		    <ion-item menu-close href="#/homeMenu/speakers">
-          Speakers
-        </ion-item>
-        <ion-item menu-close href="#/homeMenu/map">
-          Map
-        </ion-item>
-		    <ion-item menu-close href="#/homeMenu/sponsors">
-          Sponsors
-        </ion-item>
-        <ion-item menu-close href="#/homeMenu/options">
-          Options
-        </ion-item>
-        <ion-item menu-close href="#/homeMenu/logout">
-          Logout
-        </ion-item>
+        <div ng-show="currentLanguage != 'french'">
+          <ion-item menu_close href="#/homeMenu/search">
+            Search
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/newsfeed">
+            Newsfeed
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/profile">
+            Profile
+          </ion-item>
+  		    <ion-item menu-close href="#/homeMenu/schedule">
+            Schedule
+          </ion-item>
+  		    <ion-item menu-close href="#/homeMenu/speakers">
+            Speakers
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/map">
+            Map
+          </ion-item>
+  		    <ion-item menu-close href="#/homeMenu/sponsors">
+            Sponsors
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/options">
+            Options
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/logout">
+            Logout
+          </ion-item>
+        </div>
+
+        <div ng-show="currentLanguage == 'french'">
+          <ion-item menu_close href="#/homeMenu/search">
+            Recherche
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/newsfeed">
+            Fil d'Actualité
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/profile">
+            Profil
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/schedule">
+            Calendrier
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/speakers">
+            Conférenciers
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/map">
+            Carte
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/sponsors">
+            Partenaires
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/options">
+            Options
+          </ion-item>
+          <ion-item menu-close href="#/homeMenu/logout">
+            Déconnexion
+          </ion-item>
+        </div>
       </ion-list>
     </ion-content>
   </ion-side-menu>
