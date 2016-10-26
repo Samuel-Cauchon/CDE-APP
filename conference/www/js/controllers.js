@@ -90,6 +90,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   };
 })
 
+.controller('UsersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+    DatabaseService.getallUsers().success(function(dataAllUsers){
+        $scope.allUsers = dataAllUsers;
+    })
+})
+
 .controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
 
     $scope.dataEnteredRegister = {
@@ -287,6 +293,32 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 
   }
+})
+
+
+.controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+
+  $scope.profile = {
+      img:"",
+      phonenumber:"",
+      birthdate:"",
+      description:""
+  }
+
+
+  DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataimg){
+    DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
+      DatabaseService.GetBirthday(AuthService.userSelected).success(function(databirth){
+        DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
+          $scope.profile.img = dataimg[0]['profileimage'];
+          $scope.profile.phonenumber = dataphone[0]['phonenumber'];
+          $scope.profile.birthdate = databirth[0]['birthdate'];
+          $scope.profile.description = datadescription[0]['description'];
+        })
+      })
+    })
+  })
+
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {

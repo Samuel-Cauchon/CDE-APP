@@ -72,6 +72,16 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         }
       })
 
+      .state('homeMenu.users', {
+        url: '/users',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/users.html',
+            controller: 'UsersPageCtrl'
+          }
+        }
+      })
+
       .state('homeMenu.logout', {
         url: '/logout',
         views: {
@@ -109,6 +119,7 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
           }
         }
       })
+
 	  .state('homeMenu.sponsors', {
         url: '/sponsors',
         views: {
@@ -117,6 +128,17 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
           }
         }
       })
+
+    .state('homeMenu.userProfile', {
+        url: '/userProfile',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/userProfile.html',
+            controller: 'UserProfileCtrl'
+          }
+        }
+      })
+
     .state('homeMenu.options', {
         url: '/options',
         views: {

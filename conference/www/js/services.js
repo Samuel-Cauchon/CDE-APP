@@ -88,6 +88,14 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			getallUsers: function(){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/getAllUsername',
+				});
+
+			},
+
 			updateUUID: function(UUID, name){
 				return $http ({
 				  method: 'GET',
@@ -319,6 +327,7 @@ angular.module('App.services', ['backand'])
 .factory( 'AuthService', function() {
   var currentUser;
   var uid;
+  var userSelected;
   return {
   };
 })
