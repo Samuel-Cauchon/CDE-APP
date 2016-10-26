@@ -477,7 +477,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
       for (i=0; i < data.length; i++){
           $scope.entry[i] = {name:data[i]['name'],
-                            date:data[i]['date'],
+                            date:formatDate(data[i]['date']),
                             content:data[i]['content'],
                             commentid: data[i]['commentid'],
                             id: data[i]['id'],
