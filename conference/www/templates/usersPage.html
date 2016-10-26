@@ -7,9 +7,7 @@
 		  <ion-content class="padding">
 		  	<div class="list card">
 	             <div ng-repeat="user in allUsers">
-	  				<div class="item item-avatar">
-	  					<a ng-href="#/homeMenu/userProfile" ng-click="AuthService.userSelected = user.name"> {{user.name}} </a>
-	             	</div>
+	  				<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(user.name)"> {{user.name}} </a>
 	             </div>
 	        </div>
 		  </ion-content>
@@ -26,9 +24,7 @@
 		  <ion-content class="padding">
 		  	<div class="list card">
 	             <div ng-repeat="user in allUsers">
-	  				<div class="item item-avatar">
-	  					<a ng-href="#/homeMenu/userProfile" ng-click="AuthService.userSelected = user.name"> {{user.name}} </a>
-	             	</div>
+	  				<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(user.name)"> {{user.name}} </a>
 	             </div>
 	        </div>
 		  </ion-content>

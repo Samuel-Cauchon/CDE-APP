@@ -94,6 +94,11 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     DatabaseService.getallUsers().success(function(dataAllUsers){
         $scope.allUsers = dataAllUsers;
     })
+
+    $scope.setUserSelected = function(user){
+        AuthService.userSelected = user;
+        console.log(AuthService.userSelected);
+    }
 })
 
 .controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
@@ -295,8 +300,19 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   }
 })
 
+.controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+
+  console.log(AuthService.userSelected);
+  $scope.setUserSelected = function(user){
+      AuthService.userSelected = user;
+      console.log(AuthService.userSelected);
+  }
+
+})
+
 
 .controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+
 
   $scope.profile = {
       img:"",

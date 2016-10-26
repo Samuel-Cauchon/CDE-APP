@@ -72,11 +72,11 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         }
       })
 
-      .state('homeMenu.users', {
-        url: '/users',
+      .state('homeMenu.usersPage', {
+        url: '/usersPage',
         views: {
           'menuContent': {
-            templateUrl: 'templates/users.html',
+            templateUrl: 'templates/usersPage.html',
             controller: 'UsersPageCtrl'
           }
         }
@@ -127,7 +127,7 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
             templateUrl: 'templates/popup.html',
           }
         }
-      })
+    })
 
     .state('homeMenu.userProfile', {
         url: '/userProfile',
