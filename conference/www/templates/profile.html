@@ -31,7 +31,13 @@
                         <button class="button-calm" ng-click="endEditPhone()">Edit</button>
                     </div>
                 </div>
-                <img ng-src="blank-profile.png" height="300" width="300"/>
+                <form role="form" name="uploadForm">
+                    <div class="row">
+                        <img ng-src="" ng-show="imageUrl" />
+                        <input id="fileInput" type="file" accept="*/*" ng-model="filename" />
+                        <input type="button" value="x" class="delete-file" title="Delete file" ng-disabled="!imageUrl" ng-click="deleteFile()" />
+                    </div>
+                </form>
                 <div class="item item-body">
                     <div ng-show="editDescription == null">
                         <p>{{profile.description}}</p>
@@ -87,7 +93,14 @@
                         <button class="button-calm" ng-click="endEditPhone()">Modifier</button>
                     </div>
                 </div>
-                <img ng-src="blank-profile.png" height="300" width="300"/>
+               <form role="form" name="uploadForm">
+                    <div class="row">
+                        <img ng-src="" ng-show="imageUrl" />
+                        <input id="fileInput" type="file" accept="*/*" ng-model="filename" />
+                        <input type="button" value="x" class="delete-file" title="Delete file" ng-disabled="!imageUrl" ng-click="deleteFile()" />
+
+                    </div>
+                </form>
                 <div class="item item-body">
                     <div ng-show="editDescription == null">
                         <p>{{profile.description}}</p>

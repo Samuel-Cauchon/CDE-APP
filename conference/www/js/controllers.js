@@ -109,11 +109,56 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
       passwordConfirmation : "",
     };
 
+
+
+    function checkForm() 
+    {
+      if($scope.dataEnteredRegister.username == "") {
+        alert("Error: Username cannot be blank!");
+        return false;
+      }
+      re = /^\w+$/;
+      if(!re.test($scope.dataEnteredRegister.username)) {
+        alert("Error: Username must contain only letters, numbers and underscores!");
+        return false;
+      }
+
+      if($scope.dataEnteredRegister.password != "" && $scope.dataEnteredRegister.password == $scope.dataEnteredRegister.passwordConfirmation) {
+        if($scope.dataEnteredRegister.password < 6) {
+          alert("Error: Password must contain at least six characters!");
+          return false;
+        }
+        if($scope.dataEnteredRegister.password == $scope.dataEnteredRegister.username) {
+          alert("Error: Password must be different from Username!");
+          return false;
+        }
+        re = /[0-9]/;
+        if(!re.test($scope.dataEnteredRegister.password)) {
+          alert("Error: password must contain at least one number (0-9)!");
+          return false;
+        }
+        re = /[a-z]/;
+        if(!re.test($scope.dataEnteredRegister.password)) {
+          alert("Error: password must contain at least one lowercase letter (a-z)!");
+          return false;
+        }
+        re = /[A-Z]/;
+        if(!re.test($scope.dataEnteredRegister.password)) {
+          alert("Error: password must contain at least one uppercase letter (A-Z)!");
+          return false;
+        }
+      } else {
+        alert("Error: Please check that you've entered and confirmed your password!");
+        return false;
+      }
+
+      return true;
+    };
+
     $scope.Register = function () {
       DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
-        console.log("1");
         //Check if the username exist...
-        if (dataUser[0] == null){
+        if (dataUser[0] == null && checkForm()){
           DatabaseService.getMaxId().success(function(maxId){
             DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
               AuthService.currentUser = $scope.dataEnteredRegister.username;
@@ -216,7 +261,130 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand) {
+
+
+
+
+
+
+
+// Create a server side action in backand
+  // Go to any object's actions tab 
+  // and click on the Backand Storage icon.
+  // Backand consts:
+  var baseUrl = '/1/objects/';
+  var baseActionUrl = baseUrl + 'action/'
+  var objectName = 'user';
+  var filesActionName = 'img';
+
+  // Display the image after upload
+  $scope.imageUrl = null;
+
+  // Store the file name after upload to be used for delete
+  $scope.filename = null;
+
+  // input file onchange callback
+  function imageChanged(fileInput) {
+
+    //read file content
+    var file = fileInput.files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      upload(file.name, e.currentTarget.result).then(function(res) {
+        $scope.imageUrl = res.data.url;
+        $scope.filename = file.name;
+      }, function(err){
+        alert(err.data);
+      });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  // register to change event on input file 
+  function initUpload() {
+    var fileInput = document.getElementById('fileInput');
+
+    fileInput.addEventListener('change', function(e) {
+      imageChanged(fileInput);
+    });
+  }
+
+   // call to Backand action with the file name and file data  
+  function upload(filename, filedata) {
+    // By calling the files action with POST method in will perform 
+    // an upload of the file into Backand Storage
+    return $http({
+      method: 'POST',
+      url : Backand.getApiUrl() + baseActionUrl +  objectName,
+      params:{
+        "name": filesActionName
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // you need to provide the file name and the file data
+      data: {
+        "filename": filename,
+        "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
+      }
+    });
+  };
+
+  $scope.deleteFile = function(){
+    if (!$scope.filename){
+      alert('Please choose a file');
+      return;
+    }
+    // By calling the files action with DELETE method in will perform 
+    // a deletion of the file from Backand Storage
+    $http({
+      method: 'DELETE',
+      url : Backand.getApiUrl() + baseActionUrl +  objectName,
+      params:{
+        "name": filesActionName
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // you need to provide the file name 
+      data: {
+        "filename": $scope.filename
+      }
+    }).then(function(){
+      // Reset the form
+      $scope.imageUrl = null;
+      document.getElementById('fileInput').value = "";
+    });
+  }
+
+  $scope.initCtrl = function() {
+    initUpload();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   $scope.editPhone = null;
   $scope.editDescription = null;
   $scope.editBirthdate = null;
