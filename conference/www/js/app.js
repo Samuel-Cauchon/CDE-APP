@@ -84,7 +84,8 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         url: '/schedule',
         views: {
           'menuContent': {
-            templateUrl: 'templates/schedule.html'
+            templateUrl: 'templates/schedule.html',
+            controller: 'EventsCtrl'
           }
         }
       })

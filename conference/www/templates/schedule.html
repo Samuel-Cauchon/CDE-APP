@@ -10,13 +10,12 @@
   <ion-content>
     <p></p>
     <div class="bar bar-header bar-calm nav-icon">
-      <i class="ion-android-arrow-dropleft-circle icon-large-size icon-left"></i>
-      <h1 class="title" ng-click="">Saturday November 14, 2016</h1>
-      <i class="ion-android-arrow-dropright-circle icon-large-size icon-right"></i>
+      <h1 class="title">{{ putNewDate(defaultDate.clientSide, dates) }}</h1>
+      <i class="ion-android-arrow-dropdown icon-large-size icon-right" ng-click="popover.show($event)" ></i>
     </div>
-    <br></br>
+      <br></br>
     <ion-list>
-      <div ng-repeat="entity in dayOneEvents">
+      <div ng-repeat="entity in events">
         <ion-item class="item-stable"
                   ng-click="toggleGroup(entity)"
                   ng-class="{active: isGroupShown(entity)}">
@@ -29,39 +28,18 @@
         </ion-item>
         <ion-item class="item-accordion"
                   ng-if="isGroupShown(entity)">
-          <table class="myTable">
-            <tr>
-              <td>Description:</td>
-              <td>{{ entity.description }}</td>
-            </tr>
-            <tr>
-              <td>Where:</td>
-              <td>{{ entity.place }}</td>
-            </tr>
-            <tr  ng-if="entity.speaker !== null">
-              <td>Speaker(s):</td>
-              <td>{{ entity.speaker }} {{entity.attending}}</td>
-            </tr>
-          </table>
-          <br>
-
-          <!--<div id="scrollable-area">-->
-            <!--<table ng-table="tableParams" class="table"  fixed-table-headers="scrollable-area">-->
-              <!--<tr ng-repeat="user in ">-->
-                <!--<td data-title="'Name'">{{user.name}}</td>-->
-                <!--<td data-title="'Age'">{{user.age}}</td>-->
-              <!--</tr>-->
-            <!--</table>-->
-          <!--</div>-->
-
-          <!--<table class="myTable">-->
-            <!--<tr>-->
-              <!--<td>-->
-            <!--</tr>Users Attending:-->
-            <!--</td>-->
-            <!--<td ng-repeat="n in getMappingOfEventToUsers(entity.id)"> {{ n }}</td>-->
-          <!--</table>-->
-          <p class="text-center">Users Attending:</p>
+          Description
+          <p id="openBox">{{ entity.description }}</p>
+          <p>Where</p>
+          <p></p>
+          {{ entity.place }}
+          <p></p>
+          <div ng-if="entity.speaker !==null">
+          <p>Speaker(s)</p>
+          <p></p>
+          {{ entity.speaker }} {{ entity.attending }}
+          </div>
+          <p>Users Attending:</p>
             <ion-scroll style="height:100px" class="scrollVertical" direction="y">
               <div class="list">
                   <div ng-repeat="n in getMappingOfEventToUsers(entity.id) | orderBy"  >
@@ -77,13 +55,36 @@
           <p></p>
           <p></p>
           <p></p>
-          <div>
-            <input type="button" value="Register!" style="display: block; margin: 0 auto;"
-            ng-click="registerUser(entity.id)">
-          </div>
+          <!--<div>-->
+            <!--<input type="button" value="Register!" style="display: block; margin: 0 auto;"-->
+            <!--ng-click="registerUser(entity.id)">-->
+          <!--</div>-->
+
+          <button class="button button-balanced" style="display: block; margin: 0 auto">
+            Register!
+          </button>
 
         </ion-item>
       </div>
     </ion-list>
   </ion-content>
 </ion-view>
+<script id="templates/popover.html" type="text/ng-template">
+  <ion-popover-view style="width:300px !important">
+    <ion-header-bar>
+      <h1 class="title">Select A Date</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-radio ng-repeat="item in dates"
+                 ng-value="item.value"
+                 ng-model="defaultDate.clientSide">
+        {{ item.text }}
+      </ion-radio>
+      <!--<ion-radio ng-model="feedFilterLevel" value="0" select="selected" ng-click="getDateChosen(0)">{{ dates[0] }}</ion-radio>-->
+      <!--<ion-radio ng-model="feedFilterLevel" value="1" ng-click="getDateChosen(1)">{{ dates [1]}}</ion-radio>-->
+      <!--<ion-radio ng-model="feedFilterLevel" value="2" ng-click="getDateChosen(2)">{{ dates[2] }}</ion-radio>-->
+
+    </ion-content>
+  </ion-popover-view>
+
+</script>

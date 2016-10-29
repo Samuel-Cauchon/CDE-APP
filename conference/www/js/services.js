@@ -99,7 +99,7 @@ angular.module('App.services', ['backand'])
 				    }
 				  }
 				});
-			}, 	
+			},
 
 			GetBirthday: function(user){
 				return $http ({
@@ -226,7 +226,7 @@ angular.module('App.services', ['backand'])
 				var objectName = 'user';
 				var filesActionName = 'img';
 
-			    // By calling the files action with POST method in will perform 
+			    // By calling the files action with POST method in will perform
 			    // an upload of the file into Backand Storage
 			    $http({
 			      method: 'POST',
@@ -251,7 +251,7 @@ angular.module('App.services', ['backand'])
 			    var baseActionUrl = baseUrl + 'action/'
 			    var objectName = 'user';
 			    var filesActionName = 'img';
-			    // By calling the files action with DELETE method in will perform 
+			    // By calling the files action with DELETE method in will perform
 			    // a deletion of the file from Backand Storage
 			    $http({
 			      method: 'DELETE',
@@ -262,7 +262,7 @@ angular.module('App.services', ['backand'])
 			      headers: {
 			        'Content-Type': 'application/json'
 			      },
-			      // you need to provide the file name 
+			      // you need to provide the file name
 			      data: {
 			        "filename": filename
 			      }
@@ -280,7 +280,7 @@ angular.module('App.services', ['backand'])
 .factory( 'AuthService', function() {
   var currentUser;
 
-  return { 
+  return {
   };
 })
 
@@ -315,50 +315,66 @@ angular.module('App.services', ['backand'])
 
 .service('MainEvents', function(DatabaseService){
   var eventId;
+  var firstDayEvents = [];
+  var secondDayEvents = [];
+  var thirdDayEvents = [];
+
   return{
     getEventsFirstDay:function(){
-      console.log(DatabaseService.getData('/1/query/data/getEventsDay1?deep=true',{}));
       return DatabaseService.getData('/1/query/data/getEventsDay1?deep=true', {});
     },
     getEventsSecondDay: function(){
-      console.log(DatabaseService.getData('/1/query/data/getEventsDay2',{}));
       return DatabaseService.getData('/1/query/data/getEventsDay2',{});
     },
     getEventsFinalDay: function(){
-      console.log(DatabaseService.getData('/1/query/data/getEventsDay3',{}));
       return DatabaseService.getData('/1/query/data/getEventsDay3',{});
     },
     getUserQuery:function(){
-      console.log(DatabaseService.getData('/1/query/data/GetAllUsers',{}));
       return DatabaseService.getData('/1/query/data/GetAllUsers',{});
     },
-    getUserAttending: function(){
-      console.log(DatabaseService.getData('1/objects/event/', {}));
-      console.log("hi");
-      return DatabaseService.getData('1/objects/user', {});
-    },
-    setEventId: function(id){
-      eventId = id;
-    },
-    getEventId: function(){
-      return eventId;
-    },
-    getPeopleAttendingEvent: function(){
-      if(eventId) {
-        console.log(DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {}));
-        return DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {});
-      }
-    },
-    getBLAH: function(){
-      console.log(DatabaseService.getData('/1/objects/event?deep=true',{}));
-      return DatabaseService.getData('/1/objects/event?deep=true',{});
-    },
+    //getBLAH: function(){
+    //  console.log(DatabaseService.getData('/1/objects/event?deep=true',{}));
+    //  return DatabaseService.getData('/1/objects/event?deep=true',{});
+    //},
     getPeopleAttending: function(){
-      console.log(DatabaseService.getData('/1/objects/relusersevents', {}));
       return DatabaseService.getData('/1/objects/relusersevents', {});
     },
     updatePeopleAttending: function(){
       return DatabaseService.newEntry('/1/objects/relusersevents', {user:16, event:eventId} )
+    },
+
+    setEventArrayWithFixedTiming: function(dayArr, day){
+      if (day == 'one'){
+        console.log("IM HEREEEEE")
+       firstDayEvents = dayArr;
+      }
+
+      if (day == 'second'){
+        secondDayEvents = dayArr;
+      }
+
+      if (day == 'last'){
+        thirdDayEvents = dayArr;
+      }
+    },
+
+    getEventArrayWithFixedTiming: function(day){
+      if (day == 'one'){
+        if(firstDayEvents) {
+          return firstDayEvents;
+        }
+        else{
+          return [];
+        }
+      }
+
+      if(day == 'second'){
+        return secondDayEvents;
+      }
+
+      if(day == 'third'){
+        return thirdDayEvents
+      }
     }
 
 

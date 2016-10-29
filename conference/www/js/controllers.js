@@ -18,7 +18,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
                 //Check if the password is correct.
                 if (dataPass[0]['password'] === $scope.dataEntered.password){
                   AuthService.currentUser = $scope.dataEntered.username;
-                  console.log(AuthService.currentUser);
+                  console.log("YOOOO", AuthService.currentUser);
                   $state.go('homeMenu.newsfeed');
                 }
               }
@@ -27,7 +27,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
         }
 
       });
-     
+
    };
 
    $scope.Register = function () {
@@ -66,10 +66,32 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
    };
 })
 
-.controller('EventsCtrl', function($scope, MainEvents) {
+.controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
 
     var peopleAttendingEachEvent = {};
     $scope.map = {};
+
+  $scope.dates = [
+    {text: 'November 18, 2016', value:1},
+    {text: 'November 19, 2016', value: 2},
+    {text: 'November 20, 2016', value: 3}
+  ];
+  $scope.defaultDate = {
+    clientSide: '1'
+  }
+  $scope.putNewDate = function(datePickedVal, dateArr){
+    var index;
+    dateArr.some(function(entry, i){
+      if (entry.value == datePickedVal){
+        index =i;
+      }
+    })
+
+    if (index <= 2) {
+      setDateForRepetition(index);
+      return dateArr[index].text;
+    }
+  }
 
   $scope.toggleGroup = function(group) {
     if ($scope.isGroupShown(group)) {
@@ -78,42 +100,65 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       $scope.shownGroup = group;
     }
   };
+
+  $ionicPopover.fromTemplateUrl('templates/popover.html', {
+    scope: $scope,
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
   $scope.isGroupShown = function(group) {
     return $scope.shownGroup === group;
   };
 
-  MainEvents.getUserQuery().success(function(data){
+  MainEvents.getUserQuery().success(function(data) {
     var userArr = data;
-    console.log("User Info", data);
-    for (var i =0; i < userArr.length; i++){
+    for (var i = 0; i < userArr.length; i++) {
       peopleAttendingEachEvent[userArr[i].id] = {
         name: userArr[i].name
       };
     }
-    console.log("IIII", peopleAttendingEachEvent);
     MainEvents.getPeopleAttending().success(function(data){
       var mapOfEventToUser = data.data;
-      mapOfEventToUser.forEach(function(item){
-        if(!$scope.map[item.event]){
-          $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
-          console.log("SUP", $scope.map[item.event]);
-        }
-        else{
-          $scope.map[item.event].push(peopleAttendingEachEvent[item.user].name);
+      mapOfEventToUser.forEach(function(item) {
+        if((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
+          if (!$scope.map[item.event]) {
+            $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
+          }
+          else {
+            $scope.map[item.event].push(peopleAttendingEachEvent[item.user].name);
+          }
         }
       })
-      console.log("MAP", $scope.map["1"]);
       $scope.getMappingOfEventToUsers = function(id){
-        console.log("ID", id);
-        console.log("TRY", $scope.map[id]);
         return $scope.map[id];
       }
     })
   });
+
+
   MainEvents.getEventsFirstDay().success(function (data) {
     $scope.dayOneEvents = data;
-    console.log("Day One Events", data);
-    angular.forEach($scope.dayOneEvents, function (value) {
+    fixTiming($scope.dayOneEvents);
+    MainEvents.setEventArrayWithFixedTiming($scope.dayOneEvents, 'one')
+
+  });
+
+  MainEvents.getEventsSecondDay().success(function(data){
+    $scope.dayTwoEvents = data;
+    fixTiming($scope.dayTwoEvents);
+    MainEvents.setEventArrayWithFixedTiming($scope.dayTwoEvents, 'second');
+  });
+
+
+  MainEvents.getEventsFinalDay().success(function(data){
+    $scope.finalDayEvents = data;
+    fixTiming($scope.finalDayEvents);
+    MainEvents.setEventArrayWithFixedTiming($scope.finalDayEvents, 'last');
+  });
+
+  function fixTiming(dayEventArr){
+    angular.forEach(dayEventArr, function (value) {
       value.starttime = new Date(Date.parse(value.starttime)).toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit'
@@ -123,33 +168,25 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
         minute: '2-digit'
       });
     })
-  });
+  }
 
-    $scope.registerUser= function(id){
-      console.log("Id", id);
-      MainEvents.setEventId(id);
-      //MainEvents.getPeopleAttendingEvent().success(function(data){
-      //  $scope.peopleAttending = data;
-      //  console.log("peopleAttending", $scope.peopleAttending);
-      //})
-      //MainEvents.getPeopleAttending().success(function(data){
-      //  $scope.peep = data.data;
-      //  var temp = data.data;
-      //  console.log("HIIII", data.data);
-      //  temp.forEach(function(item){
-      //    if(!map[item.event]){
-      //      console.log("YOOOO");
-      //      map[item.event] = [peopleAttendingEachEvent[item.user].name];
-      //      console.log("SUP", map[item.event]);
-      //    }
-      //    else{
-      //      console.log("MY NIGGA");
-      //      map[item.event].push(peopleAttendingEachEvent[item.user].name);
-      //    }
-      //  });
-      //  console.log("MAP", map["1"]);
-      //})
+  //$scope.setDateForRepetition = function(){
+  //
+  //}
+  function setDateForRepetition(ind) {
+    $scope.events;
+    if (ind == 0) {
+      $scope.events = MainEvents.getEventArrayWithFixedTiming('one');
     }
+
+    if(ind == 1){
+      $scope.events = MainEvents.getEventArrayWithFixedTiming('second');
+    }
+
+    if(ind == 2){
+      $scope.events = MainEvents.getEventArrayWithFixedTiming('third');
+    }
+  }
 
   })
 
