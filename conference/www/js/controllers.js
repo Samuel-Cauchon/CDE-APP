@@ -8,7 +8,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
   })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
   $scope.dataEntered = {
     username : "",
     password : "",
@@ -118,6 +118,13 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     {text: 'November 19, 2016', value: 2},
     {text: 'November 20, 2016', value: 3}
   ];
+
+  $scope.datesFrench = [
+    {text: '18 novembre 2016', value: 1},
+    {text: '19 novembre 2016', value: 2},
+    {text: '20 novembre 2016', value: 3}
+  ]
+
   $scope.defaultDate = {
     clientSide: '1'
   }
