@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('App', ['ionic', 'App.controllers', 'App.services'])
+angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'])
 
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, BackandProvider) {
 
@@ -23,8 +23,10 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
       .state('homeMenu', {
         url: '/homeMenu',
         abstract: true,
-        templateUrl: 'templates/menu.html'
+        templateUrl: 'templates/menu.html',
+        controller: 'menuController'
       })
+
 
       .state('homeMenu.home', {
         url: '/home',
@@ -70,6 +72,26 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
         }
       })
 
+      .state('homeMenu.usersPage', {
+        url: '/usersPage',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/usersPage.html',
+            controller: 'UsersPageCtrl'
+          }
+        }
+      })
+
+      .state('homeMenu.logout', {
+        url: '/logout',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/logout.html',
+            controller: 'LogoutCtrl'
+          }
+        }
+      })
+
       .state('homeMenu.map', {
         url: '/map',
         views: {
@@ -89,7 +111,45 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services'])
           }
         }
       })
+	  .state('homeMenu.search', {
+        url: '/search',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/search.html',
+            controller: 'SearchCtrl'
+          }
+        }
+      })
+
+	  .state('homeMenu.sponsors', {
+        url: '/sponsors',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/popup.html',
+          }
+        }
+    })
+
+    .state('homeMenu.userProfile', {
+        url: '/userProfile',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/userProfile.html',
+            controller: 'UserProfileCtrl'
+          }
+        }
+      })
+
+    .state('homeMenu.options', {
+        url: '/options',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/options.html',
+            controller: 'OptionCtrl'
+          }
+        }
+      })
+
 // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/welcome');
-//$urlRouterProvider.otherwise('/newsfeed');
+      $urlRouterProvider.otherwise('/welcome');
   });
