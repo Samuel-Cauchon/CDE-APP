@@ -116,3 +116,8 @@ div.edit-description textarea {
 	margin-bottom: 10px;
 	font-size: 12px;
 }
+
+#openBox{
+  width:350px;
+  white-space: normal;
+}

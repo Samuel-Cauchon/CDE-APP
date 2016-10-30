@@ -376,21 +376,21 @@ angular.module('App.services', ['backand'])
 
 .service('MainEvents', function(DatabaseService){
   var eventId;
+  var firstDayEvents = [];
+  var secondDayEvents = [];
+  var thirdDayEvents = [];
+
   return{
     getEventsFirstDay:function(){
-      console.log(DatabaseService.getData('/1/query/data/getEventsDay1?deep=true',{}));
       return DatabaseService.getData('/1/query/data/getEventsDay1?deep=true', {});
     },
     getEventsSecondDay: function(){
-      console.log(DatabaseService.getData('/1/query/data/getEventsDay2',{}));
       return DatabaseService.getData('/1/query/data/getEventsDay2',{});
     },
     getEventsFinalDay: function(){
-      console.log(DatabaseService.getData('/1/query/data/getEventsDay3',{}));
       return DatabaseService.getData('/1/query/data/getEventsDay3',{});
     },
     getUserQuery:function(){
-      console.log(DatabaseService.getData('/1/query/data/GetAllUsers',{}));
       return DatabaseService.getData('/1/query/data/GetAllUsers',{});
     },
     getUserAttending: function(){
@@ -415,11 +415,44 @@ angular.module('App.services', ['backand'])
       return DatabaseService.getData('/1/objects/event?deep=true',{});
     },
     getPeopleAttending: function(){
-      console.log(DatabaseService.getData('/1/objects/relusersevents', {}));
       return DatabaseService.getData('/1/objects/relusersevents', {});
     },
     updatePeopleAttending: function(){
       return DatabaseService.newEntry('/1/objects/relusersevents', {user:16, event:eventId} )
+    },
+
+    setEventArrayWithFixedTiming: function(dayArr, day){
+      if (day == 'one'){
+        console.log("IM HEREEEEE")
+       firstDayEvents = dayArr;
+      }
+
+      if (day == 'second'){
+        secondDayEvents = dayArr;
+      }
+
+      if (day == 'last'){
+        thirdDayEvents = dayArr;
+      }
+    },
+
+    getEventArrayWithFixedTiming: function(day){
+      if (day == 'one'){
+        if(firstDayEvents) {
+          return firstDayEvents;
+        }
+        else{
+          return [];
+        }
+      }
+
+      if(day == 'second'){
+        return secondDayEvents;
+      }
+
+      if(day == 'third'){
+        return thirdDayEvents
+      }
     }
 
 

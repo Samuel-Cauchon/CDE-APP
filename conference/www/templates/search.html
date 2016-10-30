@@ -1,26 +1,27 @@
 <div ng-show="currentLanguage != 'french'">
   <ion-view view-title="Search">
   	<ion-content class="has-header">
-      <div class="list">
-        <label class="item item-input">
-          <input type="text" id="searchContent" placeholder="Search">
-          <button class="button button-dark" id="postButton" ng-click="searchUsers(searchContent)">Search</button>
-        </label>
-        <label class="item item-input item-select">
-          <select ng-controller="SearchCtrl" ng-model="selectOption" ng-change="getDropdownOption()">
+      <form ng-submit="searchUsers(searchContent)" ng-controller="SearchCtrl">
+        <input type="item item-input item-select">
+          <select ng-model="selectOption" ng-change="getDropdownOption()">
             <option value="location">Events by Location</option>
             <option value="name">Events by Name</option>
             <option value="user">People</option>
           </select>
-        </label>
-      </div>
+        </input>
+        <input type="text" ng-model="searchContent" id="searchContent" placeholder="Search"/>
+        <input type="submit" id="submit" value="Search" ng-click="getValue(searchContent)" />
+      </form>
 
-      <div class="item item-body" ng-if="searchables == 'blank'">
+      <div class="item item-body" ng-hide="searchables == 'blank' && searched != null" ng-cloak>
+        {{
         <p>
           You need to select an option from the dropdown menu to search!
         </p>
+        }}
       </div>
-      <div class="list card" ng-if="searched !== null">
+      <div class="list card" ng-show="searchables != 'blank' && searched !== null" ng-cloak>
+        {{
         <div class="item" >
           <ion-list>
             <ion-item ng-repeat="item in searched">
@@ -28,6 +29,7 @@
             </ion-item>
           </ion-list>
         </div>
+        }}
       </div>
     </ion-content>
   </ion-view>
