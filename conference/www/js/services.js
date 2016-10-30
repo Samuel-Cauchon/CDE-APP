@@ -109,6 +109,19 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			updateImg: function(name, photo){
+				return $http ({
+				  method: 'GET',
+				  url: Backand.getApiUrl() + '/1/query/data/updateImg',
+				  params: {
+				    parameters: {
+				      	name: name,
+      					photo: photo
+				    }
+				  }
+				});
+			},
+
 			GetPhoneNumber: function(user){
 				return $http ({
 				  method: 'GET',
@@ -133,10 +146,10 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
-			GetBirthday: function(user){
+			GetProfession: function(user){
 				return $http ({
 				  method: 'GET',
-				  url: Backand.getApiUrl() + '/1/query/data/GetBirthday',
+				  url: Backand.getApiUrl() + '/1/query/data/GetProfession',
 				  params: {
 				    parameters: {
 				      username: user
@@ -191,13 +204,13 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
-			updateBirthdate: function(newBirthdate, user){
+			updateProfession: function(newProfession, user){
 				return $http ({
 				  method: 'GET',
-				  url: Backand.getApiUrl() + '/1/query/data/updateBirthdate',
+				  url: Backand.getApiUrl() + '/1/query/data/updateProfession',
 				  params: {
 				    parameters: {
-				      newBirthdate: newBirthdate,
+				      newProfession: newProfession,
 				      user: user
 				    }
 				  }

@@ -261,13 +261,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand) {
-
-
-
-
-
-
+.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http) {
 
 // Create a server side action in backand
   // Go to any object's actions tab 
@@ -295,6 +289,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
       upload(file.name, e.currentTarget.result).then(function(res) {
         $scope.imageUrl = res.data.url;
         $scope.filename = file.name;
+        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+        })
+        $scope.profile.imgName = file.name;
       }, function(err){
         alert(err.data);
       });
@@ -310,12 +307,27 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     fileInput.addEventListener('change', function(e) {
       imageChanged(fileInput);
     });
+
+    var fileInputFr = document.getElementById('fileInputFr');
+
+    fileInputFr.addEventListener('change', function(e) {
+      imageChanged(fileInputFr);
+    });
+  }
+
+  $scope.clearAll = function(){
+
+    $scope.updatedProfile.newDescription = "";
   }
 
    // call to Backand action with the file name and file data  
   function upload(filename, filedata) {
     // By calling the files action with POST method in will perform 
     // an upload of the file into Backand Storage
+
+    //DatabaseService.updateImg(AuthService.currentUser, filename).success(function(){
+    //})
+
     return $http({
       method: 'POST',
       url : Backand.getApiUrl() + baseActionUrl +  objectName,
@@ -340,6 +352,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     }
     // By calling the files action with DELETE method in will perform 
     // a deletion of the file from Backand Storage
+    DatabaseService.updateImg(AuthService.currentUser, "").success(function(data){
+    })
+
     $http({
       method: 'DELETE',
       url : Backand.getApiUrl() + baseActionUrl +  objectName,
@@ -368,27 +383,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   $scope.editPhone = null;
   $scope.editDescription = null;
-  $scope.editBirthdate = null;
-  $scope.editDescription = null;
+  $scope.editProfession = null;
 
 
   $scope.startEditPhone = function(){
@@ -404,15 +401,15 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     })
   }
 
-  $scope.startEditBirthdate = function(){
-    $scope.editBirthdate = "1";
+  $scope.startEditProfession = function(){
+    $scope.editProfession = "1";
   }
 
-  $scope.endEditBirthdate= function(){
-    DatabaseService.updateBirthdate($scope.updatedProfile.newBirthdateDay+"-"+$scope.updatedProfile.newBirthdateMonth+"-"+$scope.updatedProfile.newBirthdateYear, AuthService.currentUser).success(function(){
-      DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirthdate){
-        $scope.profile.birthdate = databirthdate[0]['birthdate'];
-        $scope.editBirthdate = null;
+  $scope.endEditProfession= function(){
+    DatabaseService.updateProfession($scope.updatedProfile.newProfession, AuthService.currentUser).success(function(){
+      DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
+        $scope.profile.profession = dataprofession[0]['profession'];
+        $scope.editProfession = null;
       })
     })
   }
@@ -433,20 +430,22 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
   $scope.profile = {
       img:"",
+      imgName:"",
       phonenumber:"",
-      birthdate:"",
+      profession:"",
       description:""
   }
 
 
-  DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataimg){
-    DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
-      DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirth){
-        DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
-          $scope.profile.img = dataimg[0]['profileimage'];
+  DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+    DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
+      DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+        DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
+          $scope.profile.imgName = dataImg[0]['photo'];
           $scope.profile.phonenumber = dataphone[0]['phonenumber'];
-          $scope.profile.birthdate = databirth[0]['birthdate'];
+          $scope.profile.profession = dataprofession[0]['profession'];
           $scope.profile.description = datadescription[0]['description'];
+          console.log($scope.profile.imgName);
         })
       })
     })
@@ -454,9 +453,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
   $scope.updatedProfile = {
 
-    newBirthdateDay:"",
-    newBirthdateMonth:"",
-    newBirthdateYear:"",
+    newProfession:"",
 
     newPhonenumberRegional:"",
     newPhonenumberFirstPart:"",
@@ -485,18 +482,18 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   $scope.profile = {
       img:"",
       phonenumber:"",
-      birthdate:"",
+      profession:"",
       description:""
   }
 
 
   DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataimg){
     DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
-      DatabaseService.GetBirthday(AuthService.userSelected).success(function(databirth){
+      DatabaseService.GetProfession(AuthService.userSelected).success(function(dataprofession){
         DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
           $scope.profile.img = dataimg[0]['profileimage'];
           $scope.profile.phonenumber = dataphone[0]['phonenumber'];
-          $scope.profile.birthdate = databirth[0]['birthdate'];
+          $scope.profile.profession = dataprofession[0]['profession'];
           $scope.profile.description = datadescription[0]['description'];
         })
       })
