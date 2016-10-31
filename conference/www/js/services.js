@@ -67,7 +67,6 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
-<<<<<<< HEAD
 			searchImg: function(imgName){
 				return $http ({
 					method: 'GET',
@@ -79,7 +78,7 @@ angular.module('App.services', ['backand'])
 					}
 				});
 			},
-=======
+			
 			// Example of how to enter parameters for how to retrieve data from db
 			// listRaluca: function(){
 			// 	return $http ({
@@ -93,7 +92,6 @@ angular.module('App.services', ['backand'])
 			// 	  }
 			// 	});
 			// },
->>>>>>> d02bf94b48e547f2928dfab4ffa7ca8880b65165
 
 			getData: function(url, parameters){
 				return $http ({
