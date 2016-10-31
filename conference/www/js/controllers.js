@@ -79,7 +79,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	DatabaseService.getAllNamePhotos().success(function(dataAllInfo){
 		$scope.usersInfo = dataAllInfo;
 	})
-	
+
 	$scope.setUserSelected = function(userChosen){
 		AuthService.userSelected = userChosen;
 	}
@@ -95,7 +95,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 
 
-	function checkForm() 
+	function checkForm()
 	{
 		if($scope.dataEnteredRegister.username == "") {
 			alert("Error: Username cannot be blank!");
@@ -291,6 +291,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http) {
 
+<<<<<<< HEAD
 	// Create a server side action in backand
 	// Go to any object's actions tab 
 	// and click on the Backand Storage icon.
@@ -320,8 +321,6 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     		else {
 				imageExist = false;
 			}
-
-
 			//read file content
 			if (imageExist == true){
 				reader.onload = function(e) {
@@ -344,7 +343,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 		})
     };
 
-  // register to change event on input file 
+  // register to change event on input file
   function initUpload() {
   	var fileInput = document.getElementById('fileInput');
 
@@ -364,9 +363,9 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   	$scope.updatedProfile.newDescription = "";
   }
 
-   // call to Backand action with the file name and file data  
+   // call to Backand action with the file name and file data
    function upload(filename, filedata) {
-	// By calling the files action with POST method in will perform 
+	// By calling the files action with POST method in will perform
 	// an upload of the file into Backand Storage
 
 	//DatabaseService.updateImg(AuthService.currentUser, filename).success(function(){
@@ -394,7 +393,7 @@ $scope.deleteFile = function(){
 		alert('Please choose a file');
 		return;
 	}
-	// By calling the files action with DELETE method in will perform 
+	// By calling the files action with DELETE method in will perform
 	// a deletion of the file from Backand Storage
 	DatabaseService.updateImg(AuthService.currentUser, "").success(function(data){
 	})
@@ -408,7 +407,7 @@ $scope.deleteFile = function(){
 		headers: {
 			'Content-Type': 'application/json'
 		},
-	  // you need to provide the file name 
+	  // you need to provide the file name
 	  data: {
 	  	"filename": $scope.filename
 	  }
@@ -525,7 +524,33 @@ $scope.updatedProfile = {
 	newDescription:""
 
 
-}
+  }
+
+  var eventsAttending = {};
+  var currentUser = "";
+  DatabaseService.getID(AuthService.userSelected).success(function(data){
+    currentUser = data[0]['id'];
+  })
+  MainEvents.setUserID(currentUser);
+  MainEvents.getPeopleAttending().success(function(data) {
+    var mapOfUserToEvent = data.data;
+    console.log("HIIIII", data.data);
+    mapOfUserToEvent.forEach(function (item) {
+      if (!$scope.map[item.user]) {
+        $scope.map[item.user] = [eventsAttending[item.event].name];
+        console.log("EVENTS", $scope.map[item.event]);
+      }
+      else {
+        $scope.map[item.name].push(eventsAttending[item.event].name);
+      }
+    })
+    console.log("MAP", $scope.map["1"]);
+    $scope.getMappingOfUserToEvents = function (id) {
+      console.log("ID", id);
+      console.log("TRY", $scope.map[id]);
+      return $scope.map[id];
+    }
+  })
 })
 
 .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
@@ -567,33 +592,33 @@ $scope.updatedProfile = {
 
 })
 
-.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
-
-
-	var options = {timeout: 10000, enableHighAccuracy: true};
-
-	var script = window.document.createElement('script');
-	script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
-	window.document.head.appendChild(script);
-
-	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
-
-
-		var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-		var mapOptions = {
-			center: latLng,
-			zoom: 15,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-
-		$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-	}, function(error){
-		console.log("Could not get location");
-	});
-
-})
+// .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
+//
+//
+// 	var options = {timeout: 10000, enableHighAccuracy: true};
+//
+// 	var script = window.document.createElement('script');
+// 	script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
+// 	window.document.head.appendChild(script);
+//
+// 	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
+//
+//
+// 		var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+//
+// 		var mapOptions = {
+// 			center: latLng,
+// 			zoom: 15,
+// 			mapTypeId: google.maps.MapTypeId.ROADMAP
+// 		};
+//
+// 		$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+//
+// 	}, function(error){
+// 		console.log("Could not get location");
+// 	});
+//
+// })
 
 
 .controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
@@ -602,7 +627,12 @@ $scope.updatedProfile = {
 
 	$scope.entry = [];
 	var uid = AuthService.uid;
-	$scope.userName = AuthService.currentUser;
+  $scope.userName = "";
+  var parameters = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
+  DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
+    $scope.userName = data['name'];
+
+  });
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveTwitterFeed();
@@ -703,7 +733,7 @@ $scope.updatedProfile = {
 
 
 	function retrieveInfo(){
-		DatabaseService.getData('/1/query/data/getNameFromID').success(function(data){
+		DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
 			for (i=0; i < data.length; i++){
 				$scope.entry[i] = {name:data[i]['name'],
 				date:formatDate(data[i]['date']),
@@ -740,80 +770,57 @@ $scope.updatedProfile = {
 
 })
 
-.controller('SearchCtrl', function($scope, $http, DatabaseService) {
-	$scope.searchables = "blank";
-	console.log($scope.searchables);
-	$scope.searched = [];
-	$scope.searchUsers = function() {
-		var searchItem = document.getElementById('searchContent').value;
-		if ($scope.searchables = "blank") {
-			console.log("Blank search - unsearchable")
-		}
-		else if (searchItem = "") {
-			console.log("Blank search - unsearchable")
-		}
-		else if ($scope.searchables = "user"){
-			DatabaseService.getData('/1/query/data/searchUser').success(function(data){
-				for (i=0; i < data.length; i++){
-					$scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-				}
-			})
-			.error(function (data, status, header, config) {
-				$scope.ServerResponse =  htmlDecode("Data: " + data +
-					"\n\n\n\nstatus: " + status +
-					"\n\n\n\nheaders: " + header +
-					"\n\n\n\nconfig: " + config);
-				console.log("error getting data");
-			});
-		}
-		else if ($scope.searchables = "name"){
-			DatabaseService.getData('/1/query/data/searchEventByName').success(function(data){
-				for (i=0; i < data.length; i++){
-					$scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-				}
-			})
-			.error(function (data, status, header, config) {
-				$scope.ServerResponse =  htmlDecode("Data: " + data +
-					"\n\n\n\nstatus: " + status +
-					"\n\n\n\nheaders: " + header +
-					"\n\n\n\nconfig: " + config);
-				console.log("error getting data");
-			});
-		}
-		else if ($scope.searchables = "location") {
-			DatabaseService.getData('/1/query/data/searchEventByLocation').success(function(data){
-				for (i=0; i < data.length; i++){
-					$scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-				}
-			})
-			.error(function (data, status, header, config) {
-				$scope.ServerResponse =  htmlDecode("Data: " + data +
-					"\n\n\n\nstatus: " + status +
-					"\n\n\n\nheaders: " + header +
-					"\n\n\n\nconfig: " + config);
-				console.log("error getting data");
-			});
-		}
-	}
+  .controller('SearchCtrl', function($scope, $http, DatabaseService) {
+    $scope.searchables = "blank";
+    $scope.searched = [];
+    $scope.searchContent = "Search";
+    $scope.entries = [];
+    $scope.searchUsers = function(){
+      //$scope.searchContent= document.getElementById('searchContent').value;
+      console.log($scope.searchables);
+      console.log($scope.SearchContent);
+      if ($scope.searchables == "blank") {
+        console.log("No Category Selected - unsearchable");
+      }
+      else if ($scope.query == "Search") {
+        DatabaseService.searchUser($scope.query).success(function(data){
+          for (i=0; i < data.length; i++){
+            $scope.entries[i] = {name:data[i]['name'],
+              id: data[i]['id']};
+          }
+        })
+      }
+      else if ($scope.searchables == "user"){
+        console.log("User search");
+      }
+      else if ($scope.searchables == "name"){
+        console.log("Event by name");
+      }
+      else if ($scope.searchables == "location") {
+        console.log("Event by location");
+      }
+    }
 
-	$scope.getDropdownOption = function(){
-		searchopt = $scope.selectOption;
-		console.log(searchopt);
-		switch(searchopt) {
-			case 'location':
-			$scope.searchables = "location";
-			break;
-			case 'name':
-			$scope.searchables = "name";
-			break;
-			case 'user':
-			$scope.searchables = "user";
-			break;
-			default:
-			$scope.searchables = "blank";
+    $scope.getValue = function(val){
+      console.log("VALLLLL", val);
+    }
 
-		}
-		console.log($scope.searchables);
-	}
+    $scope.getDropdownOption = function(){
+      searchopt = $scope.selectOption;
+      switch(searchopt) {
+        case 'location':
+          $scope.searchables = "location";
+          break;
+        case 'name':
+          $scope.searchables = "name";
+          break;
+        case 'user':
+          $scope.searchables = "user";
+          break;
+        default:
+          $scope.searchables = "blank";
 
-})
+      }
+    }
+
+  })

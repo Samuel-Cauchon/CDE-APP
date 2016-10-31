@@ -29,19 +29,6 @@ angular.module('App.services', ['backand'])
 					}
 				});
 			},
-			// Example of how to enter parameters for how to retrieve data from db
-			// listRaluca: function(){
-			// 	return $http ({
-			// 	  method: 'GET',
-			// 	  url: Backand.getApiUrl() + '/1/objects/user',
-			// 	  params: {
-			// 	    pageSize: 20,
-			// 	    pageNumber: 1,
-			// 	    filter: [{"fieldName":"name","operator":"equals","value":"Raluca Niti"}],
-			// 	    sort: ''
-			// 	  }
-			// 	});
-			// },
 
 			searchUUID: function(UUID){
 				return $http ({
@@ -80,6 +67,7 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+<<<<<<< HEAD
 			searchImg: function(imgName){
 				return $http ({
 					method: 'GET',
@@ -91,6 +79,21 @@ angular.module('App.services', ['backand'])
 					}
 				});
 			},
+=======
+			// Example of how to enter parameters for how to retrieve data from db
+			// listRaluca: function(){
+			// 	return $http ({
+			// 	  method: 'GET',
+			// 	  url: Backand.getApiUrl() + '/1/objects/user',
+			// 	  params: {
+			// 	    pageSize: 20,
+			// 	    pageNumber: 1,
+			// 	    filter: [{"fieldName":"name","operator":"equals","value":"Raluca Niti"}],
+			// 	    sort: ''
+			// 	  }
+			// 	});
+			// },
+>>>>>>> d02bf94b48e547f2928dfab4ffa7ca8880b65165
 
 			getData: function(url, parameters){
 				return $http ({
@@ -119,7 +122,7 @@ angular.module('App.services', ['backand'])
 				});
 
 			},
-			
+
 			getAllNamePhotos: function(){
 				return $http ({
 					method: 'GET',
