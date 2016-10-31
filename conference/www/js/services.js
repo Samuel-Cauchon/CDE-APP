@@ -321,7 +321,27 @@ angular.module('App.services', ['backand'])
 						parameters: {}
 					}
 				});
-			}
+			},
+
+			getID: function(uname){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getID',
+          params: {
+            username: uname
+          }
+        });
+      },
+
+      getAllEvents: function() {
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getEveryEvent',
+          params: {
+            parameters: {}
+          }
+        });
+      }
 
 			/*uploadImage: function (filename, filedata) {
 

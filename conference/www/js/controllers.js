@@ -502,31 +502,33 @@ $scope.updatedProfile = {
 
   }
 
-  var eventsAttending = {};
-  var currentUser = "";
-  DatabaseService.getID(AuthService.userSelected).success(function(data){
-    currentUser = data[0]['id'];
-  })
-  MainEvents.setUserID(currentUser);
-  MainEvents.getPeopleAttending().success(function(data) {
-    var mapOfUserToEvent = data.data;
-    console.log("HIIIII", data.data);
-    mapOfUserToEvent.forEach(function (item) {
-      if (!$scope.map[item.user]) {
-        $scope.map[item.user] = [eventsAttending[item.event].name];
-        console.log("EVENTS", $scope.map[item.event]);
-      }
-      else {
-        $scope.map[item.name].push(eventsAttending[item.event].name);
+  $scope.userMap = {};
+  var eventList = {};
+  DatabaseService.getAllEvents().success(function(data) {
+    var eventArr = data;
+    for (var i = 0; i < eventArr.length; i++) {
+      eventList[eventArr[i].id] = {
+        name: eventArr[i].name
+      };
+    }
+    var currentUser = "";
+    DatabaseService.getID(AuthService.userSelected).success(function(data){
+      currentUser = data[0]['id'];
+    })
+    MainEvents.getPeopleAttending().success(function(data){
+      var mapOfEvents = data.data;
+      mapOfEvents.forEach(function(item) {
+        if(currentUser == item.user) {
+          if ($scope.userMap.indexOf(item) == -1) {
+            $scope.userMap.push(eventList[item.event].name);
+          }
+        }
+      })
+      $scope.userEvents = function(id){
+        return $scope.userMap[id];
       }
     })
-    console.log("MAP", $scope.map["1"]);
-    $scope.getMappingOfUserToEvents = function (id) {
-      console.log("ID", id);
-      console.log("TRY", $scope.map[id]);
-      return $scope.map[id];
-    }
-  })
+  });
 })
 
 .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
