@@ -80,7 +80,7 @@ div.profile-avatar {
 	padding-left: 0;
 }
 
-div.profile-avatar > img, div.profile-avatar > div, div.profile-telephone > div {
+div.profile-avatar > div, div.profile-telephone > div {
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -120,4 +120,27 @@ div.edit-description textarea {
 #openBox{
   width:350px;
   white-space: normal;
+}
+
+img.blank-profile {
+	display: block;
+	margin-bottom: 7px;
+}
+
+.item.item-avatar.profile-avatar > a > img {
+	position: absolute;
+    top: 16px;
+    left: 16px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.item.item-avatar > span {
+	display: block;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 }

@@ -1,16 +1,20 @@
 <div ng-show="currentLanguage != 'french'">
 	<ion-view view-title="Profiles">
 		<ion-modal-view>
-		  <ion-header-bar>
-		    <h1 class="title">Members</h1>
-		  </ion-header-bar>
-		  <ion-content class="padding">
-		  	<div class="list card">
-	             <div ng-repeat="user in allUsers">
-	  				<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(user.name)"> {{user.name}} </a>
-	             </div>
-	        </div>
-		  </ion-content>
+			<ion-header-bar>
+				<h1 class="title">Members</h1>
+			</ion-header-bar>
+			<ion-content class="padding">
+			<div class="list card">
+					<div class="item item-avatar profile-avatar" ng-repeat="u in usersInfo">
+						<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(u.name)"> 
+							<img ng-show="u.photo != null" ng-src="https://files.backand.io/cdeapp/{{u.photo}}" />
+							<img ng-show="u.photo == null" ng-src="blank-profile.png" />
+							<span>{{u.name}}</span>
+						</a>
+					</div>
+				</div>
+			</ion-content>
 		</ion-modal-view>
 	</ion-view>
 </div>
@@ -18,16 +22,16 @@
 <div ng-show="currentLanguage == 'french'">
 	<ion-view view-title="Profils">
 		<ion-modal-view>
-		  <ion-header-bar>
-		    <h1 class="title">Membres</h1>
-		  </ion-header-bar>
-		  <ion-content class="padding">
-		  	<div class="list card">
-	             <div ng-repeat="user in allUsers">
-	  				<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(user.name)"> {{user.name}} </a>
-	             </div>
-	        </div>
-		  </ion-content>
+			<ion-header-bar>
+				<h1 class="title">Membres</h1>
+			</ion-header-bar>
+			<ion-content class="padding">
+				<div class="list card">
+					<div ng-repeat="user in allUsers">
+						<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(user.name)"> {{user.name}} </a>
+					</div>
+				</div>
+			</ion-content>
 		</ion-modal-view>
 	</ion-view>
 </div>
