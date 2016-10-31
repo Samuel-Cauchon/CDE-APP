@@ -298,6 +298,32 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 
   }
+
+  var eventsAttending = {};
+  var currentUser = "";
+  DatabaseService.getID(AuthService.userSelected).success(function(data){
+    currentUser = data[0]['id'];
+  })
+  MainEvents.setUserID(currentUser);
+  MainEvents.getPeopleAttending().success(function(data) {
+    var mapOfUserToEvent = data.data;
+    console.log("HIIIII", data.data);
+    mapOfUserToEvent.forEach(function (item) {
+      if (!$scope.map[item.user]) {
+        $scope.map[item.user] = [eventsAttending[item.event].name];
+        console.log("EVENTS", $scope.map[item.event]);
+      }
+      else {
+        $scope.map[item.name].push(eventsAttending[item.event].name);
+      }
+    })
+    console.log("MAP", $scope.map["1"]);
+    $scope.getMappingOfUserToEvents = function (id) {
+      console.log("ID", id);
+      console.log("TRY", $scope.map[id]);
+      return $scope.map[id];
+    }
+  })
 })
 
 .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
@@ -511,80 +537,56 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('SearchCtrl', function($scope, $http, DatabaseService) {
-  $scope.searchables = "blank";
-  console.log($scope.searchables);
-  $scope.searched = [];
-  $scope.searchUsers = function() {
-    var searchItem = document.getElementById('searchContent').value;
-    if ($scope.searchables = "blank") {
-      console.log("Blank search - unsearchable")
-    }
-    else if (searchItem = "") {
-      console.log("Blank search - unsearchable")
-    }
-    else if ($scope.searchables = "user"){
-      DatabaseService.getData('/1/query/data/searchUser').success(function(data){
-      for (i=0; i < data.length; i++){
-        $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
+  .controller('SearchCtrl', function($scope, $http, DatabaseService) {
+    $scope.searchables = "blank";
+    $scope.searched = [];
+    $scope.searchContent = "Search";
+    $scope.entries = [];
+    $scope.searchUsers = function(){
+      //$scope.searchContent= document.getElementById('searchContent').value;
+      console.log($scope.searchables);
+      if ($scope.searchables == "blank") {
+        console.log("No Category Selected - unsearchable");
       }
-      })
-    .error(function (data, status, header, config) {
-      $scope.ServerResponse =  htmlDecode("Data: " + data +
-        "\n\n\n\nstatus: " + status +
-        "\n\n\n\nheaders: " + header +
-        "\n\n\n\nconfig: " + config);
-      console.log("error getting data");
-    });
+      else if ($scope.query == "Search") {
+        DatabaseService.searchUser($scope.query).success(function(data){
+          for (i=0; i < data.length; i++){
+            $scope.entries[i] = {name:data[i]['name'],
+              id: data[i]['id']};
+          }
+        })
+      }
+      else if ($scope.searchables == "user"){
+        console.log("User search");
+      }
+      else if ($scope.searchables == "name"){
+        console.log("Event by name");
+      }
+      else if ($scope.searchables == "location") {
+        console.log("Event by location");
+      }
     }
-    else if ($scope.searchables = "name"){
-      DatabaseService.getData('/1/query/data/searchEventByName').success(function(data){
-        for (i=0; i < data.length; i++){
-          $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-        }
-      })
-        .error(function (data, status, header, config) {
-          $scope.ServerResponse =  htmlDecode("Data: " + data +
-            "\n\n\n\nstatus: " + status +
-            "\n\n\n\nheaders: " + header +
-            "\n\n\n\nconfig: " + config);
-          console.log("error getting data");
-        });
-    }
-    else if ($scope.searchables = "location") {
-      DatabaseService.getData('/1/query/data/searchEventByLocation').success(function(data){
-        for (i=0; i < data.length; i++){
-          $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-        }
-      })
-        .error(function (data, status, header, config) {
-          $scope.ServerResponse =  htmlDecode("Data: " + data +
-            "\n\n\n\nstatus: " + status +
-            "\n\n\n\nheaders: " + header +
-            "\n\n\n\nconfig: " + config);
-          console.log("error getting data");
-        });
-    }
-  }
 
-  $scope.getDropdownOption = function(){
-    searchopt = $scope.selectOption;
-    console.log(searchopt);
-    switch(searchopt) {
-      case 'location':
-        $scope.searchables = "location";
-        break;
-      case 'name':
-        $scope.searchables = "name";
-        break;
-      case 'user':
-        $scope.searchables = "user";
-        break;
-      default:
-        $scope.searchables = "blank";
-
+    $scope.getValue = function(val){
+      console.log("VALLLLL", val);
     }
-    console.log($scope.searchables);
-  }
 
-})
+    $scope.getDropdownOption = function(){
+      searchopt = $scope.selectOption;
+      switch(searchopt) {
+        case 'location':
+          $scope.searchables = "location";
+          break;
+        case 'name':
+          $scope.searchables = "name";
+          break;
+        case 'user':
+          $scope.searchables = "user";
+          break;
+        default:
+          $scope.searchables = "blank";
+
+      }
+    }
+
+  })

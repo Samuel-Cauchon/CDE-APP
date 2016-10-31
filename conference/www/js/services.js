@@ -363,6 +363,7 @@ angular.module('App.services', ['backand'])
 
 .service('MainEvents', function(DatabaseService){
   var eventId;
+  var userID;
   return{
     getEventsFirstDay:function(){
       console.log(DatabaseService.getData('/1/query/data/getEventsDay1?deep=true',{}));
@@ -407,8 +408,19 @@ angular.module('App.services', ['backand'])
     },
     updatePeopleAttending: function(){
       return DatabaseService.newEntry('/1/objects/relusersevents', {user:16, event:eventId} )
+    },
+    setUserID: function(id){
+      userID = id;
+    },
+    getUserID: function(){
+      return userID;
+    },
+    getUserEvent: function(){
+      if(userID) {
+        console.log(DatabaseService.getData('/1/objects/event/' + userID + '?deep=true', {}));
+        return DatabaseService.getData('/1/objects/event/' + userID + '?deep=true', {});
+      }
     }
-
 
   }
 })
