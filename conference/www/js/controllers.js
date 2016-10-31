@@ -291,9 +291,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http) {
 
-<<<<<<< HEAD
 	// Create a server side action in backand
-	// Go to any object's actions tab 
+	// Go to any object's actions tab
 	// and click on the Backand Storage icon.
 	// Backand consts:
 	var baseUrl = '/1/objects/';
