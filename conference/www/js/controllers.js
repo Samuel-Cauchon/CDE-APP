@@ -289,7 +289,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http) {
+.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http, MainEvents) {
 
 	// Create a server side action in backand
 	// Go to any object's actions tab
@@ -525,8 +525,9 @@ $scope.updatedProfile = {
 
   }
 
-  $scope.userMap = {};
+  $scope.userMap = [];
   var eventList = {};
+  $scope.isUser = 1;
   DatabaseService.getAllEvents().success(function(data) {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
@@ -534,10 +535,16 @@ $scope.updatedProfile = {
         name: eventArr[i].name
       };
     }
+
     var currentUser = "";
-    DatabaseService.getID(AuthService.userSelected).success(function(data){
-      currentUser = data[0]['id'];
-    })
+    if($scope.isUser == 1) {
+      currentUser = AuthService.uid;
+    } else {
+      DatabaseService.getID(AuthService.userSelected).success(function(data){
+        currentUser = data[0]['id'];
+      })
+    }
+
     MainEvents.getPeopleAttending().success(function(data){
       var mapOfEvents = data.data;
       mapOfEvents.forEach(function(item) {
@@ -547,11 +554,26 @@ $scope.updatedProfile = {
           }
         }
       })
-      $scope.userEvents = function(id){
-        return $scope.userMap[id];
+      $scope.userMap = removeDuplicates($scope.userMap);
+      console.log($scope.userMap);
+      $scope.userEvents = function(){
+        return $scope.userMap;
       }
     })
   });
+
+  function removeDuplicates(arr){
+    var temp = [];
+    for (var i=0; i < arr.length; i++){
+      if(temp.indexOf(arr[i]) == -1){
+        temp.push(arr[i]);
+      }
+    }
+    arr = temp;
+    temp = [];
+    return arr;
+
+  }
 })
 
 .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
