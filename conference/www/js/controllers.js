@@ -70,7 +70,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	DatabaseService.getAllNamePhotos().success(function(dataAllInfo){
 		$scope.usersInfo = dataAllInfo;
 	})
-	
+
 	$scope.setUserSelected = function(userChosen){
 		AuthService.userSelected = userChosen;
 	}
@@ -86,7 +86,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 
 
-	function checkForm() 
+	function checkForm()
 	{
 		if($scope.dataEnteredRegister.username == "") {
 			alert("Error: Username cannot be blank!");
@@ -283,7 +283,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http) {
 
 // Create a server side action in backand
-  // Go to any object's actions tab 
+  // Go to any object's actions tab
   // and click on the Backand Storage icon.
   // Backand consts:
   var baseUrl = '/1/objects/';
@@ -319,7 +319,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	reader.readAsDataURL(file);
 };
 
-  // register to change event on input file 
+  // register to change event on input file
   function initUpload() {
   	var fileInput = document.getElementById('fileInput');
 
@@ -339,9 +339,9 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   	$scope.updatedProfile.newDescription = "";
   }
 
-   // call to Backand action with the file name and file data  
+   // call to Backand action with the file name and file data
    function upload(filename, filedata) {
-	// By calling the files action with POST method in will perform 
+	// By calling the files action with POST method in will perform
 	// an upload of the file into Backand Storage
 
 	//DatabaseService.updateImg(AuthService.currentUser, filename).success(function(){
@@ -369,7 +369,7 @@ $scope.deleteFile = function(){
 		alert('Please choose a file');
 		return;
 	}
-	// By calling the files action with DELETE method in will perform 
+	// By calling the files action with DELETE method in will perform
 	// a deletion of the file from Backand Storage
 	DatabaseService.updateImg(AuthService.currentUser, "").success(function(data){
 	})
@@ -383,7 +383,7 @@ $scope.deleteFile = function(){
 		headers: {
 			'Content-Type': 'application/json'
 		},
-	  // you need to provide the file name 
+	  // you need to provide the file name
 	  data: {
 	  	"filename": $scope.filename
 	  }
@@ -577,7 +577,12 @@ $scope.updatedProfile = {
 
 	$scope.entry = [];
 	var uid = AuthService.uid;
-	$scope.userName = AuthService.currentUser;
+  $scope.userName = "";
+  var parameters = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
+  DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
+    $scope.userName = data['name'];
+
+  });
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveTwitterFeed();
@@ -678,7 +683,7 @@ $scope.updatedProfile = {
 
 
 	function retrieveInfo(){
-		DatabaseService.getData('/1/query/data/getNameFromID').success(function(data){
+		DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
 			for (i=0; i < data.length; i++){
 				$scope.entry[i] = {name:data[i]['name'],
 				date:formatDate(data[i]['date']),
