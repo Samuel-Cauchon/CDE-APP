@@ -754,6 +754,7 @@ $scope.updatedProfile = {
     $scope.searchUsers = function(){
       //$scope.searchContent= document.getElementById('searchContent').value;
       console.log($scope.searchables);
+      console.log($scope.SearchContent);
       if ($scope.searchables == "blank") {
         console.log("No Category Selected - unsearchable");
       }

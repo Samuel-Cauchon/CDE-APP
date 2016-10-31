@@ -13,24 +13,29 @@
         <input type="submit" id="submit" value="Search" ng-click="getValue(searchContent)" />
       </form>
 
-      <div class="item item-body" ng-hide="searchables == 'blank' && searched != null" ng-cloak>
-        {{
-        <p>
-          You need to select an option from the dropdown menu to search!
-        </p>
-        }}
+      <div>
+        <ul>
+            <li ng-repeat="d in data|filter:search.txt">{{d}}</li>
+        </ul>
       </div>
-      <div class="list card" ng-show="searchables != 'blank' && searched !== null" ng-cloak>
-        {{
-        <div class="item" >
-          <ion-list>
-            <ion-item ng-repeat="item in searched">
-              {{item.name}}<br>
-            </ion-item>
-          </ion-list>
-        </div>
-        }}
-      </div>
+      <!--<div class="item item-body" ng-hide="searchables == 'blank' && searched != null" ng-cloak>-->
+        <!--{{-->
+        <!--<p>-->
+          <!--You need to select an option from the dropdown menu to search!-->
+        <!--</p>-->
+        <!--}}-->
+      <!--</div>-->
+      <!--<div class="list card" ng-show="searchables != 'blank' && searched !== null" ng-cloak>-->
+        <!--{{-->
+        <!--<div class="item" >-->
+          <!--<ion-list>-->
+            <!--<ion-item ng-repeat="item in searched">-->
+              <!--{{item.name}}<br>-->
+            <!--</ion-item>-->
+          <!--</ion-list>-->
+        <!--</div>-->
+        <!--}}-->
+      <!--</div>-->
     </ion-content>
   </ion-view>
 </div>
