@@ -26,15 +26,24 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 				AuthService.currentUser = $scope.dataEntered.username;
 				AuthService.uid = dataUser[0]['id'];
 				DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
-			  //if (AuthService.currentLanguage == "English"){
-			  	$state.go('homeMenu.newsfeed');
-			  //}
-			  //else{
-				//$state.go('homeMenu.newsfeedFrench');
-			  //}
-			}
-		});
+				  //if (AuthService.currentLanguage == "English"){
+				  	$state.go('homeMenu.newsfeed');
+				  //}
+				  //else{
+					//$state.go('homeMenu.newsfeedFrench');
+				  //}
+				}
+				else{
+					alert("Could not login! Wrong Input!")
+				}
+			});
 		}
+		else{
+			alert("Could not login! Wrong Input!")
+		}
+	}
+	else{
+		alert("Could not login! Wrong Input!")
 	}
 });
 	};
@@ -282,42 +291,57 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http) {
 
-// Create a server side action in backand
-  // Go to any object's actions tab
-  // and click on the Backand Storage icon.
-  // Backand consts:
-  var baseUrl = '/1/objects/';
-  var baseActionUrl = baseUrl + 'action/'
-  var objectName = 'user';
-  var filesActionName = 'img';
+<<<<<<< HEAD
+	// Create a server side action in backand
+	// Go to any object's actions tab 
+	// and click on the Backand Storage icon.
+	// Backand consts:
+	var baseUrl = '/1/objects/';
+	var baseActionUrl = baseUrl + 'action/'
+	var objectName = 'user';
+	var filesActionName = 'img';
 
-  // Display the image after upload
-  $scope.imageUrl = null;
+	// Display the image after upload
+	$scope.imageUrl = null;
+	// Store the file name after upload to be used for delete
+	$scope.filename = null;
 
-  // Store the file name after upload to be used for delete
-  $scope.filename = null;
 
-  // input file onchange callback
-  function imageChanged(fileInput) {
+    // input file onchange callback
+    function imageChanged(fileInput) {
+    	var imageExist = false;
+    	var file = fileInput.files[0];
+    	var reader = new FileReader();
 
-	//read file content
-	var file = fileInput.files[0];
-	var reader = new FileReader();
+    	DatabaseService.searchImg(file.name).success(function(data){
+    		if (data[0] == undefined){
+    			console.log(data[0]);
+    			imageExist = true;
+    		}
+    		else {
+				imageExist = false;
+			}
+			//read file content
+			if (imageExist == true){
+				reader.onload = function(e) {
+					upload(file.name, e.currentTarget.result).then(function(res) {
+						$scope.imageUrl = res.data.url;
+						$scope.filename = file.name;
+						DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+						})
+						$scope.profile.imgName = file.name;
+					}, function(err){
+						alert(err.data);
+					});
+				}
 
-	reader.onload = function(e) {
-		upload(file.name, e.currentTarget.result).then(function(res) {
-			$scope.imageUrl = res.data.url;
-			$scope.filename = file.name;
-			DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-			})
-			$scope.profile.imgName = file.name;
-		}, function(err){
-			alert(err.data);
-		});
-	};
-
-	reader.readAsDataURL(file);
-};
+				reader.readAsDataURL(file);
+			}
+			else {
+				alert("Change the name of the image! // Veuillez changer le nom de l'image!");
+			}
+		})
+    };
 
   // register to change event on input file
   function initUpload() {

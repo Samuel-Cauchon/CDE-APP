@@ -67,6 +67,18 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			searchImg: function(imgName){
+				return $http ({
+					method: 'GET',
+					url: Backand.getApiUrl() + '/1/query/data/searchImg',
+					params: {
+						parameters: {
+							imageName: imgName
+						}
+					}
+				});
+			},
+			
 			// Example of how to enter parameters for how to retrieve data from db
 			// listRaluca: function(){
 			// 	return $http ({
