@@ -3,11 +3,21 @@
 		<div ng-show="currentLanguage != 'french'">
 			<div class="list card">
 				<div class="profile-img">
-					<img ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
+					<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
 				</div>
 				<div class="item item-avatar profile-avatar" align="center">
 					<img class="blank-profile" src="blank-profile.png" />
-					<div ng-show="editProfession == null">
+					<div ng-show="editName == null">
+						<h2>
+							{{profile.name}}
+							<button class="button-calm" ng-click="startEditName()">Edit</button>
+						</h2>
+					</div>
+					<div class="edit-name" ng-show="editName != null">
+						<input ng-model="updatedProfile.newName" placeholder="25 characters maximum" maxlength="25"></input>
+						<button class="button-calm" ng-click="endEditName()">Edit</button>
+					</div>
+					<div  class="edit-profession" ng-show="editProfession == null">
 						<h2>
 							{{profile.profession}}
 							<button class="button-calm" ng-click="startEditProfession()">Edit</button>
@@ -64,18 +74,28 @@
 		<div ng-show="currentLanguage == 'french'">
 			<div class="list card">
 				<div class="profile-img">
-					<img ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
+					<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
 				</div>
 				<div class="item item-avatar profile-avatar" align="center">
 					<img class="blank-profile" src="blank-profile.png" />
-					<div ng-show="editProfession == null">
+					<div ng-show="editName == null">
+						<h2>
+							{{profile.name}}
+							<button class="button-calm" ng-click="startEditName()">Modifier</button>
+						</h2>
+					</div>
+					<div class="edit-name" ng-show="editName != null">
+						<input ng-model="updatedProfile.newName" placeholder="25 characters maximum" maxlength="25"></input>
+						<button class="button-calm" ng-click="endEditName()">Modifier</button>
+					</div>
+					<div  class="edit-profession" ng-show="editProfession == null">
 						<h2>
 							{{profile.profession}}
 							<button class="button-calm" ng-click="startEditProfession()">Modifier</button>
 						</h2>
 					</div>
-					<div class="edit-profession-english" ng-show="editProfession != null">
-						<input ng-model="updatedProfile.newProfession" placeholder="25 caractères maximum" maxlength="25"></input>
+					<div class="edit-profession" ng-show="editProfession != null">
+						<input ng-model="updatedProfile.newProfession" placeholder="25 characters maximum" maxlength="25"></input>
 						<button class="button-calm" ng-click="endEditProfession()">Modifier</button>
 					</div>
 				</div>
@@ -96,7 +116,7 @@
 				
 				<form role="form" name="uploadForm">
 					<div class="row">
-						<input id="fileInputFr" type="file" accept="*/*" ng-model="filename" />
+						<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
 					</div>			
 				</form>
 				<div class="item item-body">
@@ -105,7 +125,7 @@
 						<button class="button-calm" ng-click="startEditDescription()">Modifier</button>
 					</div>
 					<div class="edit-description" ng-show="editDescription != null" class="edit-description">
-						<textarea maxlength="250" placeholder="250 caractères maximum" ng-model="updatedProfile.newDescription"></textarea>
+						<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
 						<button class="button-calm" ng-click="endEditDescription()">Modifier</button>
 						<button class="button-calm" ng-click="clearAll()">Effacer Tout</button>
 					</div>

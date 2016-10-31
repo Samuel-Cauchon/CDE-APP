@@ -25,11 +25,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 			if (dataPass[0]['password'] === $scope.dataEntered.password){
 				AuthService.currentUser = $scope.dataEntered.username;
 				AuthService.uid = dataUser[0]['id'];
-				console.log(AuthService.uid);
 				DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
-				console.log(AuthService.currentUser);
 			  //if (AuthService.currentLanguage == "English"){
-			  	console.log($rootScope.currentLanguage);
 			  	$state.go('homeMenu.newsfeed');
 			  //}
 			  //else{
@@ -73,8 +70,9 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	DatabaseService.getAllNamePhotos().success(function(dataAllInfo){
 		$scope.usersInfo = dataAllInfo;
 	})
-	$scope.setUserSelected = function(user){
-		AuthService.userSelected = user;
+	
+	$scope.setUserSelected = function(userChosen){
+		AuthService.userSelected = userChosen;
 	}
 })
 
@@ -407,6 +405,7 @@ $scope.initCtrl = function() {
 $scope.editPhone = null;
 $scope.editDescription = null;
 $scope.editProfession = null;
+$scope.editName = null;
 
 
 $scope.startEditPhone = function(){
@@ -436,6 +435,20 @@ $scope.endEditProfession= function(){
 }
 
 
+$scope.startEditName = function(){
+	$scope.editName = "1";
+}
+
+$scope.endEditName= function(){
+	DatabaseService.updateName(AuthService.currentUser,$scope.updatedProfile.newName).success(function(){
+		DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+			$scope.profile.name = dataname[0]['name'];
+			$scope.editName = null;
+		})
+	})
+}
+
+
 $scope.startEditDescription = function(){
 	$scope.editDescription = "1";
 }
@@ -450,7 +463,7 @@ $scope.endEditDescription= function(){
 }
 
 $scope.profile = {
-	img:"",
+	name:"",
 	imgName:"",
 	phonenumber:"",
 	profession:"",
@@ -462,16 +475,21 @@ DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(datapho
 	DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
 		DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
 			DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
-				$scope.profile.imgName = dataImg[0]['photo'];
-				$scope.profile.phonenumber = dataphone[0]['phonenumber'];
-				$scope.profile.profession = dataprofession[0]['profession'];
-				$scope.profile.description = datadescription[0]['description'];
+				DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+					$scope.profile.name = dataname[0]['name'];
+					$scope.profile.imgName = dataImg[0]['photo'];
+					$scope.profile.phonenumber = dataphone[0]['phonenumber'];
+					$scope.profile.profession = dataprofession[0]['profession'];
+					$scope.profile.description = datadescription[0]['description'];
+				})
 			})
 		})
 	})
 })
 
 $scope.updatedProfile = {
+
+	newName:"",
 
 	newProfession:"",
 
@@ -499,20 +517,24 @@ $scope.updatedProfile = {
 
 	$scope.profile = {
 		img:"",
+		name:"",
 		phonenumber:"",
 		profession:"",
 		description:""
 	}
 
 
-	DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataimg){
-		DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
-			DatabaseService.GetProfession(AuthService.userSelected).success(function(dataprofession){
-				DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
-					$scope.profile.imgName = dataImg[0]['photo'];
-					$scope.profile.phonenumber = dataphone[0]['phonenumber'];
-					$scope.profile.profession = dataprofession[0]['profession'];
-					$scope.profile.description = datadescription[0]['description'];
+	DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
+		DatabaseService.GetProfession(AuthService.userSelected).success(function(dataprofession){
+			DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataImg){
+				DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
+					DatabaseService.getName(AuthService.userSelected).success(function(dataname){
+						$scope.profile.imgName = dataImg[0]['photo'];
+						$scope.profile.name = dataname[0]['name'];
+						$scope.profile.phonenumber = dataphone[0]['phonenumber'];
+						$scope.profile.profession = dataprofession[0]['profession'];
+						$scope.profile.description = datadescription[0]['description'];
+					})
 				})
 			})
 		})

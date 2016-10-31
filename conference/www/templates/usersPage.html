@@ -7,7 +7,7 @@
 			<ion-content class="padding">
 			<div class="list card">
 					<div class="item item-avatar profile-avatar" ng-repeat="u in usersInfo">
-						<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(u.name)"> 
+						<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(u.username)"> 
 							<img ng-show="u.photo != null" ng-src="https://files.backand.io/cdeapp/{{u.photo}}" />
 							<img ng-show="u.photo == null" ng-src="blank-profile.png" />
 							<span>{{u.name}}</span>
@@ -28,7 +28,7 @@
 			<ion-content class="padding">
 				<div class="list card">
 					<div ng-repeat="user in allUsers">
-						<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(user.name)"> {{user.name}} </a>
+						<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(user.username)"> {{user.name}} </a>
 					</div>
 				</div>
 			</ion-content>

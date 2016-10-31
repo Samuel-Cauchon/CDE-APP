@@ -3,10 +3,12 @@
 		<div ng-show="currentLanguage != 'french'">
 			<div class="list card">
 				<div class="profile-img">
-					<img ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
+					<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}" />
+					<img ng-show="profile.imgName == null" ng-src="blank-profile.png" />
 				</div>
 				<div class="item item-avatar profile-avatar" align="center">
 					<img class="blank-profile" src="blank-profile.png" />
+					{{profile.name}}
 					<h2>
 						{{profile.profession}}
 					</h2>
@@ -33,34 +35,36 @@
 
 
 		<div ng-show="currentLanguage == 'french'">
-		 <div class="list card">
-			<div class="profile-img">
-				<img ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
-			</div>
-			<div class="item item-avatar profile-avatar" align="center">
-				<img class="blank-profile" src="blank-profile.png" />
-				<h2>
-					{{profile.profession}}
-				</h2>
-			</div>
+			<div class="list card">
+				<div class="profile-img">
+					<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}" />
+					<img ng-show="profile.imgName == null" ng-src="blank-profile.png" />
+				</div>
+				<div class="item item-avatar profile-avatar" align="center">
+					<img class="blank-profile" src="blank-profile.png" />
+					{{profile.name}}
+					<h2>
+						{{profile.profession}}
+					</h2>
+				</div>
 
-			<div class="item item-icon-left profile-telephone" align="center">
-				<i class="icon ion-ios-telephone"></i>
-				{{profile.phonenumber}}
-			</div>
-			
-			<div class="item item-body">
-				<p>{{profile.description}}</p>
-			</div>
-			<div class="button-bar">
-				<a class="button button-block button-positive" ng-href="#" onclick="window.open('http://www.facebook.com/', '_system', 'location=yes'); return false;">
-					Facebook
-				</a>
-				<a class="button button-block button-calm" ng-href="#" onclick="window.open('http://www.twitter.com/', '_system', 'location=yes'); return false;">
-					Twitter
-				</a>
+				<div class="item item-icon-left profile-telephone" align="center">
+					<i class="icon ion-ios-telephone"></i>
+					{{profile.phonenumber}}
+				</div>
+				
+				<div class="item item-body">
+					<p>{{profile.description}}</p>
+				</div>
+				<div class="button-bar">
+					<a class="button button-block button-positive" ng-href="#" onclick="window.open('http://www.facebook.com/', '_system', 'location=yes'); return false;">
+						Facebook
+					</a>
+					<a class="button button-block button-calm" ng-href="#" onclick="window.open('http://www.twitter.com/', '_system', 'location=yes'); return false;">
+						Twitter
+					</a>
+				</div>
 			</div>
 		</div>
-	</div>
-</ion-content>
+	</ion-content>
 </ion-view>

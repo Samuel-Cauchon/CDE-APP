@@ -139,6 +139,19 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			updateName: function(username, newName){
+				return $http ({
+					method: 'GET',
+					url: Backand.getApiUrl() + '/1/query/data/updateName',
+					params: {
+						parameters: {
+							username: username,
+							newName: newName
+						}
+					}
+				});
+			},
+
 			updateImg: function(name, photo){
 				return $http ({
 					method: 'GET',
