@@ -20,21 +20,17 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         controller: 'LoginCtrl'
       })
 
+      .state('welcomefr', {
+        url: '/welcomefr',
+        templateUrl: 'templates/loginfr.html',
+        controller: 'LoginCtrl'
+      })
+
       .state('homeMenu', {
         url: '/homeMenu',
         abstract: true,
         templateUrl: 'templates/menu.html',
         controller: 'menuController'
-      })
-
-
-      .state('homeMenu.home', {
-        url: '/home',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/home.html'
-          }
-        }
       })
 
       .state('homeMenu.profile', {
@@ -47,9 +43,25 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         }
       })
 
+      .state('homeMenu.profilefr', {
+        url: '/profilefr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/profilefr.html',
+            controller: 'ProfileCtrl'
+          }
+        }
+      })
+
       .state('register', {
         url: '/register',
         templateUrl: 'templates/register.html',
+        controller: 'RegisterCtrl'
+      })
+
+      .state('registerfr', {
+        url: '/registerfr',
+        templateUrl: 'templates/registerfr.html',
         controller: 'RegisterCtrl'
       })
 
@@ -58,6 +70,16 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         views: {
           'menuContent': {
             templateUrl: 'templates/newsfeed.html',
+            controller: 'NewsfeedCtrl'
+          }
+        }
+      })
+
+      .state('homeMenu.newsfeedfr', {
+        url: '/newsfeedfr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/newsfeedfr.html',
             controller: 'NewsfeedCtrl'
           }
         }
@@ -82,11 +104,31 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         }
       })
 
+      .state('homeMenu.usersPagefr', {
+        url: '/usersPagefr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/usersPagefr.html',
+            controller: 'UsersPageCtrl'
+          }
+        }
+      })
+
       .state('homeMenu.logout', {
         url: '/logout',
         views: {
           'menuContent': {
             templateUrl: 'templates/logout.html',
+            controller: 'LogoutCtrl'
+          }
+        }
+      })
+
+      .state('homeMenu.logoutfr', {
+        url: '/logoutfr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/logoutfr.html',
             controller: 'LogoutCtrl'
           }
         }
@@ -111,11 +153,32 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
           }
         }
       })
+
+      .state('homeMenu.schedulefr', {
+        url: '/schedulefr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/schedulefr.html',
+            controller: 'EventsCtrl'
+          }
+        }
+      })
+
 	  .state('homeMenu.search', {
         url: '/search',
         views: {
           'menuContent': {
             templateUrl: 'templates/search.html',
+            controller: 'SearchCtrl'
+          }
+        }
+      })
+
+    .state('homeMenu.searchfr', {
+        url: '/searchfr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/searchfr.html',
             controller: 'SearchCtrl'
           }
         }
@@ -130,11 +193,30 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
         }
     })
 
+    .state('homeMenu.sponsorsfr', {
+        url: '/sponsorsfr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/popupfr.html',
+          }
+        }
+    })
+
     .state('homeMenu.userProfile', {
         url: '/userProfile',
         views: {
           'menuContent': {
             templateUrl: 'templates/userProfile.html',
+            controller: 'UserProfileCtrl'
+          }
+        }
+      })
+
+    .state('homeMenu.userProfilefr', {
+        url: '/userProfilefr',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/userProfilefr.html',
             controller: 'UserProfileCtrl'
           }
         }

@@ -14,6 +14,16 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 		password : "",
 	};
 
+	$scope.goFrench = function(){
+		$rootScope.currentLanguage = "french";
+		$state.go('welcomefr');
+	}
+
+	$scope.goEnglish = function(){
+		$rootScope.currentLanguage = "english";
+		$state.go('welcome');
+	}
+
 	$scope.Login = function () {
 		DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
 	  //Check if the username exist...
@@ -22,16 +32,16 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 		if (dataUser[0]['username'] === $scope.dataEntered.username){
 			DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
 			//Check if the password is correct.
-			if (dataPass[0]['password'] === $scope.dataEntered.password){
-				AuthService.currentUser = $scope.dataEntered.username;
-				AuthService.uid = dataUser[0]['id'];
-				DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
-				  //if (AuthService.currentLanguage == "English"){
-				  	$state.go('homeMenu.newsfeed');
-				  //}
-				  //else{
-					//$state.go('homeMenu.newsfeedFrench');
-				  //}
+				if (dataPass[0]['password'] === $scope.dataEntered.password){
+					AuthService.currentUser = $scope.dataEntered.username;
+					AuthService.uid = dataUser[0]['id'];
+					DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+					if ($rootScope.currentLanguage != "french"){
+						$state.go('homeMenu.newsfeed');
+					}
+					else{
+						$state.go('homeMenu.newsfeedfr');
+					}
 				}
 				else{
 					alert("Could not login! Wrong Input!")
@@ -49,7 +59,12 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	};
 
 	$scope.Register = function () {
-		$state.go('register');
+		if($rootScope.currentLanguage != "french"){
+			$state.go('register');
+		}
+		else{
+			$state.go('registerfr');
+		}
 	};
 
 })
@@ -59,7 +74,12 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	$scope.Logout = function () {
 		DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
 		AuthService.currentUser = "";
-		$state.go('welcome');
+		if ($rootScope.currentLanguage != "french"){
+			$state.go('welcome');
+		}
+		else{
+			$state.go('welcomefr');
+		}
 	};
 })
 
@@ -67,7 +87,6 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 	$scope.goFrench = function() {
 		$rootScope.currentLanguage = "french";
-		console.log($rootScope.currentLanguage);
 	};
 
 	$scope.goEnglish = function() {
@@ -146,7 +165,13 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 			DatabaseService.getMaxId().success(function(maxId){
 				DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
 					AuthService.currentUser = $scope.dataEnteredRegister.username;
-					$state.go('homeMenu.newsfeed');
+					if ($rootScope.currentLanguage != "french"){
+						$state.go('homeMenu.newsfeed');
+					}
+					else{
+						$state.go('homeMenu.newsfeedfr');
+
+					}
 				})
 			})
 		}
@@ -154,7 +179,12 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	};
 
 	$scope.Cancel = function () {
-		$state.go('welcome');
+		if ($rootScope.currentLanguage != "french"){
+			$state.go('welcome');
+		}
+		else{
+			$state.go('welcomefr');
+		}
 	};
 })
 
@@ -291,7 +321,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http) {
 
-<<<<<<< HEAD
+
 	// Create a server side action in backand
 	// Go to any object's actions tab 
 	// and click on the Backand Storage icon.
@@ -319,8 +349,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     			imageExist = true;
     		}
     		else {
-				imageExist = false;
-			}
+    			imageExist = false;
+    		}
 			//read file content
 			if (imageExist == true){
 				reader.onload = function(e) {
@@ -524,9 +554,9 @@ $scope.updatedProfile = {
 	newDescription:""
 
 
-  }
+}
 
-  var eventsAttending = {};
+  /*var eventsAttending = {};
   var currentUser = "";
   DatabaseService.getID(AuthService.userSelected).success(function(data){
     currentUser = data[0]['id'];
@@ -550,7 +580,7 @@ $scope.updatedProfile = {
       console.log("TRY", $scope.map[id]);
       return $scope.map[id];
     }
-  })
+})*/
 })
 
 .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
@@ -627,12 +657,12 @@ $scope.updatedProfile = {
 
 	$scope.entry = [];
 	var uid = AuthService.uid;
-  $scope.userName = "";
-  var parameters = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
-  DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
-    $scope.userName = data['name'];
+	$scope.userName = "";
+	var parameters = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
+	DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
+		$scope.userName = data['name'];
 
-  });
+	});
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveTwitterFeed();
@@ -770,57 +800,57 @@ $scope.updatedProfile = {
 
 })
 
-  .controller('SearchCtrl', function($scope, $http, DatabaseService) {
-    $scope.searchables = "blank";
-    $scope.searched = [];
-    $scope.searchContent = "Search";
-    $scope.entries = [];
-    $scope.searchUsers = function(){
+.controller('SearchCtrl', function($scope, $http, DatabaseService) {
+	$scope.searchables = "blank";
+	$scope.searched = [];
+	$scope.searchContent = "Search";
+	$scope.entries = [];
+	$scope.searchUsers = function(){
       //$scope.searchContent= document.getElementById('searchContent').value;
       console.log($scope.searchables);
       console.log($scope.SearchContent);
       if ($scope.searchables == "blank") {
-        console.log("No Category Selected - unsearchable");
+      	console.log("No Category Selected - unsearchable");
       }
       else if ($scope.query == "Search") {
-        DatabaseService.searchUser($scope.query).success(function(data){
-          for (i=0; i < data.length; i++){
-            $scope.entries[i] = {name:data[i]['name'],
-              id: data[i]['id']};
-          }
-        })
+      	DatabaseService.searchUser($scope.query).success(function(data){
+      		for (i=0; i < data.length; i++){
+      			$scope.entries[i] = {name:data[i]['name'],
+      			id: data[i]['id']};
+      		}
+      	})
       }
       else if ($scope.searchables == "user"){
-        console.log("User search");
+      	console.log("User search");
       }
       else if ($scope.searchables == "name"){
-        console.log("Event by name");
+      	console.log("Event by name");
       }
       else if ($scope.searchables == "location") {
-        console.log("Event by location");
+      	console.log("Event by location");
       }
-    }
+  }
 
-    $scope.getValue = function(val){
-      console.log("VALLLLL", val);
-    }
+  $scope.getValue = function(val){
+  	console.log("VALLLLL", val);
+  }
 
-    $scope.getDropdownOption = function(){
-      searchopt = $scope.selectOption;
-      switch(searchopt) {
-        case 'location':
-          $scope.searchables = "location";
-          break;
-        case 'name':
-          $scope.searchables = "name";
-          break;
-        case 'user':
-          $scope.searchables = "user";
-          break;
-        default:
-          $scope.searchables = "blank";
+  $scope.getDropdownOption = function(){
+  	searchopt = $scope.selectOption;
+  	switch(searchopt) {
+  		case 'location':
+  		$scope.searchables = "location";
+  		break;
+  		case 'name':
+  		$scope.searchables = "name";
+  		break;
+  		case 'user':
+  		$scope.searchables = "user";
+  		break;
+  		default:
+  		$scope.searchables = "blank";
 
-      }
-    }
+  	}
+  }
 
-  })
+})

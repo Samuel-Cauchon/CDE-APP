@@ -1,0 +1,21 @@
+<ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Inscription</h1>
+    </ion-header-bar>
+
+    <ion-content class="padding">
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" placeholder="Nom d'utilisateur" ng-model="dataEnteredRegister.username">
+            </label>
+            <label class="item item-input">
+                <input type="password" placeholder="Mot de passe" ng-model="dataEnteredRegister.password">
+            </label>
+            <label class="item item-input">
+                <input type="password" placeholder="Confirmation du mot de passe" ng-model="dataEnteredRegister.passwordConfirmation">
+            </label>
+        </div>
+        <button class="button button-block button-calm" ng-click="Register()">Enregistrer</button>
+        <button class="button button-block button-calm" ng-click="Cancel()">Annuler</button>
+    </ion-content>
+</ion-modal-view>

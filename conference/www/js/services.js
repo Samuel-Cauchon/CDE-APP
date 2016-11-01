@@ -78,6 +78,18 @@ angular.module('App.services', ['backand'])
 					}
 				});
 			},
+
+			getID: function (username){
+				return $http ({
+					method: 'GET',
+					url: Backand.getApiUrl() + '/1/query/data/getID',
+					params: {
+						parameters: {
+							username: username
+						}
+					}
+				});
+			},
 			
 			// Example of how to enter parameters for how to retrieve data from db
 			// listRaluca: function(){
