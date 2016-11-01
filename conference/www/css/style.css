@@ -122,6 +122,16 @@ div.edit-description textarea {
   width:350px;
   white-space: normal;
 }
+<<<<<<< HEAD
+p.small{
+  line-height: 1.2;
+}
+
+.button-registerEvent{
+  display: block;
+  margin: 0 auto;
+}
+=======
 
 img.blank-profile {
 	display: block;
@@ -144,4 +154,10 @@ img.blank-profile {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+.inner h2{
+  letter-spacing:0.1em;
+  text-transform: uppercase;
+  color: #111e45;
 }

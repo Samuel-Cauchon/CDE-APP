@@ -200,350 +200,275 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	};
 })
 
-.controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
+  .controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
 
-	var peopleAttendingEachEvent = {};
-	$scope.map = {};
+    var peopleAttendingEachEvent = {};
+    $scope.map = {};
+    $scope.mapUserRegisteredToEvent = {};
+    $scope.eventIdUserClicked;
 
-	$scope.dates = [
-	{text: 'November 18, 2016', value:1},
-	{text: 'November 19, 2016', value: 2},
-	{text: 'November 20, 2016', value: 3}
-	];
-
-	$scope.datesFrench = [
-	{text: '18 novembre 2016', value: 1},
-	{text: '19 novembre 2016', value: 2},
-	{text: '20 novembre 2016', value: 3}
-	]
-
-	$scope.defaultDate = {
-		clientSide: '1'
-	}
-	$scope.putNewDate = function(datePickedVal, dateArr){
-		var index;
-		dateArr.some(function(entry, i){
-			if (entry.value == datePickedVal){
-				index =i;
-			}
-		})
-
-		if (index <= 2) {
-			setDateForRepetition(index);
-			return dateArr[index].text;
-		}
-	}
-
-	$scope.toggleGroup = function(group) {
-		if ($scope.isGroupShown(group)) {
-			$scope.shownGroup = null;
-		} else {
-			$scope.shownGroup = group;
-		}
-	};
-
-	$ionicPopover.fromTemplateUrl('templates/popover.html', {
-		scope: $scope,
-	}).then(function(popover) {
-		$scope.popover = popover;
-	});
-
-	$scope.isGroupShown = function(group) {
-		return $scope.shownGroup === group;
-	};
-
-	MainEvents.getUserQuery().success(function(data) {
-		var userArr = data;
-		for (var i = 0; i < userArr.length; i++) {
-			peopleAttendingEachEvent[userArr[i].id] = {
-				name: userArr[i].name
-			};
-		}
-		MainEvents.getPeopleAttending().success(function(data){
-			var mapOfEventToUser = data.data;
-			mapOfEventToUser.forEach(function(item) {
-				if((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
-					if (!$scope.map[item.event]) {
-						$scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
-					}
-					else {
-						$scope.map[item.event].push(peopleAttendingEachEvent[item.user].name);
-					}
-				}
-			})
-			$scope.getMappingOfEventToUsers = function(id){
-				return $scope.map[id];
-			}
-		})
-	});
+    $scope.eventRegistered = false;
+    $scope.activateRegisteredButton = function(){
+      $scope.eventRegistered = !$scope.eventRegistered;
+    }
 
 
-	MainEvents.getEventsFirstDay().success(function (data) {
-		$scope.dayOneEvents = data;
-		fixTiming($scope.dayOneEvents);
-		MainEvents.setEventArrayWithFixedTiming($scope.dayOneEvents, 'one')
+    $scope.$on('$ionicView.enter', function () {
+      updatePeopleAttendingEachEvent();
+      console.log("page opened");
+    })
 
-	});
+    $scope.getIdOfEvent= function(eventId){
+      $scope.eventIdUserClicked = eventId;
+    }
 
-	MainEvents.getEventsSecondDay().success(function(data){
-		$scope.dayTwoEvents = data;
-		fixTiming($scope.dayTwoEvents);
-		MainEvents.setEventArrayWithFixedTiming($scope.dayTwoEvents, 'second');
-	});
+    $scope.dates = [
+      {text: 'November 18, 2016', value:1},
+      {text: 'November 19, 2016', value: 2},
+      {text: 'November 20, 2016', value: 3}
+    ];
 
+    $scope.datesFrench = [
+      {text: '18 novembre 2016', value: 1},
+      {text: '19 novembre 2016', value: 2},
+      {text: '20 novembre 2016', value: 3}
+    ]
 
-	MainEvents.getEventsFinalDay().success(function(data){
-		$scope.finalDayEvents = data;
-		fixTiming($scope.finalDayEvents);
-		MainEvents.setEventArrayWithFixedTiming($scope.finalDayEvents, 'last');
-	});
+    $scope.defaultDate = {
+      clientSide: '1'
+    }
+    $scope.putNewDate = function(datePickedVal, dateArr){
+      var index;
+      dateArr.some(function(entry, i){
+        if (entry.value == datePickedVal){
+          index =i;
+        }
+      })
 
-	function fixTiming(dayEventArr){
-		angular.forEach(dayEventArr, function (value) {
-			value.starttime = new Date(Date.parse(value.starttime)).toLocaleTimeString('en-GB', {
-				hour: '2-digit',
-				minute: '2-digit'
-			});
-			value.endtime = new Date(Date.parse(value.endtime)).toLocaleTimeString('en-GB', {
-				hour: '2-digit',
-				minute: '2-digit'
-			});
-		})
-	}
+      if (index <= 2) {
+        setDateForRepetition(index);
+        return dateArr[index].text;
+      }
+    }
 
-  //$scope.setDateForRepetition = function(){
-  //
-  //}
-  function setDateForRepetition(ind) {
-  	$scope.events;
-  	if (ind == 0) {
-  		$scope.events = MainEvents.getEventArrayWithFixedTiming('one');
-  	}
-
-  	if(ind == 1){
-  		$scope.events = MainEvents.getEventArrayWithFixedTiming('second');
-  	}
-
-  	if(ind == 2){
-  		$scope.events = MainEvents.getEventArrayWithFixedTiming('third');
-  	}
-  }
-
-})
-
-.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http, MainEvents) {
-
-	// Create a server side action in backand
-	// Go to any object's actions tab
-	// and click on the Backand Storage icon.
-	// Backand consts:
-	var baseUrl = '/1/objects/';
-	var baseActionUrl = baseUrl + 'action/'
-	var objectName = 'user';
-	var filesActionName = 'img';
-
-	// Display the image after upload
-	$scope.imageUrl = null;
-	// Store the file name after upload to be used for delete
-	$scope.filename = null;
-
-
-    // input file onchange callback
-    $scope.imageChangedFr = function (){
-    	var imageExist = false;
-    	var file = $scope.fileInput.files[0];
-    	var reader = new FileReader();
-
-    	DatabaseService.searchImg(file.name).success(function(data){
-    		if (data[0] == undefined){
-    			imageExist = true;
-    		}
-    		else {
-    			imageExist = false;
-    		}
-			//read file content
-			if (imageExist == true){
-				reader.onload = function(e) {
-					upload(file.name, e.currentTarget.result).then(function(res) {
-						$scope.imageUrl = res.data.url;
-						$scope.filename = file.name;
-						DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-						})
-						$scope.profile.imgName = file.name;
-					}, function(err){
-						alert(err.data);
-					});
-				}
-
-				reader.readAsDataURL(file);
-			}
-			else {
-				alert("Change the name of the image! // Veuillez changer le nom de l'image!");
-			}
-		})
+    $scope.toggleGroup = function(group) {
+      if ($scope.isGroupShown(group)) {
+        $scope.shownGroup = null;
+      } else {
+        $scope.shownGroup = group;
+      }
     };
 
-    $scope.imageChangedFr = function (){
-    	var imageExist = false;
-    	var file = $scope.fileInputFr.files[0];
-    	var reader = new FileReader();
+    $ionicPopover.fromTemplateUrl('templates/popover.html', {
+      scope: $scope,
+    }).then(function(popover) {
+      $scope.popover = popover;
+    });
 
-    	DatabaseService.searchImg(file.name).success(function(data){
-    		if (data[0] == undefined){
-    			imageExist = true;
-    		}
-    		else {
-    			imageExist = false;
-    		}
-			//read file content
-			if (imageExist == true){
-				reader.onload = function(e) {
-					upload(file.name, e.currentTarget.result).then(function(res) {
-						$scope.imageUrl = res.data.url;
-						$scope.filename = file.name;
-						DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-						})
-						$scope.profile.imgName = file.name;
-					}, function(err){
-						alert(err.data);
-					});
-				}
-
-				reader.readAsDataURL(file);
-			}
-			else {
-				alert("Change the name of the image! // Veuillez changer le nom de l'image!");
-			}
-		})
+    $scope.isGroupShown = function(group) {
+      return $scope.shownGroup === group;
     };
 
-  // register to change event on input file
-  function initUpload() {
-  	$scope.fileInput = document.getElementById('fileInput');
+    function updatePeopleAttendingEachEvent() {
+      MainEvents.getUserQuery().success(function (data) {
+        var userArr = data;
+        for (var i = 0; i < userArr.length; i++) {
+          peopleAttendingEachEvent[userArr[i].id] = {
+            name: userArr[i].name
+          };
+        }
+      });
+      MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
+      MainEvents.getPeopleAttending().success(function (data) {
+        var mapOfEventToUser = data.data;
+        console.log("Map of event to user", mapOfEventToUser);
+        mapOfEventToUser.forEach(function (item) {
+          if ((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
+            //console.log("InSIDE HERE");
+            //console.log("maEventTouser", mapOfEventToUser);
+            //console.log("Item", item);
+            console.log("item.event", item.event);
+            if (!$scope.map[item.event]) {
+              $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
+              console.log("CAme here");
+            }
+            else {
+              $scope.map[item.event].push(peopleAttendingEachEvent[item.user].name);
+              console.log("Came here too",peopleAttendingEachEvent[item.user].name );
+            }
+          }
+        })
+        console.log("$scoe.mapooooo", $scope.map);
+        $scope.getMappingOfEventToUsers = function (id) {
+          console.log("Id gotten", id);
+          MainEvents.setMapOfEventsToUsers($scope.map);
+          if ($scope.map[id]) {
+            console.log("$scope.map[id]", removeDuplicates($scope.map[id]));
+            return removeDuplicates($scope.map[id]);
+            //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
+          }
+        }
+      })
+    }
 
 
+    function removeDuplicates(arr){
+      if(arr) {
+        var temp = [];
+        for (var i = 0; i < arr.length; i++) {
+          if (temp.indexOf(arr[i]) == -1) {
+            temp.push(arr[i]);
+          }
+        }
+        arr = temp;
+        temp = [];
+        return arr;
 
-  	$scope.fileInputFr = document.getElementById('fileInputFr');
-  }
+      }
+    }
 
-  $scope.clearAll = function(){
+    $scope.registered = false;
+    $scope.preRegistered = function(){
+      $scope.registered = !$scope.registered;
+    }
 
-  	$scope.updatedProfile.newDescription = "";
-  }
+    function checkIfUserHasRegisteredToEvent(uid, mapOfIdsToUsernames, eventId, mapOfEventsToRegister) {
+      if (uid && mapOfIdsToUsernames && eventId && mapOfEventsToRegister) {
+        var username = mapOfIdsToUsernames[uid].name;
+        console.log("Username", username);
+        console.log("Map of events to register", mapOfEventsToRegister);
+        for (var key in mapOfEventsToRegister) {
+          var obj = mapOfEventsToRegister[key];
+          console.log("OBJ", obj);
+          if (obj.indexOf(username) !== -1) {
+            console.log("HEREEEE");
+            $scope.mapUserRegisteredToEvent[key]= ({'value': true});
+          }
+          else{
+            $scope.mapUserRegisteredToEvent[key] = ({'value': false});
+          }
+        }
 
-   // call to Backand action with the file name and file data
-   function upload(filename, filedata) {
-	// By calling the files action with POST method in will perform
-	// an upload of the file into Backand Storage
+        //$scope.mapUserRegisteredToEvent = removeDuplicates($scope.mapUserRegisteredToEvent);
+        console.log("MAPP", $scope.mapUserRegisteredToEvent)
+      }
+    }
 
-	//DatabaseService.updateImg(AuthService.currentUser, filename).success(function(){
-	//})
+    MainEvents.getEventsFirstDay().success(function (data) {
+      $scope.dayOneEvents = data;
+      fixTiming($scope.dayOneEvents);
+      MainEvents.setEventArrayWithFixedTiming($scope.dayOneEvents, 'one')
 
-	return $http({
-		method: 'POST',
-		url : Backand.getApiUrl() + baseActionUrl +  objectName,
-		params:{
-			"name": filesActionName
-		},
-		headers: {
-			'Content-Type': 'application/json'
-		},
-	  // you need to provide the file name and the file data
-	  data: {
-	  	"filename": filename,
-		"filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
-	}
-});
-};
+    });
 
-$scope.deleteFile = function(){
-	if (!$scope.filename){
-		alert('Please choose a file');
-		return;
-	}
-	// By calling the files action with DELETE method in will perform
-	// a deletion of the file from Backand Storage
-	DatabaseService.updateImg(AuthService.currentUser, "").success(function(data){
-	})
-
-	$http({
-		method: 'DELETE',
-		url : Backand.getApiUrl() + baseActionUrl +  objectName,
-		params:{
-			"name": filesActionName
-		},
-		headers: {
-			'Content-Type': 'application/json'
-		},
-	  // you need to provide the file name
-	  data: {
-	  	"filename": $scope.filename
-	  }
-	}).then(function(){
-	  // Reset the form
-	  $scope.imageUrl = null;
-	  document.getElementById('fileInput').value = "";
-	});
-}
-
-$scope.initCtrl = function() {
-	initUpload();
-}
+    MainEvents.getEventsSecondDay().success(function(data){
+      $scope.dayTwoEvents = data;
+      fixTiming($scope.dayTwoEvents);
+      MainEvents.setEventArrayWithFixedTiming($scope.dayTwoEvents, 'second');
+    });
 
 
+    MainEvents.getEventsFinalDay().success(function(data){
+      $scope.finalDayEvents = data;
+      fixTiming($scope.finalDayEvents);
+      MainEvents.setEventArrayWithFixedTiming($scope.finalDayEvents, 'last');
+    });
+
+    function fixTiming(dayEventArr){
+      angular.forEach(dayEventArr, function (value) {
+        value.starttime = new Date(Date.parse(value.starttime)).toLocaleTimeString('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        value.endtime = new Date(Date.parse(value.endtime)).toLocaleTimeString('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      })
+    }
+
+    function setDateForRepetition(ind) {
+      $scope.events;
+      if (ind == 0) {
+        $scope.events = MainEvents.getEventArrayWithFixedTiming('one');
+      }
+
+      if(ind == 1){
+        $scope.events = MainEvents.getEventArrayWithFixedTiming('second');
+      }
+
+      if(ind == 2){
+        $scope.events = MainEvents.getEventArrayWithFixedTiming('third');
+      }
+    }
+
+    $scope.refreshEvents = function () {
+      updatePeopleAttendingEachEvent();
+      $scope.$broadcast('scroll.refreshComplete');
+      console.log("page refresh");
+    }
+
+    $scope.registerForEvent = function(eventId){
+      var uid = MainEvents.getUserId();
+      console.log("UID register", uid);
+      var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
+      var eventToRegister = eventId;
+      console.log("Event to register", eventId);
+      var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
+      console.log("REGISTER FOR EVENT");
+      MainEvents.updatePeopleAttending(uid, eventToRegister).success(function(data){
+        console.log("AFTER");
+          var serverResponse = data;
+          $scope.refreshEvents();
+          $scope.activateRegisteredButton();
+          //checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
+
+        })
+        .error(function(data){
+          $scope.serverResponse = htmlDecode("Data: "+data);
+          console.log("Error refreshing data");
+        });
+    }
+
+  })
+
+  .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+    $scope.editPhone = null;
+    $scope.editDescription = null;
+    $scope.editBirthdate = null;
+    $scope.editDescription = null;
 
 
+    $scope.startEditPhone = function(){
+      $scope.editPhone = "1";
+    }
 
-$scope.editPhone = null;
-$scope.editDescription = null;
-$scope.editProfession = null;
-$scope.editName = null;
+    $scope.endEditPhone= function(){
+      DatabaseService.updatePhonenumber("("+$scope.updatedProfile.newPhonenumberRegional+") "+$scope.updatedProfile.newPhonenumberFirstPart+"-"+$scope.updatedProfile.newPhonenumberSecondPart, AuthService.currentUser).success(function(){
+        DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+          $scope.profile.phonenumber = dataphone[0]['phonenumber'];
+          $scope.editPhone = null;
+        })
+      })
+    }
 
+    $scope.startEditBirthdate = function(){
+      $scope.editBirthdate = "1";
+    }
 
-$scope.startEditPhone = function(){
-	$scope.editPhone = "1";
-}
-
-$scope.endEditPhone= function(){
-	DatabaseService.updatePhonenumber("("+$scope.updatedProfile.newPhonenumberRegional+") "+$scope.updatedProfile.newPhonenumberFirstPart+"-"+$scope.updatedProfile.newPhonenumberSecondPart, AuthService.currentUser).success(function(){
-		DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
-			$scope.profile.phonenumber = dataphone[0]['phonenumber'];
-			$scope.editPhone = null;
-		})
-	})
-}
-
-$scope.startEditProfession = function(){
-	$scope.editProfession = "1";
-}
-
-$scope.endEditProfession= function(){
-	DatabaseService.updateProfession($scope.updatedProfile.newProfession, AuthService.currentUser).success(function(){
-		DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
-			$scope.profile.profession = dataprofession[0]['profession'];
-			$scope.editProfession = null;
-		})
-	})
-}
+    $scope.endEditBirthdate= function(){
+      DatabaseService.updateBirthdate($scope.updatedProfile.newBirthdateDay+"-"+$scope.updatedProfile.newBirthdateMonth+"-"+$scope.updatedProfile.newBirthdateYear, AuthService.currentUser).success(function(){
+        DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirthdate){
+          $scope.profile.birthdate = databirthdate[0]['birthdate'];
+          $scope.editBirthdate = null;
+        })
+      })
+    }
 
 
-$scope.startEditName = function(){
-	$scope.editName = "1";
-}
-
-$scope.endEditName= function(){
-	DatabaseService.updateName(AuthService.currentUser,$scope.updatedProfile.newName).success(function(){
-		DatabaseService.getName(AuthService.currentUser).success(function(dataname){
-			$scope.profile.name = dataname[0]['name'];
-			$scope.editName = null;
-		})
-	})
-}
-
-
-$scope.startEditDescription = function(){
-	$scope.editDescription = "1";
-}
+    $scope.startEditDescription = function(){
+      $scope.editDescription = "1";
+    }
 
 $scope.endEditDescription= function(){
 	DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
