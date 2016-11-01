@@ -321,10 +321,6 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, Backand, $http, MainEvents) {
 
-<<<<<<< HEAD
-
-=======
->>>>>>> cd5ba8a9ca6cf23547d26aebb448fbf46a4513ac
 	// Create a server side action in backand
 	// Go to any object's actions tab
 	// and click on the Backand Storage icon.
@@ -559,7 +555,7 @@ $scope.updatedProfile = {
 
 }
 
-<<<<<<< HEAD
+
   /*var eventsAttending = {};
   var currentUser = "";
   DatabaseService.getID(AuthService.userSelected).success(function(data){
@@ -623,14 +619,13 @@ $scope.updatedProfile = {
       }
     }
 <<<<<<< HEAD
-})*/
-=======
+})
+
     arr = temp;
     temp = [];
-    return arr;
+    return arr;*/
 
-  }
->>>>>>> cd5ba8a9ca6cf23547d26aebb448fbf46a4513ac
+
 })
 
 .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {

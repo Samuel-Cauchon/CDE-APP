@@ -47,6 +47,7 @@
 					<input id="fileInputFr" type="file" accept="*/*" ng-model="filename" />
 				</div>			
 			</form>
+
 			<div class="item item-body">
 				<div ng-show="editDescription == null">
 					<p>{{profile.description}}</p>
@@ -58,6 +59,20 @@
 					<button class="button-calm" ng-click="clearAll()">Effacer Tout</button>
 				</div>
 			</div>
+
+			<div>
+				<h4>Événements</h4>
+				<ion-scroll style="height:100px" class="scrollVertical" direction="y">
+					<div class="list">
+						<div ng-repeat="n in userEvents() | orderBy"  >
+							<div class="item item-divider" >
+								{{ n }}
+							</div>
+						</div>
+					</div>
+				</ion-scroll>
+			</div>		
+
 			<div class="button-bar">
 				<a class="button button-block button-positive" ng-href="#" onclick="window.open('http://www.facebook.com/', '_system', 'location=yes'); return false;">
 					Facebook

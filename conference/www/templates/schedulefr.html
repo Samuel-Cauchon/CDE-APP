@@ -64,3 +64,17 @@
 </ion-list>
 </ion-content>
 </ion-view>
+<script id="templates/popover.html" type="text/ng-template">
+	<ion-popover-view style="width:300px !important">
+		<ion-header-bar>
+			<h1 class="title">Select A Date</h1>
+		</ion-header-bar>
+		<ion-content>
+			<ion-radio ng-repeat="item in datesFrench"
+			ng-value="item.value"
+			ng-model="defaultDate.clientSide">
+			{{ item.text }}
+			</ion-radio>
+		</ion-content>
+	</ion-popover-view>
+</script>
