@@ -145,6 +145,30 @@ angular.module('App.services', ['backand'])
         });
       },
 
+      GetProfession: function(user){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/GetProfession',
+          params: {
+            parameters: {
+              username: user
+            }
+          }
+        });
+      },
+
+      getName: function(user){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getName',
+          params: {
+            parameters: {
+              username: user
+            }
+          }
+        });
+      },
+
       GetBirthday: function(user){
         return $http ({
           method: 'GET',
