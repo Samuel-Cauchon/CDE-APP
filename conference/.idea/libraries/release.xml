@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="release">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/internal_impl-23.4.0_61db7544e53e52879a13284d73c25adce558fc47.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/support-annotations-23.4.0_ec95d7192b1fe57d1c2d8948305d46ac6174cee4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.android.support-support-v4-23.4.0_82d51da6e7d62e93275fb4c2c383cd054cc0bed7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/internal_impl-23.4.0_ba10932fbb92fc1e1939afdc7ee3c96ba9ea7a9d.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.google.android.gms-play-services-base-9.0.2_829552dec8251998f75c7f1a51d77d0629bd727c.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/me.leolin-ShortcutBadger-1.1.4_4cd148df08b55c790394d6662d1f3b8dfdd4b175.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.android.support-support-v13-23.4.0_13297ce07082a2add5a018bade6c050102741a1f.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.google.android.gms-play-services-gcm-9.0.2_0db0d3ff7fb6dfacbb737b1b538b9a6468f5c6ad.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/release_0e1616723449325dfde110342e3d2c9a8df7e209.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.google.android.gms-play-services-iid-9.0.2_f56932e03df1b07871ad23461defff0266e86f59.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/CordovaLib-unspecified-release_66805185c1104068d294bf67e7b2526ad08325fb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.google.android.gms-play-services-basement-9.0.2_7d14c1efdd1a294519ee04fd0ae6f0b6588c7edf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.google.firebase-firebase-common-9.0.2_e55225c16a43564ba4d7523675d68739779a3324.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/build/intermediates/pre-dexed/release/com.google.android.gms-play-services-tasks-9.0.2_26439d292cee01c2d5e0375ea70339a4e65b6b58.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
