@@ -1,115 +1,204 @@
 angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
-  .run(function($rootScope) {
-    $rootScope.currentLanguage = "english";
-  })
+.run(function($rootScope) {
+	$rootScope.currentLanguage = "english";
+})
 
-  .controller('menuController', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope) {
+.controller('menuController', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope) {
 
-  })
+})
 
-  .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, MainEvents) {
-    $scope.dataEntered = {
-      username : "",
-      password : "",
-    };
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+	$scope.dataEntered = {
+		username : "",
+		password : "",
+	};
 
-    $scope.Login = function () {
-      DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
-        //Check if the username exist...
-        if (dataUser[0] != null){
-          //Maybe an unecessary second check of the corectnes of the username...
-          if (dataUser[0]['username'] === $scope.dataEntered.username){
-            DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
-              //Check if the password is correct.
-              if (dataPass[0]['password'] === $scope.dataEntered.password){
-                AuthService.currentUser = $scope.dataEntered.username;
-                console.log("Current user name", AuthService.currentUser);
-                AuthService.uid = dataUser[0]['id'];
-                MainEvents.setUserId(AuthService.uid);
-                console.log(AuthService.uid);
+	$scope.goFrench = function(){
+		$rootScope.currentLanguage = "french";
+		$state.go('welcomefr');
+	}
 
-                DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
-                console.log(AuthService.currentUser);
-                //if (AuthService.currentLanguage == "English"){
-                console.log($rootScope.currentLanguage);
-                $state.go('homeMenu.newsfeed');
-                //}
-                //else{
-                //$state.go('homeMenu.newsfeedFrench');
-                //}
-              }
-            });
-          }
-        }
-      });
-    };
+	$scope.goEnglish = function(){
+		$rootScope.currentLanguage = "english";
+		$state.go('welcome');
+	}
 
-    $scope.Register = function () {
-      $state.go('register');
-    };
+	$scope.Login = function () {
+		DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
+	  //Check if the username exist...
+	  if (dataUser[0] != null){
+		//Maybe an unecessary second check of the corectnes of the username...
+		if (dataUser[0]['username'] === $scope.dataEntered.username){
+			DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
+			//Check if the password is correct.
+				if (dataPass[0]['password'] === $scope.dataEntered.password){
+					AuthService.currentUser = $scope.dataEntered.username;
+					AuthService.uid = dataUser[0]['id'];
+					DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+					if ($rootScope.currentLanguage != "french"){
+						$state.go('homeMenu.newsfeed');
+					}
+					else{
+						$state.go('homeMenu.newsfeedfr');
+					}
+				}
+				else{
+					alert("Could not login! Wrong Input!")
+				}
+			});
+		}
+		else{
+			alert("Could not login! Wrong Input!")
+		}
+	}
+	else{
+		alert("Could not login! Wrong Input!")
+	}
+});
+	};
 
-  })
+	$scope.Register = function () {
+		if($rootScope.currentLanguage != "french"){
+			$state.go('register');
+		}
+		else{
+			$state.go('registerfr');
+		}
+	};
 
-  .controller('LogoutCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+})
 
-    $scope.Logout = function () {
-      DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
-      AuthService.currentUser = "";
-      $state.go('welcome');
-    };
-  })
+.controller('LogoutCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
 
-  .controller('OptionCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+	$scope.Logout = function () {
+		DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
+		AuthService.currentUser = "";
+		if ($rootScope.currentLanguage != "french"){
+			$state.go('welcome');
+		}
+		else{
+			$state.go('welcomefr');
+		}
+	};
+})
 
-    $scope.goFrench = function() {
-      $rootScope.currentLanguage = "french";
-      console.log($rootScope.currentLanguage);
-    };
+.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
 
-    $scope.goEnglish = function() {
-      $rootScope.currentLanguage = "english";
-    };
-  })
+	$scope.goFrench = function() {
+		$rootScope.currentLanguage = "french";
+	};
 
-  .controller('UsersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, MainEvents){
-    DatabaseService.getallUsers().success(function(dataAllUsers){
-      $scope.allUsers = dataAllUsers;
-    })
+	$scope.goEnglish = function() {
+		$rootScope.currentLanguage = "english";
+	};
+})
 
-    $scope.setUserSelected = function(user){
-      AuthService.userSelected = user;
-      console.log(AuthService.userSelected);
-    }
-  })
+.controller('UsersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+	DatabaseService.getAllNamePhotos().success(function(dataAllInfo){
+		$scope.usersInfo = dataAllInfo;
+	})
 
-  .controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+	$scope.setUserSelected = function(userChosen){
+		AuthService.userSelected = userChosen;
+	}
+})
 
-    $scope.dataEnteredRegister = {
-      username : "",
-      password : "",
-      passwordConfirmation : "",
-    };
+.controller('SpeakersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
 
-    $scope.Register = function () {
-      DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
-        console.log("1");
-        //Check if the username exist...
-        if (dataUser[0] == null){
-          DatabaseService.getMaxId().success(function(maxId){
-            DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
-              AuthService.currentUser = $scope.dataEnteredRegister.username;
-              $state.go('homeMenu.newsfeed');
-            })
-          })
-        }
-      })
-    };
+	DatabaseService.getAllSpeakersInfo().success(function(dataAllInfo){
+		$scope.speakersInfo = dataAllInfo;
+	})
 
-    $scope.Cancel = function () {
-      $state.go('welcome');
-    };
-  })
+	$scope.setSpeakerSelected = function(speaker){
+		AuthService.userSelected = speaker;
+	}
+
+})
+
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+
+	$scope.dataEnteredRegister = {
+		username : "",
+		password : "",
+		passwordConfirmation : "",
+	};
+
+
+
+	function checkForm()
+	{
+		if($scope.dataEnteredRegister.username == "") {
+			alert("Error: Username cannot be blank!");
+			return false;
+		}
+		re = /^\w+$/;
+		if(!re.test($scope.dataEnteredRegister.username)) {
+			alert("Error: Username must contain only letters, numbers and underscores!");
+			return false;
+		}
+
+		if($scope.dataEnteredRegister.password != "" && $scope.dataEnteredRegister.password == $scope.dataEnteredRegister.passwordConfirmation) {
+			if($scope.dataEnteredRegister.password < 6) {
+				alert("Error: Password must contain at least six characters!");
+				return false;
+			}
+			if($scope.dataEnteredRegister.password == $scope.dataEnteredRegister.username) {
+				alert("Error: Password must be different from Username!");
+				return false;
+			}
+			re = /[0-9]/;
+			if(!re.test($scope.dataEnteredRegister.password)) {
+				alert("Error: password must contain at least one number (0-9)!");
+				return false;
+			}
+			re = /[a-z]/;
+			if(!re.test($scope.dataEnteredRegister.password)) {
+				alert("Error: password must contain at least one lowercase letter (a-z)!");
+				return false;
+			}
+			re = /[A-Z]/;
+			if(!re.test($scope.dataEnteredRegister.password)) {
+				alert("Error: password must contain at least one uppercase letter (A-Z)!");
+				return false;
+			}
+		} else {
+			alert("Error: Please check that you've entered and confirmed your password!");
+			return false;
+		}
+
+		return true;
+	};
+
+	$scope.Register = function () {
+		DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+		//Check if the username exist...
+		if (dataUser[0] == null && checkForm()){
+			DatabaseService.getMaxId().success(function(maxId){
+				DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
+					AuthService.currentUser = $scope.dataEnteredRegister.username;
+					if ($rootScope.currentLanguage != "french"){
+						$state.go('homeMenu.newsfeed');
+					}
+					else{
+						$state.go('homeMenu.newsfeedfr');
+
+					}
+				})
+			})
+		}
+	})
+	};
+
+	$scope.Cancel = function () {
+		if ($rootScope.currentLanguage != "french"){
+			$state.go('welcome');
+		}
+		else{
+			$state.go('welcomefr');
+		}
+	};
+})
 
   .controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
 
@@ -381,337 +470,429 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       $scope.editDescription = "1";
     }
 
-    $scope.endEditDescription= function(){
-      DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
-        DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
-          $scope.profile.description = datadescription[0]['description'];
-          $scope.editDescription = null;
-        })
-      })
-    }
+$scope.endEditDescription= function(){
+	DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
+		DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+			$scope.profile.description = datadescription[0]['description'];
+			$scope.editDescription = null;
+		})
+	})
+}
 
-    $scope.profile = {
-      img:"",
-      phonenumber:"",
-      birthdate:"",
-      description:""
-    }
-
-
-    DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataimg){
-      DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
-        DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirth){
-          DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
-            $scope.profile.img = dataimg[0]['profileimage'];
-            $scope.profile.phonenumber = dataphone[0]['phonenumber'];
-            $scope.profile.birthdate = databirth[0]['birthdate'];
-            $scope.profile.description = datadescription[0]['description'];
-          })
-        })
-      })
-    })
-
-    $scope.updatedProfile = {
-
-      newBirthdateDay:"",
-      newBirthdateMonth:"",
-      newBirthdateYear:"",
-
-      newPhonenumberRegional:"",
-      newPhonenumberFirstPart:"",
-      newPhonenumberSecondPart:"",
-
-      newDescription:""
+$scope.profile = {
+	name:"",
+	imgName:"",
+	phonenumber:"",
+	profession:"",
+	description:""
+}
 
 
-    }
-  })
+DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+	DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
+		DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+			DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
+				DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+					$scope.profile.name = dataname[0]['name'];
+					$scope.profile.imgName = dataImg[0]['photo'];
+					$scope.profile.phonenumber = dataphone[0]['phonenumber'];
+					$scope.profile.profession = dataprofession[0]['profession'];
+					$scope.profile.description = datadescription[0]['description'];
+				})
+			})
+		})
+	})
+})
 
-  .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+$scope.updatedProfile = {
 
-    console.log(AuthService.userSelected);
-    $scope.setUserSelected = function(user){
-      AuthService.userSelected = user;
-      console.log(AuthService.userSelected);
-    }
+	newName:"",
 
-  })
+	newProfession:"",
 
+	newPhonenumberRegional:"",
+	newPhonenumberFirstPart:"",
+	newPhonenumberSecondPart:"",
 
-  .controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
-
-
-    $scope.profile = {
-      img:"",
-      phonenumber:"",
-      birthdate:"",
-      description:""
-    }
-
-
-    DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataimg){
-      DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
-        DatabaseService.GetBirthday(AuthService.userSelected).success(function(databirth){
-          DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
-            $scope.profile.img = dataimg[0]['profileimage'];
-            $scope.profile.phonenumber = dataphone[0]['phonenumber'];
-            $scope.profile.birthdate = databirth[0]['birthdate'];
-            $scope.profile.description = datadescription[0]['description'];
-          })
-        })
-      })
-    })
-
-  })
-
-  .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
+	newDescription:""
 
 
-    var options = {timeout: 10000, enableHighAccuracy: true};
+}
 
-    var script = window.document.createElement('script');
-    script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
-    window.document.head.appendChild(script);
-
-    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-
-
-      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-      var mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+  $scope.userMap = [];
+  var eventList = {};
+  $scope.isUser = 1;
+  DatabaseService.getAllEvents().success(function(data) {
+    var eventArr = data;
+    for (var i = 0; i < eventArr.length; i++) {
+      eventList[eventArr[i].id] = {
+        name: eventArr[i].name
       };
-
-      $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-    }, function(error){
-      console.log("Could not get location");
-    });
-
-  })
-
-
-  .controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
-
-
-
-    $scope.entry = [];
-    var uid = AuthService.uid;
-    $scope.userName = AuthService.currentUser;
-
-    $scope.$on('$ionicView.enter', function () {
-      retrieveTwitterFeed();
-      retrieveInfo();
-      console.log("page opened");
-    })
-
-    $scope.refreshTwitterfeed = function () {
-      retrieveTwitterFeed();
-      $scope.$broadcast('scroll.refreshComplete');
-      console.log("page refresh");
     }
 
-    $scope.refreshNewsfeed = function () {
-      retrieveInfo();
-      $scope.$broadcast('scroll.refreshComplete');
-      console.log("page refresh");
+    var currentUser = "";
+    if($scope.isUser == 1) {
+      currentUser = AuthService.uid;
+    } else {
+      DatabaseService.getID(AuthService.userSelected).success(function(data){
+        currentUser = data[0]['id'];
+      })
     }
 
-    var formatNumber = function(number) {
-      if (number<10){
-        return "0"+number
-      } else {
-        return ""+number
+    MainEvents.getPeopleAttending().success(function(data){
+      var mapOfEvents = data.data;
+      mapOfEvents.forEach(function(item) {
+        if(currentUser == item.user) {
+          if ($scope.userMap.indexOf(item) == -1) {
+            $scope.userMap.push(eventList[item.event].name);
+          }
+        }
+      })
+      $scope.userMap = removeDuplicates($scope.userMap);
+      console.log($scope.userMap);
+      $scope.userEvents = function(){
+        return $scope.userMap;
       }
-    };
+    })
+  });
 
-
-    var getMonth = function(monthNumber) {
-      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      return months[parseInt(monthNumber) -1];
-    };
-
-    var formatDate = function(datetime) {
-      var result = datetime.split("-");
-      var year = result[0];
-      var month = getMonth(result[1]);
-      var res = result[2].split("T");
-      var day = res[0];
-      var time = res[1].split(":");
-      var hour = time[0];
-      var min = time[1];
-
-      return month+" "+day+" at "+hour+":"+min;
-    };
-
-    function retrieveTwitterFeed(){
-      TwitterREST.sync().then(function(tweets){
-        console.log(tweets);
-        $scope.tweets = tweets.statuses;
-      });
-
-      $scope.innapBrowser = function (value) {
-        window.open(value, '_blank');
-      };
+  function removeDuplicates(arr){
+    var temp = [];
+    for (var i=0; i < arr.length; i++){
+      if(temp.indexOf(arr[i]) == -1){
+        temp.push(arr[i]);
+      }
     }
+    arr = temp;
+    temp = [];
+    return arr;
 
-    $scope.postComment = function(id) {
-      var comment = document.getElementById(id).value;
-      var timestamp = new Date();
-      var day = formatNumber(timestamp.getDate());
-      var month = formatNumber(timestamp.getMonth()+1);
-      var year = timestamp.getFullYear();
-      var hours = formatNumber(timestamp.getHours());
-      var min = formatNumber(timestamp.getMinutes());
-      var sec = formatNumber(timestamp.getSeconds());
-      var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
-      var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
-      DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
-          $scope.ServerResponse = data;
-          console.log("comment saved");
-          $scope.refreshNewsfeed();
-          document.getElementById(id).value = null;
-        })
-        .error(function (data, status, header, config) {
-          $scope.ServerResponse =  htmlDecode("Data: " + data +
-            "\n\n\n\nstatus: " + status +
-            "\n\n\n\nheaders: " + header +
-            "\n\n\n\nconfig: " + config);
-          console.log("error saving comment");
-        });
-    }
+  }
+})
 
-    $scope.like = function(likesCounter, entryId){
-      var data = {"likes": (parseInt(likesCounter) + 1)};
-      DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
-          $scope.ServerResponse = data;
-          console.log("likes updated");
-          $scope.refreshNewsfeed();
-        })
-        .error(function (data, status, header, config) {
-          $scope.ServerResponse =  htmlDecode("Data: " + data +
-            "\n\n\n\nstatus: " + status +
-            "\n\n\n\nheaders: " + header +
-            "\n\n\n\nconfig: " + config);
-          console.log("error updating likes");
-        });
-    };
+.controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+
+	$scope.setUserSelected = function(user){
+		AuthService.userSelected = user;
+	}
+
+})
 
 
-    function retrieveInfo(){
-      DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
+.controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+
+
+	$scope.profile = {
+		img:"",
+		name:"",
+		phonenumber:"",
+		profession:"",
+		description:""
+	}
+
+
+	DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
+		DatabaseService.GetProfession(AuthService.userSelected).success(function(dataprofession){
+			DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataImg){
+				DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
+					DatabaseService.getName(AuthService.userSelected).success(function(dataname){
+						$scope.profile.imgName = dataImg[0]['photo'];
+						$scope.profile.name = dataname[0]['name'];
+						$scope.profile.phonenumber = dataphone[0]['phonenumber'];
+						$scope.profile.profession = dataprofession[0]['profession'];
+						$scope.profile.description = datadescription[0]['description'];
+					})
+				})
+			})
+		})
+	})
+
+})
+
+// .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
+//
+//
+// 	var options = {timeout: 10000, enableHighAccuracy: true};
+//
+// 	var script = window.document.createElement('script');
+// 	script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
+// 	window.document.head.appendChild(script);
+//
+// 	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
+//
+//
+// 		var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+//
+// 		var mapOptions = {
+// 			center: latLng,
+// 			zoom: 15,
+// 			mapTypeId: google.maps.MapTypeId.ROADMAP
+// 		};
+//
+// 		$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+//
+// 	}, function(error){
+// 		console.log("Could not get location");
+// 	});
+//
+// })
+
+
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
+
+
+
+	$scope.entry = [];
+	var uid = AuthService.uid;
+	$scope.userName = "";
+	var parameters = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
+	DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
+		$scope.userName = data['name'];
+
+	});
+
+	$scope.$on('$ionicView.enter', function () {
+		retrieveTwitterFeed();
+		retrieveInfo();
+	})
+
+	$scope.refreshTwitterfeed = function () {
+		retrieveTwitterFeed();
+		$scope.$broadcast('scroll.refreshComplete');
+		console.log("page refresh");
+	}
+
+	$scope.refreshNewsfeed = function () {
+		retrieveInfo();
+		$scope.$broadcast('scroll.refreshComplete');
+		console.log("page refresh");
+	}
+
+	var formatNumber = function(number) {
+		if (number<10){
+			return "0"+number
+		} else {
+			return ""+number
+		}
+	};
+
+
+	var getMonth = function(monthNumber) {
+		months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		return months[parseInt(monthNumber) -1];
+	};
+
+	var formatDate = function(datetime) {
+		var result = datetime.split("-");
+		var year = result[0];
+		var month = getMonth(result[1]);
+		var res = result[2].split("T");
+		var day = res[0];
+		var time = res[1].split(":");
+		var hour = time[0];
+		var min = time[1];
+
+		return month+" "+day+" at "+hour+":"+min;
+	};
+
+	function retrieveTwitterFeed(){
+		TwitterREST.sync().then(function(tweets){
+			console.log(tweets);
+			$scope.tweets = tweets.statuses;
+		});
+
+		$scope.innapBrowser = function (value) {
+			window.open(value, '_blank');
+		};
+	}
+
+	$scope.postComment = function(id) {
+		var comment = document.getElementById(id).value;
+		var timestamp = new Date();
+		var day = formatNumber(timestamp.getDate());
+		var month = formatNumber(timestamp.getMonth()+1);
+		var year = timestamp.getFullYear();
+		var hours = formatNumber(timestamp.getHours());
+		var min = formatNumber(timestamp.getMinutes());
+		var sec = formatNumber(timestamp.getSeconds());
+		var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
+		var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
+		DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
+			$scope.ServerResponse = data;
+			console.log("comment saved");
+			$scope.refreshNewsfeed();
+			document.getElementById(id).value = null;
+		})
+		.error(function (data, status, header, config) {
+			$scope.ServerResponse =  htmlDecode("Data: " + data +
+				"\n\n\n\nstatus: " + status +
+				"\n\n\n\nheaders: " + header +
+				"\n\n\n\nconfig: " + config);
+			console.log("error saving comment");
+		});
+	}
+
+	$scope.like = function(likesCounter, entryId){
+		var data = {"likes": (parseInt(likesCounter) + 1)};
+		DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
+			$scope.ServerResponse = data;
+			console.log("likes updated");
+			$scope.refreshNewsfeed();
+		})
+		.error(function (data, status, header, config) {
+			$scope.ServerResponse =  htmlDecode("Data: " + data +
+				"\n\n\n\nstatus: " + status +
+				"\n\n\n\nheaders: " + header +
+				"\n\n\n\nconfig: " + config);
+			console.log("error updating likes");
+		});
+	};
+
+
+	function retrieveInfo(){
+		DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
+			for (i=0; i < data.length; i++){
+				$scope.entry[i] = {name:data[i]['name'],
+				date:formatDate(data[i]['date']),
+				content:data[i]['content'],
+				commentid: data[i]['commentid'],
+				id: data[i]['id'],
+				likes: data[i]['likes']};
+			}
+		})
+		.error(function (data, status, header, config) {
+			$scope.ServerResponse =  htmlDecode("Data: " + data +
+				"\n\n\n\nstatus: " + status +
+				"\n\n\n\nheaders: " + header +
+				"\n\n\n\nconfig: " + config);
+			console.log("error getting data");
+		});
+	}
+
+
+  // $scope.items = [];
+  //
+  // PersonService.GetFeed().then(function(items){
+  //   $scope.items = items;
+  // });
+  //
+  // $scope.doRefresh = function() {
+  //   PersonService.GetNewUser().then(function(items){
+  //     $scope.items = items.concat($scope.items);
+  //
+  //     //Stop the ion-refresher from spinning
+  //     $scope.$broadcast('scroll.refreshComplete');
+  //   });
+  // };
+
+})
+
+.controller('SearchCtrl', function($scope, $http, DatabaseService) {
+	$scope.searchables = "blank";
+	$scope.searched = [];
+	$scope.searchContent = "Search";
+	$scope.entries = [];
+	$scope.searchUsers = function(){
+      //$scope.searchContent= document.getElementById('searchContent').value;
+      console.log($scope.searchables);
+      console.log($scope.searchContent);
+      if ($scope.searchables == "blank") {
+        console.log("No Category Selected - unsearchable");
+        $scope.entries[0] = "Please select a category from the dropdown menu to search!";
+      }
+      else if ($scope.searchContent== "Search") {
+        console.log("Blank Search");
+        $scope.entries[0] = "Please enter something in the search box to search!"
+      }
+      else if ($scope.searchables == "user"){
+        console.log("User search");
+        DatabaseService.searchUser($scope.searchContent).success(function(data){
           for (i=0; i < data.length; i++){
-            $scope.entry[i] = {name:data[i]['name'],
-              date:formatDate(data[i]['date']),
-              content:data[i]['content'],
-              commentid: data[i]['commentid'],
-              id: data[i]['id'],
-              likes: data[i]['likes']};
+            $scope.entries[i] = {name:data[i]['name'],
+              id: data[i]['id']};
           }
         })
-        .error(function (data, status, header, config) {
-          $scope.ServerResponse =  htmlDecode("Data: " + data +
-            "\n\n\n\nstatus: " + status +
-            "\n\n\n\nheaders: " + header +
-            "\n\n\n\nconfig: " + config);
-          console.log("error getting data");
-        });
+      }
+      else if ($scope.searchables == "name"){
+      	console.log("Event by name");
+      }
+      else if ($scope.searchables == "location") {
+      	console.log("Event by location");
+      }
+  }
+
+    // var eventArr = data;
+    // for (var i = 0; i < eventArr.length; i++) {
+    //   eventList[eventArr[i].id] = {
+    //     name: eventArr[i].name
+    //   };
+    // }
+    //
+    // var currentUser = "";
+    // if($scope.isUser == 1) {
+    //   currentUser = AuthService.uid;
+    // } else {
+    //   DatabaseService.getID(AuthService.userSelected).success(function(data){
+    //     currentUser = data[0]['id'];
+    //   })
+    // }
+    //
+    // MainEvents.getPeopleAttending().success(function(data){
+    //   var mapOfEvents = data.data;
+    //   mapOfEvents.forEach(function(item) {
+    //     if(currentUser == item.user) {
+    //       if ($scope.userMap.indexOf(item) == -1) {
+    //         $scope.userMap.push(eventList[item.event].name);
+    //       }
+    //     }
+    //   })
+    //   $scope.userMap = removeDuplicates($scope.userMap);
+    //   console.log($scope.userMap);
+    //   $scope.userEvents = function(){
+    //     return $scope.userMap;
+    //   }
+    // })
+    $scope.entries = removeDuplicates($scope.entries);
+    $scope.returnEvents = function(){
+      return $scope.entries;
     }
 
+    function removeDuplicates(arr){
+      var temp = [];
+      for (var i=0; i < arr.length; i++){
+        if(temp.indexOf(arr[i]) == -1){
+          temp.push(arr[i]);
+        }
+      }
+      arr = temp;
+      temp = [];
+      return arr;
 
-    // $scope.items = [];
-    //
-    // PersonService.GetFeed().then(function(items){
-    //   $scope.items = items;
-    // });
-    //
-    // $scope.doRefresh = function() {
-    //   PersonService.GetNewUser().then(function(items){
-    //     $scope.items = items.concat($scope.items);
-    //
-    //     //Stop the ion-refresher from spinning
-    //     $scope.$broadcast('scroll.refreshComplete');
-    //   });
-    // };
-
-  })
-
-  .controller('SearchCtrl', function($scope, $http, DatabaseService) {
-    $scope.searchables = "blank";
-    console.log($scope.searchables);
-    $scope.searched = [];
-    $scope.searchUsers = function() {
-      var searchItem = document.getElementById('searchContent').value;
-      if ($scope.searchables = "blank") {
-        console.log("Blank search - unsearchable")
-      }
-      else if (searchItem = "") {
-        console.log("Blank search - unsearchable")
-      }
-      else if ($scope.searchables = "user"){
-        DatabaseService.getData('/1/query/data/searchUser').success(function(data){
-            for (i=0; i < data.length; i++){
-              $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-            }
-          })
-          .error(function (data, status, header, config) {
-            $scope.ServerResponse =  htmlDecode("Data: " + data +
-              "\n\n\n\nstatus: " + status +
-              "\n\n\n\nheaders: " + header +
-              "\n\n\n\nconfig: " + config);
-            console.log("error getting data");
-          });
-      }
-      else if ($scope.searchables = "name"){
-        DatabaseService.getData('/1/query/data/searchEventByName').success(function(data){
-            for (i=0; i < data.length; i++){
-              $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-            }
-          })
-          .error(function (data, status, header, config) {
-            $scope.ServerResponse =  htmlDecode("Data: " + data +
-              "\n\n\n\nstatus: " + status +
-              "\n\n\n\nheaders: " + header +
-              "\n\n\n\nconfig: " + config);
-            console.log("error getting data");
-          });
-      }
-      else if ($scope.searchables = "location") {
-        DatabaseService.getData('/1/query/data/searchEventByLocation').success(function(data){
-            for (i=0; i < data.length; i++){
-              $scope.searched[i] = {name:data[i]['name'], photo:data[i]['photo']};
-            }
-          })
-          .error(function (data, status, header, config) {
-            $scope.ServerResponse =  htmlDecode("Data: " + data +
-              "\n\n\n\nstatus: " + status +
-              "\n\n\n\nheaders: " + header +
-              "\n\n\n\nconfig: " + config);
-            console.log("error getting data");
-          });
-      }
     }
 
-    $scope.getDropdownOption = function(){
-      searchopt = $scope.selectOption;
-      console.log(searchopt);
-      switch(searchopt) {
-        case 'location':
-          $scope.searchables = "location";
-          break;
-        case 'name':
-          $scope.searchables = "name";
-          break;
-        case 'user':
-          $scope.searchables = "user";
-          break;
-        default:
-          $scope.searchables = "blank";
-
-      }
-      console.log($scope.searchables);
+    $scope.getValue = function(val){
+      console.log("VALLLLL", val);
     }
+  $scope.getValue = function(val){
+  	console.log("VALLLLL", val);
+  }
 
-  })
+  $scope.getDropdownOption = function(){
+  	searchopt = $scope.selectOption;
+  	switch(searchopt) {
+  		case 'location':
+  		$scope.searchables = "location";
+  		break;
+  		case 'name':
+  		$scope.searchables = "name";
+  		break;
+  		case 'user':
+  		$scope.searchables = "user";
+  		break;
+  		default:
+  		$scope.searchables = "blank";
+
+  	}
+  }
+
+})
