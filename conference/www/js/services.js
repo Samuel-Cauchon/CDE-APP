@@ -366,82 +366,108 @@ angular.module('App.services', ['backand'])
   var firstDayEvents = [];
   var secondDayEvents = [];
   var thirdDayEvents = [];
+  var userId;
+  var allUsers;
+  var mapOfIdToNames;
+  var mapOfEventsUsers;
 
-  return{
-    getEventsFirstDay:function(){
+  return {
+    getEventsFirstDay: function () {
       return DatabaseService.getData('/1/query/data/getEventsDay1?deep=true', {});
     },
-    getEventsSecondDay: function(){
-      return DatabaseService.getData('/1/query/data/getEventsDay2',{});
+    getEventsSecondDay: function () {
+      return DatabaseService.getData('/1/query/data/getEventsDay2', {});
     },
-    getEventsFinalDay: function(){
-      return DatabaseService.getData('/1/query/data/getEventsDay3',{});
+    getEventsFinalDay: function () {
+      return DatabaseService.getData('/1/query/data/getEventsDay3', {});
     },
-    getUserQuery:function(){
-      return DatabaseService.getData('/1/query/data/GetAllUsers',{});
+    getUserQuery: function () {
+      return DatabaseService.getData('/1/query/data/GetAllUsers', {});
     },
-    getUserAttending: function(){
+    getUserAttending: function () {
       console.log(DatabaseService.getData('1/objects/event/', {}));
       console.log("hi");
       return DatabaseService.getData('1/objects/user', {});
     },
-    setEventId: function(id){
+    setEventId: function (id) {
       eventId = id;
     },
-    getEventId: function(){
+    getEventId: function () {
       return eventId;
     },
-    getPeopleAttendingEvent: function(){
-      if(eventId) {
+    getPeopleAttendingEvent: function () {
+      if (eventId) {
         console.log(DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {}));
         return DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {});
       }
     },
-    getBLAH: function(){
-      console.log(DatabaseService.getData('/1/objects/event?deep=true',{}));
-      return DatabaseService.getData('/1/objects/event?deep=true',{});
+    getBLAH: function () {
+      console.log(DatabaseService.getData('/1/objects/event?deep=true', {}));
+      return DatabaseService.getData('/1/objects/event?deep=true', {});
     },
-    getPeopleAttending: function(){
+    getPeopleAttending: function () {
       return DatabaseService.getData('/1/objects/relusersevents', {});
     },
-    updatePeopleAttending: function(){
-      return DatabaseService.newEntry('/1/objects/relusersevents', {user:16, event:eventId} )
+    updatePeopleAttending: function (userId, eventId) {
+      return DatabaseService.newEntry('/1/objects/relusersevents', {user: userId, event: eventId});
     },
 
-    setEventArrayWithFixedTiming: function(dayArr, day){
-      if (day == 'one'){
-        console.log("IM HEREEEEE")
-       firstDayEvents = dayArr;
+    setEventArrayWithFixedTiming: function (dayArr, day) {
+      if (day == 'one') {
+        firstDayEvents = dayArr;
       }
 
-      if (day == 'second'){
+      if (day == 'second') {
         secondDayEvents = dayArr;
       }
 
-      if (day == 'last'){
+      if (day == 'last') {
         thirdDayEvents = dayArr;
       }
     },
 
-    getEventArrayWithFixedTiming: function(day){
-      if (day == 'one'){
-        if(firstDayEvents) {
+    getEventArrayWithFixedTiming: function (day) {
+      if (day == 'one') {
           return firstDayEvents;
-        }
-        else{
-          return [];
-        }
       }
 
-      if(day == 'second'){
+      if (day == 'second') {
         return secondDayEvents;
       }
 
-      if(day == 'third'){
+      if (day == 'third') {
         return thirdDayEvents
       }
-    }
+    },
 
+    setUserId: function (id) {
+      userId = id;
+    },
+
+    getUserId: function () {
+      return userId;
+    },
+
+    setPeopleAttendingEachEvent: function(peopleAttendingArr){
+      mapOfIdToNames = peopleAttendingArr;
+    },
+
+    getPeopleAttendingEachEvent: function(){
+      if(mapOfIdToNames){
+        return mapOfIdToNames;
+      }
+      else{
+        return {};
+      }
+    },
+
+    setMapOfEventsToUsers: function(map){
+      mapOfEventsUsers = map;
+    },
+
+    getMapOfEventsToUsers: function(){
+      return mapOfEventsUsers;
+    }
 
   }
 })

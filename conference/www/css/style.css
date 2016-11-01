@@ -52,3 +52,11 @@
   width:350px;
   white-space: normal;
 }
+p.small{
+  line-height: 1.2;
+}
+
+.button-registerEvent{
+  display: block;
+  margin: 0 auto;
+}

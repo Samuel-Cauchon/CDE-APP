@@ -8,7 +8,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
   })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, MainEvents) {
   $scope.dataEntered = {
     username : "",
     password : "",
@@ -19,13 +19,16 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       //Check if the username exist...
       if (dataUser[0] != null){
         //Maybe an unecessary second check of the corectnes of the username...
-        if (dataUser[0]['name'] === $scope.dataEntered.username){
+        if (dataUser[0]['username'] === $scope.dataEntered.username){
           DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
             //Check if the password is correct.
             if (dataPass[0]['password'] === $scope.dataEntered.password){
               AuthService.currentUser = $scope.dataEntered.username;
+              console.log("Current user name", AuthService.currentUser);
               AuthService.uid = dataUser[0]['id'];
+              MainEvents.setUserId(AuthService.uid);
               console.log(AuthService.uid);
+
               DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
               console.log(AuthService.currentUser);
               //if (AuthService.currentLanguage == "English"){
@@ -69,7 +72,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   };
 })
 
-.controller('UsersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+.controller('UsersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, MainEvents){
     DatabaseService.getallUsers().success(function(dataAllUsers){
         $scope.allUsers = dataAllUsers;
     })
@@ -112,6 +115,22 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
     var peopleAttendingEachEvent = {};
     $scope.map = {};
+    $scope.mapUserRegisteredToEvent = {};
+  $scope.eventIdUserClicked;
+
+  //$scope.activateRegisteredButton = function(){
+  //  $scope.eventRegistered =
+  //}
+
+
+  $scope.$on('$ionicView.enter', function () {
+    updatePeopleAttendingEachEvent();
+    console.log("page opened");
+  })
+
+  $scope.getIdOfEvent= function(eventId){
+    $scope.eventIdUserClicked = eventId;
+  }
 
   $scope.dates = [
     {text: 'November 18, 2016', value:1},
@@ -160,17 +179,20 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     return $scope.shownGroup === group;
   };
 
-  MainEvents.getUserQuery().success(function(data) {
-    var userArr = data;
-    for (var i = 0; i < userArr.length; i++) {
-      peopleAttendingEachEvent[userArr[i].id] = {
-        name: userArr[i].name
-      };
-    }
-    MainEvents.getPeopleAttending().success(function(data){
+  function updatePeopleAttendingEachEvent() {
+    MainEvents.getUserQuery().success(function (data) {
+      var userArr = data;
+      for (var i = 0; i < userArr.length; i++) {
+        peopleAttendingEachEvent[userArr[i].id] = {
+          name: userArr[i].name
+        };
+      }
+    });
+    MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
+    MainEvents.getPeopleAttending().success(function (data) {
       var mapOfEventToUser = data.data;
-      mapOfEventToUser.forEach(function(item) {
-        if((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
+      mapOfEventToUser.forEach(function (item) {
+        if ((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
           if (!$scope.map[item.event]) {
             $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
           }
@@ -179,12 +201,61 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
           }
         }
       })
-      $scope.getMappingOfEventToUsers = function(id){
-        return $scope.map[id];
+      for (var key in $scope.map){
+        $scope.map[key] = removeDuplicates($scope.map[key]);
+      }
+      $scope.getMappingOfEventToUsers = function (id) {
+        MainEvents.setMapOfEventsToUsers($scope.map);
+        if ($scope.map[id]) {
+          return $scope.map[id];
+          //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
+        }
       }
     })
-  });
+  }
 
+
+  function removeDuplicates(arr){
+    if(arr) {
+      var temp = [];
+      for (var i = 0; i < arr.length; i++) {
+        if (temp.indexOf(arr[i]) == -1) {
+          temp.push(arr[i]);
+        }
+      }
+      arr = temp;
+      temp = [];
+      return arr;
+
+    }
+  }
+
+  $scope.registered = false;
+  $scope.preRegistered = function(){
+    $scope.registered = !$scope.registered;
+  }
+
+  function checkIfUserHasRegisteredToEvent(uid, mapOfIdsToUsernames, eventId, mapOfEventsToRegister) {
+    if (uid && mapOfIdsToUsernames && eventId && mapOfEventsToRegister) {
+      var username = mapOfIdsToUsernames[uid].name;
+      console.log("Username", username);
+      console.log("Map of events to register", mapOfEventsToRegister);
+      for (var key in mapOfEventsToRegister) {
+        var obj = mapOfEventsToRegister[key];
+        console.log("OBJ", obj);
+        if (obj.indexOf(username) !== -1) {
+          console.log("HEREEEE");
+            $scope.mapUserRegisteredToEvent[key]= ({'value': true});
+          }
+        else{
+          $scope.mapUserRegisteredToEvent[key] = ({'value': false});
+        }
+        }
+
+        //$scope.mapUserRegisteredToEvent = removeDuplicates($scope.mapUserRegisteredToEvent);
+        console.log("MAPP", $scope.mapUserRegisteredToEvent)
+      }
+    }
 
   MainEvents.getEventsFirstDay().success(function (data) {
     $scope.dayOneEvents = data;
@@ -219,9 +290,6 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     })
   }
 
-  //$scope.setDateForRepetition = function(){
-  //
-  //}
   function setDateForRepetition(ind) {
     $scope.events;
     if (ind == 0) {
@@ -235,6 +303,30 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     if(ind == 2){
       $scope.events = MainEvents.getEventArrayWithFixedTiming('third');
     }
+  }
+
+  $scope.refreshEvents = function () {
+    updatePeopleAttendingEachEvent();
+    $scope.$broadcast('scroll.refreshComplete');
+    console.log("page refresh");
+  }
+
+  $scope.registerForEvent = function(eventId){
+    var uid = MainEvents.getUserId();
+    var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
+    var eventToRegister = eventId;
+    var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
+    MainEvents.updatePeopleAttending(uid, eventToRegister).success(function(data){
+      var serverResponse = data;
+      $scope.refreshEvents();
+      //$scope.activateRegisteredButton();
+      checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
+
+    })
+    .error(function(data){
+      $scope.serverResponse = htmlDecode("Data: "+data);
+      console.log("Error refreshing data");
+    });
   }
 
   })
