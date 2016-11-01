@@ -17,6 +17,16 @@ angular.module('App.services', ['backand'])
 				});
 			},
 
+			getAllSpeakersInfo: function() {
+				return $http ({
+				  	method: 'GET',
+				  	url: Backand.getApiUrl() + '/1/query/data/getAllSpeakersInfo',
+				  	params: {
+				    	parameters: {}
+				  	}
+				});
+			},
+
 			list: function(){
 				return $http ({
 					method: 'GET',

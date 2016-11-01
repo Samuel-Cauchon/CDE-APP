@@ -104,6 +104,18 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 	}
 })
 
+.controller('SpeakersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+
+	DatabaseService.getAllSpeakersInfo().success(function(dataAllInfo){
+		$scope.speakersInfo = dataAllInfo;
+	})
+
+	$scope.setSpeakerSelected = function(speaker){
+		AuthService.userSelected = speaker;
+	}
+
+})
+
 .controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
 
 	$scope.dataEnteredRegister = {
@@ -187,6 +199,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 		}
 	};
 })
+
+
 
 .controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
 
@@ -627,15 +641,6 @@ $scope.updatedProfile = {
 
 
 })
-
-.controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
-
-	$scope.setUserSelected = function(user){
-		AuthService.userSelected = user;
-	}
-
-})
-
 
 .controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
 
