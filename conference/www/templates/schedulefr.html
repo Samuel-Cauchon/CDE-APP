@@ -1,0 +1,80 @@
+<ion-view view-title="Calendrier">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<ion-content>
+		<p></p>
+		<div class="bar bar-header bar-calm nav-icon">
+			<h1 class="title">{{ putNewDate(defaultDate.clientSide, datesFrench) }}</h1>
+			<i class="ion-android-arrow-dropdown icon-large-size icon-right" ng-click="popover.show($event)" ></i>
+		</div>
+		<br></br>
+		<ion-list>
+			<div ng-repeat="entity in events">
+				<ion-item class="item-stable"
+				ng-click="toggleGroup(entity)"
+				ng-class="{active: isGroupShown(entity)}">
+				<i class="icon" ng-class="isGroupShown(entity) ? 'ion-minus' : 'ion-plus'"></i>
+				&nbsp;
+				<i class="ion-calendar"></i>
+				<b>{{entity.name}}</b>
+				<p></p>
+				{{entity.starttime}} - {{entity.endtime}}
+			</ion-item>
+			<ion-item class="item-accordion"
+			ng-if="isGroupShown(entity)">
+			Description
+			<p id="openBox">{{ entity.description }}</p>
+			<p>Emplacement:</p>
+			<p></p>
+			{{ entity.place }}
+			<p></p>
+			<div ng-if="entity.speaker !==null">
+				<p>Conférentier(s):</p>
+				<p></p>
+				{{ entity.speaker }} {{ entity.attending }}
+			</div>
+			<p>Membres Inscrits:</p>
+			<ion-scroll style="height:100px" class="scrollVertical" direction="y">
+				<div class="list">
+					<div ng-repeat="n in getMappingOfEventToUsers(entity.id) | orderBy"  >
+						<div class="item item-divider" >
+							{{ n }}
+						</div>
+					</div>
+				</div>
+			</ion-scroll>
+			<p></p>
+			<p></p>
+			<p></p>
+			<p></p>
+			<p></p>
+			<p></p>
+			<button class="button button-balanced" style="display: block; margin: 0 auto">
+				Enregistrer!
+			</button>
+
+		</ion-item>
+	</div>
+</ion-list>
+</ion-content>
+</ion-view>
+<script id="templates/popover.html" type="text/ng-template">
+	<ion-popover-view style="width:300px !important">
+		<ion-header-bar>
+			<h1 class="title">Select A Date</h1>
+		</ion-header-bar>
+		<ion-content>
+			<ion-radio ng-repeat="item in datesFrench"
+			ng-value="item.value"
+			ng-model="defaultDate.clientSide">
+			{{ item.text }}
+			</ion-radio>
+		</ion-content>
+	</ion-popover-view>
+</script>
