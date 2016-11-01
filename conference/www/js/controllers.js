@@ -421,7 +421,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   function initUpload() {
   	$scope.fileInput = document.getElementById('fileInput');
 
-  	
+
 
   	$scope.fileInputFr = document.getElementById('fileInputFr');
   }
@@ -880,7 +880,7 @@ $scope.updatedProfile = {
       }
       else if ($scope.searchables == "user"){
         console.log("User search");
-        DatabaseService.searchUser($scope.query).success(function(data){
+        DatabaseService.searchUser($scope.searchContent).success(function(data){
           for (i=0; i < data.length; i++){
             $scope.entries[i] = {name:data[i]['name'],
               id: data[i]['id']};
