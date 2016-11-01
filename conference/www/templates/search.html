@@ -2,35 +2,42 @@
   <ion-view view-title="Search">
   	<ion-content class="has-header">
       <form ng-submit="searchUsers(searchContent)" ng-controller="SearchCtrl">
-        <input type="item item-input item-select">
+        <input type="item item-select">
           <select ng-model="selectOption" ng-change="getDropdownOption()">
             <option value="location">Events by Location</option>
             <option value="name">Events by Name</option>
             <option value="user">People</option>
           </select>
         </input>
-        <input type="text" ng-model="searchContent" id="searchContent" placeholder="Search"/>
+        <input type="text" ng-model="searchContent" placeholder="Search"/>
         <input type="submit" id="submit" value="Search" ng-click="getValue(searchContent)" />
       </form>
 
-      <div class="item item-body" ng-hide="searchables == 'blank' && searched != null" ng-cloak>
-        {{
-        <p>
-          You need to select an option from the dropdown menu to search!
-        </p>
-        }}
+      <div>
+        <ul>
+            <li ng-repeat="d in returnEvents() | orderBy">
+              {{ d }}
+            </li>
+        </ul>
       </div>
-      <div class="list card" ng-show="searchables != 'blank' && searched !== null" ng-cloak>
-        {{
-        <div class="item" >
-          <ion-list>
-            <ion-item ng-repeat="item in searched">
-              {{item.name}}<br>
-            </ion-item>
-          </ion-list>
-        </div>
-        }}
-      </div>
+      <!--<div class="item item-body" ng-hide="searchables == 'blank' && searched != null" ng-cloak>-->
+        <!--{{-->
+        <!--<p>-->
+          <!--You need to select an option from the dropdown menu to search!-->
+        <!--</p>-->
+        <!--}}-->
+      <!--</div>-->
+      <!--<div class="list card" ng-show="searchables != 'blank' && searched !== null" ng-cloak>-->
+        <!--{{-->
+        <!--<div class="item" >-->
+          <!--<ion-list>-->
+            <!--<ion-item ng-repeat="item in searched">-->
+              <!--{{item.name}}<br>-->
+            <!--</ion-item>-->
+          <!--</ion-list>-->
+        <!--</div>-->
+        <!--}}-->
+      <!--</div>-->
     </ion-content>
   </ion-view>
 </div>

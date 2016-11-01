@@ -1,57 +1,128 @@
-* Empty. Add your own CSS if you like */
+/* Empty. Add your own CSS if you like */
 
 #nav-icon {
-  position: relative;
+	position: relative;
 }
 
 .icon-large-size {
-  font-size: 40px
+	font-size: 40px
 }
 .icon-medium-size{
-  font-size:20px;
+	font-size:20px;
 }
 
 .icon-left{
-  position:absolute;
-  top:-10px;
-  left:5px;
+	position:absolute;
+	top:-10px;
+	left:5px;
 }
 
 .icon-right{
-  position: absolute;
-  top: -10px;
-  right: 5px;
+	position: absolute;
+	top: -10px;
+	right: 5px;
 }
 
 .paddingLarge{
-  padding:12px;
+	padding:12px;
 }
 .list .item.item-accordion {
-  line-height: 38px;
-  padding-top: 0;
-  padding-bottom: 0;
-  transition: 0.09s all linear;
-  white-space: normal;
+	line-height: 38px;
+	padding-top: 0;
+	padding-bottom: 0;
+	transition: 0.09s all linear;
+	white-space: normal;
 }
 .list .item.item-accordion.ng-hide {
-  line-height: 0px;
+	line-height: 0px;
 }
 .list .item.item-accordion.ng-hide-add,
 .list .item.item-accordion.ng-hide-remove {
-  display: block !important;
+	display: block !important;
 }
 
 .myTable { background-color:white;
-  border-collapse:collapse;
-  color:black;
+	border-collapse:collapse;
+	color:black;
 }
 .myTable td, .myTable th { padding:5px; }
 .myTable td { line-height:1.5em; }
+
+/* profile */
+
+.profile-img {
+	width: 140px;
+	height: 140px;
+	margin: 10px auto 20px auto;
+	border-radius: 50%;
+	border: 4px solid #fff;
+	box-shadow: 0 5px 15px rgba(0,0,0,.3);
+	overflow: hidden;
+}
+
+.profile-img > img {
+	max-width: 200px;
+	min-width: 100px;
+	max-height: 200px;
+	min-height: 100px;
+	display: block;
+	margin-left: -50%;
+}
+
+div.item.item-avatar.profile-avatar > img.blank-profile {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	top:0;
+	left:0;
+}
+div.profile-avatar {
+	padding-left: 0;
+}
+
+div.profile-telephone > div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+div.edit-profession {
+	position: relative;
+	margin-top: 10px;
+}
+
+div.profile-telephone {
+	padding-left: 0;
+}
+
+div.profile-telephone i.icon.ion-ios-telephone {
+	display: inline-block;
+	position: relative;
+	width: 32px;
+	height: 32px;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+div.profile-telephone i.icon.ion-ios-telephone:before {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+div.edit-description textarea {
+	width: 100%;
+	height: 100px;
+	border: 1px solid rgba(0,0,0,0.2);
+	margin-bottom: 10px;
+	font-size: 12px;
+}
 
 #openBox{
   width:350px;
   white-space: normal;
 }
+<<<<<<< HEAD
 p.small{
   line-height: 1.2;
 }
@@ -59,4 +130,34 @@ p.small{
 .button-registerEvent{
   display: block;
   margin: 0 auto;
+}
+=======
+
+img.blank-profile {
+	display: block;
+	margin-bottom: 7px;
+}
+
+.item.item-avatar.profile-avatar > a > img {
+	position: absolute;
+    top: 16px;
+    left: 16px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.item.item-avatar > span {
+	display: block;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.inner h2{
+  letter-spacing:0.1em;
+  text-transform: uppercase;
+  color: #111e45;
 }

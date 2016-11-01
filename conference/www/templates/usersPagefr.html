@@ -1,0 +1,15 @@
+<ion-view view-title="Profils">
+	<ion-modal-view>
+		<ion-content class="padding">
+		<div class="list card">
+				<div class="item item-avatar profile-avatar" ng-repeat="u in usersInfo | orderBy: 'name'">
+					<a class="item item-avatar" ng-href="#/homeMenu/userProfilefr" ng-click="setUserSelected(u.username)"> 
+						<img ng-show="u.photo != null" ng-src="https://files.backand.io/cdeapp/{{u.photo}}" />
+						<img ng-show="u.photo == null" ng-src="blank-profile.png" />
+						<span>{{u.name}}</span>
+					</a>
+				</div>
+			</div>
+		</ion-content>
+	</ion-modal-view>
+</ion-view>

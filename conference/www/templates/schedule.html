@@ -13,9 +13,9 @@
       <h1 class="title">{{ putNewDate(defaultDate.clientSide, dates) }}</h1>
       <i class="ion-android-arrow-dropdown icon-large-size icon-right" ng-click="popover.show($event)" ></i>
     </div>
-      <br></br>
+    <br></br>
     <ion-list>
-      <div ng-repeat="entity in events">
+      <div ng-repeat="entity in events" class="inner">
         <ion-item class="item-stable"
                   ng-click="toggleGroup(entity);getIdOfEvent(entity.id)"
                   ng-class="{active: isGroupShown(entity)}">
@@ -28,28 +28,29 @@
         </ion-item>
         <ion-item class="item-accordion"
                   ng-if="isGroupShown(entity)">
-         <h2><b>Description</b></h2>
           <p></p>
-          <p id="openBox" class="small">{{ entity.description }}</p>
+          <h2><b>Description</b></h2>
+          <h3 id="openBox">{{ entity.description }}</h3>
           <p></p>
-          <h2>Where</h2>
-          {{ entity.place }}
+          <h2><b>Where</b></h2>
+          <h3 id="openBox"{{ entity.place }}></h3>
           <p></p>
           <span ng-if="entity.speaker != null">
-          <h2>Speaker(s)</h2>
+          <h2><b>Speaker(s)</b></h2>
           <p></p>
-          {{ entity.speaker }} {{ entity.attending }}
+          <h3 id="openBox"{{ entity.speaker }} {{ entity.attending }}></h3>
           </span>
-          <h2>Users Attending:</h2>
-            <ion-scroll style="height:100px" class="scrollVertical" direction="y">
-              <div class="list">
-                  <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy"  >
-                    <div class="item item-divider" >
-                      {{ n }}
-                    </div>
-                    </div>
+          <p></p>
+          <h2><b>Users Attending:</b></h2>
+          <ion-scroll style="height:100px" class="scrollVertical" direction="y">
+            <div class="list">
+              <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy"  >
+                <div class="item item-divider" >
+                  <h3 id="openBox">{{ n }}</h3>
+                </div>
               </div>
-            </ion-scroll>
+            </div>
+          </ion-scroll>
           <p></p>
           <p></p>
           <p></p>
@@ -61,12 +62,12 @@
                   ng-click="registerForEvent(entity.id)"
                   type="button"
                   style="display: block; margin: 0 auto">
-                  {{ (eventRegistered) ? 'Registered' : 'Register' }}
+            {{ (eventRegistered) ? 'Registered' : 'Register' }}
           </button>
 
           <!--<button class="btn" style="display: block; margin: 0 auto" ng-click="registerForEvent(entity.id)">-->
-            <!--<i ng-class="(registeredInBackend == 'yes') ? 'button-balanced' : 'button-assertive'"></i>-->
-               <!--Register-->
+          <!--<i ng-class="(registeredInBackend == 'yes') ? 'button-balanced' : 'button-assertive'"></i>-->
+          <!--Register-->
           <!--</button>-->
 
         </ion-item>
@@ -156,5 +157,5 @@
       </ion-list>
     </ion-content>
   </ion-view>
-  </div>
+</div>
 

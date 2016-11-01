@@ -1,0 +1,32 @@
+<ion-view view-title="Recherche">
+	<ion-content class="has-header">
+		<div class="list">
+			<label class="item item-input">
+			<input type="text" id="searchContent" placeholder="Recherche">
+				<button class="button button-dark" id="postButton" ng-click="searchUsers(searchContent)">Recherche</button>
+			</label>
+			<label class="item item-input item-select">
+				<select ng-controller="SearchCtrl" ng-model="selectOption" ng-change="getDropdownOption()">
+					<option value="location">Événements par localisation</option>
+					<option value="name">Événements par nom</option>
+					<option value="user">Membres</option>
+				</select>
+			</label>
+		</div>
+
+		<div class="item item-body" ng-if="searchables == 'blank'">
+			<p>
+				Vous devez choisir une option de recherche!
+			</p>
+		</div>
+		<div class="list card" ng-if="searched !== null">
+			<div class="item" >
+				<ion-list>
+					<ion-item ng-repeat="item in searched">
+						{{item.name}}<br>
+					</ion-item>
+				</ion-list>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>
