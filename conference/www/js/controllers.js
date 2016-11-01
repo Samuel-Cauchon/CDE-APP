@@ -434,7 +434,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
   })
 
-  .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+  .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents) {
     $scope.editPhone = null;
     $scope.editDescription = null;
     $scope.editBirthdate = null;
@@ -817,6 +817,7 @@ $scope.updatedProfile = {
           if($scope.entries.length == 0) {
             $scope.entries.push("No user with this name was found.");
           }
+          console.log($scope.entries);
           // return $scope.entries;
         })
       }
@@ -833,6 +834,7 @@ $scope.updatedProfile = {
           if($scope.entries.length == 0) {
             $scope.entries.push("No event with this name was found.");
           }
+          console.log($scope.entries);
           // return $scope.entries;
         })
       }
