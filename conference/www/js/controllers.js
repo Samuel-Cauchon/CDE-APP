@@ -640,7 +640,7 @@ $scope.updatedProfile = {
     }
     arr = temp;
     temp = [];
-    return arr;*/
+    return arr;
 
   }
 })
@@ -877,6 +877,7 @@ $scope.updatedProfile = {
       }
       else if ($scope.searchContent== "Search") {
         console.log("Blank Search");
+        $scope.entries[0] = "Please enter something in the search box to search!"
       }
       else if ($scope.searchables == "user"){
         console.log("User search");
@@ -886,9 +887,6 @@ $scope.updatedProfile = {
               id: data[i]['id']};
           }
         })
-      }
-      else if ($scope.searchables == "user"){
-      	console.log("User search");
       }
       else if ($scope.searchables == "name"){
       	console.log("Event by name");
