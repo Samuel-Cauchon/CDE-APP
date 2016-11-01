@@ -286,6 +286,50 @@ angular.module('App.services', ['backand'])
             parameters: {}
           }
         });
+      },
+
+      getName: function(username){
+       	return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getName',
+          params: {
+            parameters: {
+              username: username
+            }
+          }
+        });
+      },
+
+      getAllSpeakersInfo: function() {
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getAllSpeakersInfo',
+          params: {
+           	parameters: {}
+          }
+        });
+      },
+
+      getAllNamePhotos: function(){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getAllNamePhotos',
+          params: {
+          	parameters: {}
+          }
+        });
+      },
+
+      GetProfession: function(user){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/GetProfession',
+          params: {
+          parameters: {
+            username: user
+            }
+          }
+        });
       }
 
       /*uploadImage: function (filename, filedata) {
