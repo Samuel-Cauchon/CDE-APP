@@ -421,7 +421,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   function initUpload() {
   	$scope.fileInput = document.getElementById('fileInput');
 
-  	
+
 
   	$scope.fileInputFr = document.getElementById('fileInputFr');
   }
@@ -640,7 +640,7 @@ $scope.updatedProfile = {
     }
     arr = temp;
     temp = [];
-    return arr;*/
+    return arr;
 
   }
 })
