@@ -16,16 +16,47 @@
 					<input ng-model="updatedProfile.newName" placeholder="25 characters maximum" maxlength="25"></input>
 					<button class="button-calm" ng-click="endEditName()">Edit</button>
 				</div>
+<<<<<<< HEAD
 				<div  class="edit-profession" ng-show="editProfession == null">
 					<h2>
 						{{profile.profession}}
 						<button class="button-calm" ng-click="startEditProfession()">Edit</button>
 					</h2>
+=======
+
+				<form role="form" name="uploadForm">
+					<div class="row">
+						<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
+					</div>
+				</form>
+				<div class="item item-body">
+					<div ng-show="editDescription == null">
+						<p>{{profile.description}}</p>
+						<button class="button-calm" ng-click="startEditDescription()">Edit</button>
+					</div>
+					<div class="edit-description" ng-show="editDescription != null" class="edit-description">
+						<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
+						<button class="button-calm" ng-click="endEditDescription()">Edit</button>
+						<button class="button-calm" ng-click="clearAll()">Clear</button>
+					</div>
+>>>>>>> cd5ba8a9ca6cf23547d26aebb448fbf46a4513ac
 				</div>
 				<div class="edit-profession" ng-show="editProfession != null">
 					<input ng-model="updatedProfile.newProfession" placeholder="25 characters maximum" maxlength="25"></input>
 					<button class="button-calm" ng-click="endEditProfession()">Edit</button>
 				</div>
+        <div>
+          <h4>Events</h4>
+          <ion-scroll style="height:100px" class="scrollVertical" direction="y">
+            <div class="list">
+              <div ng-repeat="n in userEvents() | orderBy"  >
+                <div class="item item-divider" >
+                  {{ n }}
+                </div>
+              </div>
+            </div>
+          </ion-scroll>
+        </div>
 			</div>
 
 			<div class="item item-icon-left profile-telephone" align="center">
@@ -52,10 +83,37 @@
 					<p>{{profile.description}}</p>
 					<button class="button-calm" ng-click="startEditDescription()">Edit</button>
 				</div>
+<<<<<<< HEAD
 				<div class="edit-description" ng-show="editDescription != null" class="edit-description">
 					<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
 					<button class="button-calm" ng-click="endEditDescription()">Edit</button>
 					<button class="button-calm" ng-click="clearAll()">Clear</button>
+=======
+
+				<form role="form" name="uploadForm">
+					<div class="row">
+						<input id="fileInputFr" type="file" accept="*/*" ng-model="filename" />
+					</div>
+				</form>
+				<div class="item item-body">
+					<div ng-show="editDescription == null">
+						<p>{{profile.description}}</p>
+						<button class="button-calm" ng-click="startEditDescription()">Modifier</button>
+					</div>
+					<div class="edit-description" ng-show="editDescription != null" class="edit-description">
+						<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
+						<button class="button-calm" ng-click="endEditDescription()">Modifier</button>
+						<button class="button-calm" ng-click="clearAll()">Effacer Tout</button>
+					</div>
+				</div>
+				<div class="button-bar">
+					<a class="button button-block button-positive" ng-href="#" onclick="window.open('http://www.facebook.com/', '_system', 'location=yes'); return false;">
+						Facebook
+					</a>
+					<a class="button button-block button-calm" ng-href="#" onclick="window.open('http://www.twitter.com/', '_system', 'location=yes'); return false;">
+						Twitter
+					</a>
+>>>>>>> cd5ba8a9ca6cf23547d26aebb448fbf46a4513ac
 				</div>
 			</div>
 			<div class="button-bar">
