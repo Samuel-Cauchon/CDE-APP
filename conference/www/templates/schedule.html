@@ -29,16 +29,16 @@
         <ion-item class="item-accordion"
                   ng-if="isGroupShown(entity)">
           <p></p>
-          <h2><b>Description</b></h2>
+          <h2><b>Description:</b></h2>
           <h3 id="openBox">{{ entity.description }}</h3>
           <p></p>
-          <h2><b>Where</b></h2>
-          <h3 id="openBox"{{ entity.place }}></h3>
+          <h2><b>Where:</b></h2>
+          <h3 id="openBox">{{ entity.place }}</h3>
           <p></p>
           <span ng-if="entity.speaker != null">
           <h2><b>Speaker(s)</b></h2>
           <p></p>
-          <h3 id="openBox"{{ entity.speaker }} {{ entity.attending }}></h3>
+          <h3 id="openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
           <p></p>
           <h2><b>Users Attending:</b></h2>

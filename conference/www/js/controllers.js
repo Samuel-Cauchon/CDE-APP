@@ -8,7 +8,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, MainEvents) {
 	$scope.dataEntered = {
 		username : "",
 		password : "",
@@ -35,6 +35,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 				if (dataPass[0]['password'] === $scope.dataEntered.password){
 					AuthService.currentUser = $scope.dataEntered.username;
 					AuthService.uid = dataUser[0]['id'];
+          MainEvents.setUserId(AuthService.uid);
 					DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
 					if ($rootScope.currentLanguage != "french"){
 						$state.go('homeMenu.newsfeed');
@@ -268,7 +269,6 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     $scope.isGroupShown = function(group) {
       return $scope.shownGroup === group;
     };
-
     function updatePeopleAttendingEachEvent() {
       MainEvents.getUserQuery().success(function (data) {
         var userArr = data;
@@ -416,6 +416,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       console.log("Event to register", eventId);
       var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
       console.log("REGISTER FOR EVENT");
+
       MainEvents.updatePeopleAttending(uid, eventToRegister).success(function(data){
         console.log("AFTER");
           var serverResponse = data;
@@ -429,6 +430,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
           console.log("Error refreshing data");
         });
     }
+
 
   })
 
