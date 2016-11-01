@@ -2,7 +2,7 @@
   <ion-view view-title="Search">
   	<ion-content class="has-header">
       <form ng-submit="searchUsers(searchContent)" ng-controller="SearchCtrl">
-        <input type="item item-input item-select">
+        <input type="item item-select">
           <select ng-model="selectOption" ng-change="getDropdownOption()">
             <option value="location">Events by Location</option>
             <option value="name">Events by Name</option>
@@ -15,7 +15,9 @@
 
       <div>
         <ul>
-            <li ng-repeat="d in data|filter:search.txt">{{d}}</li>
+            <li ng-repeat="d in returnEvents() | orderBy">
+              {{ d }}
+            </li>
         </ul>
       </div>
       <!--<div class="item item-body" ng-hide="searchables == 'blank' && searched != null" ng-cloak>-->
