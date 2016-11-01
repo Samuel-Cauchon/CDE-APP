@@ -10,7 +10,7 @@ angular.module('App.services', ['backand'])
 			getUsers: function() {
 				return $http ({
 					method: 'GET',
-					url: Backand.getApiUrl() + '/1/query/data/getAllUsers',
+					url: Backand.getApiUrl() + '/1/query/data/GetAllUsers',
 					params: {
 						parameters: {}
 					}
@@ -100,7 +100,7 @@ angular.module('App.services', ['backand'])
 					}
 				});
 			},
-			
+
 			// Example of how to enter parameters for how to retrieve data from db
 			// listRaluca: function(){
 			// 	return $http ({

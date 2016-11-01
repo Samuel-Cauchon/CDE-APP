@@ -13,31 +13,13 @@
         <input type="submit" id="submit" value="Search" ng-click="getValue(searchContent)" />
       </form>
 
-      <div>
+      <div ng-if="getLength() > 0">
         <ul>
             <li ng-repeat="d in returnEvents() | orderBy">
               {{ d }}
             </li>
         </ul>
       </div>
-      <!--<div class="item item-body" ng-hide="searchables == 'blank' && searched != null" ng-cloak>-->
-        <!--{{-->
-        <!--<p>-->
-          <!--You need to select an option from the dropdown menu to search!-->
-        <!--</p>-->
-        <!--}}-->
-      <!--</div>-->
-      <!--<div class="list card" ng-show="searchables != 'blank' && searched !== null" ng-cloak>-->
-        <!--{{-->
-        <!--<div class="item" >-->
-          <!--<ion-list>-->
-            <!--<ion-item ng-repeat="item in searched">-->
-              <!--{{item.name}}<br>-->
-            <!--</ion-item>-->
-          <!--</ion-list>-->
-        <!--</div>-->
-        <!--}}-->
-      <!--</div>-->
     </ion-content>
   </ion-view>
 </div>

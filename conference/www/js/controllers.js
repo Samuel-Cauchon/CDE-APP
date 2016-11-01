@@ -862,94 +862,86 @@ $scope.updatedProfile = {
 
 })
 
-.controller('SearchCtrl', function($scope, $http, DatabaseService) {
+.controller('SearchCtrl', function($scope, $http, DatabaseService, $location, $state) {
 	$scope.searchables = "blank";
-	$scope.searched = [];
 	$scope.searchContent = "Search";
 	$scope.entries = [];
 	$scope.searchUsers = function(){
-      //$scope.searchContent= document.getElementById('searchContent').value;
       console.log($scope.searchables);
       console.log($scope.searchContent);
       if ($scope.searchables == "blank") {
         console.log("No Category Selected - unsearchable");
-        $scope.entries[0] = "Please select a category from the dropdown menu to search!";
+        $scope.entries.push("Please select a category from the dropdown menu to search!");
       }
       else if ($scope.searchContent== "Search") {
         console.log("Blank Search");
-        $scope.entries[0] = "Please enter something in the search box to search!"
+        $scope.entries.push("Please enter something in the search box to search!");
       }
       else if ($scope.searchables == "user"){
         console.log("User search");
-        DatabaseService.searchUser($scope.searchContent).success(function(data){
+        DatabaseService.getUsers().success(function(data){
           for (i=0; i < data.length; i++){
-            $scope.entries[i] = {name:data[i]['name'],
-              id: data[i]['id']};
+            var dbsmash = data[i]['name'].split(" ").join("").toLowerCase();
+            var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
+            if(dbsmash.includes(searchsmash)){
+              $scope.entries.push(data[i]['name']);
+            }
           }
+          if($scope.entries.length == 0) {
+            $scope.entries.push("No user with this name was found.");
+          }
+          // return $scope.entries;
         })
       }
       else if ($scope.searchables == "name"){
       	console.log("Event by name");
+        DatabaseService.getAllEvents().success(function(data){
+          for (i=0; i < data.length; i++){
+            var dbsmash = data[i]['name'].split(" ").join("").toLowerCase();
+            var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
+            if(dbsmash.includes(searchsmash)){
+              $scope.entries.push(data[i]['name']);
+            }
+          }
+          if($scope.entries.length == 0) {
+            $scope.entries.push("No event with this name was found.");
+          }
+          // return $scope.entries;
+        })
       }
       else if ($scope.searchables == "location") {
       	console.log("Event by location");
+        DatabaseService.getAllEvents().success(function(data){
+          for (i=0; i < data.length; i++){
+            var dbsmash = data[i]['place'].split(" ").join("").toLowerCase();
+            var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
+            if(dbsmash.includes(searchsmash)){
+              $scope.entries.push(data[i]['name']);
+            }
+          }
+          if($scope.entries.length == 0) {
+            $scope.entries.push("No events are being held at this location.");
+          }
+          console.log($scope.entries);
+          // return $scope.entries;
+        })
+      }
+      $scope.getLength = function() {
+        return $scope.entries.length;
       }
   }
 
-    // var eventArr = data;
-    // for (var i = 0; i < eventArr.length; i++) {
-    //   eventList[eventArr[i].id] = {
-    //     name: eventArr[i].name
-    //   };
-    // }
-    //
-    // var currentUser = "";
-    // if($scope.isUser == 1) {
-    //   currentUser = AuthService.uid;
-    // } else {
-    //   DatabaseService.getID(AuthService.userSelected).success(function(data){
-    //     currentUser = data[0]['id'];
-    //   })
-    // }
-    //
-    // MainEvents.getPeopleAttending().success(function(data){
-    //   var mapOfEvents = data.data;
-    //   mapOfEvents.forEach(function(item) {
-    //     if(currentUser == item.user) {
-    //       if ($scope.userMap.indexOf(item) == -1) {
-    //         $scope.userMap.push(eventList[item.event].name);
-    //       }
-    //     }
-    //   })
-    //   $scope.userMap = removeDuplicates($scope.userMap);
-    //   console.log($scope.userMap);
-    //   $scope.userEvents = function(){
-    //     return $scope.userMap;
-    //   }
-    // })
-    $scope.entries = removeDuplicates($scope.entries);
-    $scope.returnEvents = function(){
-      return $scope.entries;
-    }
-
-    function removeDuplicates(arr){
-      var temp = [];
-      for (var i=0; i < arr.length; i++){
-        if(temp.indexOf(arr[i]) == -1){
-          temp.push(arr[i]);
-        }
-      }
-      arr = temp;
-      temp = [];
-      return arr;
-
-    }
-
-    $scope.getValue = function(val){
-      console.log("VALLLLL", val);
-    }
+  $scope.refreshSearchPage = function(value){
+    // $scope.searchUsers(value);
+    $scope.$broadcast('scroll.refreshComplete');
+    console.log("page refresh");
+    return $scope.searchUsers(value);
+  }
+  console.log($scope.entries.length);
   $scope.getValue = function(val){
   	console.log("VALLLLL", val);
+    // $location.url('/module/:module')
+    // $state.go('.detail', {id: newId}, {notify: false})
   }
 
   $scope.getDropdownOption = function(){
