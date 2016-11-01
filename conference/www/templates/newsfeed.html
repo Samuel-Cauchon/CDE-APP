@@ -1,4 +1,5 @@
 <ion-view view-title="NewsFeed">
+  <!-- <ion-view title='<img class="title-image" src="images/kidsintouchtext.png" />'> -->
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -27,36 +28,39 @@
       <iom-header-bar class="bar-subheader bar-stable">
         <a class="tab-item">App Feed</a>
       </iom-header-bar>
+      <link href="css/ionicons.css" rel="stylesheet">
+      <link href="css/style.css" rel="stylesheet">
       <ion-content class="has-header">
       <ion-refresher on-refresh="refreshNewsfeed()"></ion-refresher>
       <div class="item">
-        <div id="userName">
+        <div class="user-name">
         {{userName}}
       </div>
         <label class="item item-input">
           <input type="text" id=0 placeholder="Say Something">
         </label>
-        <button class="button button-dark" id="postButton" ng-click="postComment(0)">Post</button>
+        <button class="button button-calm" id="postButton" ng-click="postComment(0)">Post</button>
       </div>
       <div class="list card">
         <div class="item">
           <ion-list>
             <ion-item ng-repeat="item in entry" ng-hide="item.commentid != '0'">
-              {{item.date}}<br>
-              {{item.name}}<br>
-              {{item.content}}<br>
+              <div class="user-post">{{item.name}}<br></div>
+              <div class="comment-date">{{item.date}}<br></div>
+              <div class="comment-content">{{item.content}}<br></div>
+              <i class="ion-thumbsup"></i>
               {{item.likes}}<br>
               <!-- {{item.id}}<br>
               {{item.commentid}}<br> -->
-              <button class="button button-dark" id="commentButton" ng-click="like(item.likes, item.id)">Like</button>
-              <button class="button button-dark" id="commentButton" ng-click="postComment({{item.id}})">Comment</button>
+              <button class="button button-calm" id="commentButton" ng-click="like(item.likes, item.id)">Like</button>
+              <button class="button button-calm" id="commentButton" ng-click="postComment({{item.id}})">Comment</button>
               <label class="item item-input">
                 <input type="text" id={{item.id}} placeholder="Comment">
               </label>
                 <ion-item ng-repeat="comment in entry" ng-if="item.id == comment.commentid">
-                  {{comment.date}}<br>
                   {{comment.name}}<br>
-                  {{comment.content}}<br>
+                  <div class="comment-date">{{comment.date}}<br></div>
+                  <div class="comment-content">{{comment.content}}<br></div>
                   <!-- {{comment.id}}<br>
                   {{comment.commentid}}<br> -->
                 </ion-item>
