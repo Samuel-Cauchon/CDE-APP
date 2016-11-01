@@ -349,14 +349,47 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 
     // input file onchange callback
-    function imageChanged(fileInput) {
+    $scope.imageChangedFr = function (){
     	var imageExist = false;
-    	var file = fileInput.files[0];
+    	var file = $scope.fileInput.files[0];
     	var reader = new FileReader();
 
     	DatabaseService.searchImg(file.name).success(function(data){
     		if (data[0] == undefined){
-    			console.log(data[0]);
+    			imageExist = true;
+    		}
+    		else {
+    			imageExist = false;
+    		}
+			//read file content
+			if (imageExist == true){
+				reader.onload = function(e) {
+					upload(file.name, e.currentTarget.result).then(function(res) {
+						$scope.imageUrl = res.data.url;
+						$scope.filename = file.name;
+						DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+						})
+						$scope.profile.imgName = file.name;
+					}, function(err){
+						alert(err.data);
+					});
+				}
+
+				reader.readAsDataURL(file);
+			}
+			else {
+				alert("Change the name of the image! // Veuillez changer le nom de l'image!");
+			}
+		})
+    };
+
+    $scope.imageChangedFr = function (){
+    	var imageExist = false;
+    	var file = $scope.fileInputFr.files[0];
+    	var reader = new FileReader();
+
+    	DatabaseService.searchImg(file.name).success(function(data){
+    		if (data[0] == undefined){
     			imageExist = true;
     		}
     		else {
@@ -386,17 +419,11 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
   // register to change event on input file
   function initUpload() {
-  	var fileInput = document.getElementById('fileInput');
+  	$scope.fileInput = document.getElementById('fileInput');
 
-  	fileInput.addEventListener('change', function(e) {
-  		imageChanged(fileInput);
-  	});
+  	
 
-  	var fileInputFr = document.getElementById('fileInputFr');
-
-  	fileInputFr.addEventListener('change', function(e) {
-  		imageChanged(fileInputFr);
-  	});
+  	$scope.fileInputFr = document.getElementById('fileInputFr');
   }
 
   $scope.clearAll = function(){

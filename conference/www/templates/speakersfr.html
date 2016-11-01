@@ -2,7 +2,7 @@
 	<ion-modal-view>
 		<ion-content class="padding">
 		<div class="list card">
-				<div class="item item-avatar profile-avatar" ng-repeat="s in speakersInfo">
+				<div class="item item-avatar profile-avatar" ng-repeat="s in speakersInfo | orderBy: 'name'">
 					<a class="item item-avatar" ng-href="#/homeMenu/userProfilefr" ng-click="setSpeakerSelected(s.username)">
 				      	<img ng-show="s.photo != null" ng-src="https://files.backand.io/cdeapp/{{s.photo}}" />
 						<img ng-show="s.photo == null" ng-src="blank-profile.png" />
