@@ -188,3 +188,16 @@ img.blank-profile {
 .newsfeed-background {
 	background-color: #1C4690;
 }
+.body{
+  background-image: url("city.jpg");
+  max-width: 100%;
+  height: auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 0% 5%;
+
+}
+
+.hi{
+color: rgba(255, 255, 255, 0.7)
+}
