@@ -154,8 +154,37 @@ img.blank-profile {
 	transform: translateY(-50%);
 }
 
+
 .inner h2{
   letter-spacing:0.1em;
   text-transform: uppercase;
   color: #111e45;
+}
+
+.user-name {
+	font-size: 150%;
+}
+
+.comment-date {
+	font-size: 75%;
+}
+
+.user-post {
+	font-weight: bold;
+}
+
+
+.comment-content {
+	width:300px;
+  white-space: normal;
+}
+
+
+.button-calm {
+	padding-top: 0.1%;
+	padding-bottom: 0.1%;
+}
+
+.newsfeed-background {
+	background-color: #1C4690;
 }

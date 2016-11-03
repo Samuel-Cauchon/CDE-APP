@@ -652,20 +652,19 @@ $scope.updatedProfile = {
 
 .controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
 
-
-
 	$scope.entry = [];
+  var currentToken = "";
 	var uid = AuthService.uid;
-	$scope.userName = "";
-	var parameters = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
-	DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
-		$scope.userName = data['name'];
-
-	});
+  $scope.userName = "";
+  DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
+    $scope.userName = data['name'];
+  });
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveTwitterFeed();
 		retrieveInfo();
+    //$scope.pushNotification();
+	  console.log("page opened");
 	})
 
 	$scope.refreshTwitterfeed = function () {
@@ -676,9 +675,10 @@ $scope.updatedProfile = {
 
 	$scope.refreshNewsfeed = function () {
 		retrieveInfo();
-		$scope.$broadcast('scroll.refreshComplete');
-		console.log("page refresh");
-	}
+    //$scope.pushNotification();
+    $scope.$broadcast('scroll.refreshComplete');
+    console.log("page refresh");
+  }
 
 	var formatNumber = function(number) {
 		if (number<10){
@@ -744,59 +744,106 @@ $scope.updatedProfile = {
 		});
 	}
 
-	$scope.like = function(likesCounter, entryId){
-		var data = {"likes": (parseInt(likesCounter) + 1)};
-		DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
-			$scope.ServerResponse = data;
-			console.log("likes updated");
-			$scope.refreshNewsfeed();
-		})
-		.error(function (data, status, header, config) {
-			$scope.ServerResponse =  htmlDecode("Data: " + data +
-				"\n\n\n\nstatus: " + status +
-				"\n\n\n\nheaders: " + header +
-				"\n\n\n\nconfig: " + config);
-			console.log("error updating likes");
-		});
-	};
+  $scope.like = function(likesCounter, entryId){
+     var data = {"likes": (parseInt(likesCounter) + 1)};
+     DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
+       $scope.ServerResponse = data;
+       console.log("likes updated");
+       $scope.refreshNewsfeed();
+     })
+       .error(function (data, status, header, config) {
+             $scope.ServerResponse =  htmlDecode("Data: " + data +
+                 "\n\n\n\nstatus: " + status +
+                 "\n\n\n\nheaders: " + header +
+                 "\n\n\n\nconfig: " + config);
+   							console.log("error updating likes");
+     });
+   };
 
 
-	function retrieveInfo(){
-		DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
-			for (i=0; i < data.length; i++){
-				$scope.entry[i] = {name:data[i]['name'],
-				date:formatDate(data[i]['date']),
-				content:data[i]['content'],
-				commentid: data[i]['commentid'],
-				id: data[i]['id'],
-				likes: data[i]['likes']};
-			}
-		})
-		.error(function (data, status, header, config) {
-			$scope.ServerResponse =  htmlDecode("Data: " + data +
-				"\n\n\n\nstatus: " + status +
-				"\n\n\n\nheaders: " + header +
-				"\n\n\n\nconfig: " + config);
-			console.log("error getting data");
-		});
-	}
+  function retrieveInfo(){
+    DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
+      for (i=0; i < data.length; i++){
+          $scope.entry[i] = {name:data[i]['name'],
+                            date:formatDate(data[i]['date']),
+                            content:data[i]['content'],
+                            commentid: data[i]['commentid'],
+                            id: data[i]['id'],
+                            likes: data[i]['likes']};
+      }
+    })
+    .error(function (data, status, header, config) {
+        $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+            console.log("error getting data");
+   });
+ };
 
+ var message = {};
+ var events = [];
 
-  // $scope.items = [];
-  //
-  // PersonService.GetFeed().then(function(items){
-  //   $scope.items = items;
-  // });
-  //
-  // $scope.doRefresh = function() {
-  //   PersonService.GetNewUser().then(function(items){
-  //     $scope.items = items.concat($scope.items);
-  //
-  //     //Stop the ion-refresher from spinning
-  //     $scope.$broadcast('scroll.refreshComplete');
-  //   });
-  // };
+ var push = new Ionic.Push({
+   "debug": true
+ });
 
+ push.register(function(token) {
+   console.log("My Device token:",token.token);
+   currentToken = token.token;
+   push.saveToken(token);  // persist the token in the Ionic Platform
+ });
+
+ DatabaseService.getData('/1/query/data/getUserEventTimes').success(function(data){
+   for(i=0; i<data.length; i++){
+     if (data[i]['User'] == uid){
+       events.push({eventName:data[i]['Name'], eventTime:formatDate(data[i]['Starttime'])});
+       message = {
+          "tokens": [currentToken],
+          "profile": "conference",
+          "notification": {
+            "message": events[0].eventName+" starts in 30 min!"
+           }
+         }
+     }
+   }
+  //  console.log(events);
+  //  console.log(message);
+ });
+
+//sort events by most recent first
+//after notification is sent, pop most recent event
+ $scope.pushNotification = function() {
+  //    console.log("the current token is", currentToken);
+	//		console.log(message);
+  //    console.log(events);
+      var timestamp = new Date();
+      var currentDay = timestamp.getDate();
+      var currentHours = timestamp.getHours();
+      var currentMin = timestamp.getMinutes();
+      var dayTimeResult = events[0].eventTime.split(" ");
+      var eventDay = parseInt(dayTimeResult[1]);
+      var eventTime = dayTimeResult[3];
+      var eventHours = parseInt(eventTime.split(":")[0]);
+      var eventMin = parseInt(eventTime.split(":")[1]);
+      console.log(currentDay+" current day and "+eventDay+" event day");
+      console.log(currentHours+" current hours and "+eventHours+" event hours");
+      if((currentDay == eventDay) && ((currentHours == eventHours) || ((currentHours + 1) == eventHours))){
+        console.log("we're posting a push");
+  			$http.defaults.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmYTAyYjU0ZS0wNmNmLTRmYmUtYmQ3MS0yMzBjMWQ0YmU1OGEifQ.w0RzP2rQjOFjYruB3jq-SHIdq8JOBGp2pFk_R_qzNGQ';
+  			$http.defaults.headers.common['Content-Type'] = 'application/json';
+  			$http.post("https://api.ionic.io/push/notifications", JSON.stringify(message)).success(function() {
+  				//pushed notification to user;
+  			})
+  			.error(function (data, status, header, config) {
+  			$scope.ServerResponse =  htmlDecode("Data: " + data +
+  				"\n\n\n\nstatus: " + status +
+  				"\n\n\n\nheaders: " + header +
+  				"\n\n\n\nconfig: " + config);
+  			console.log($scope.ServerResponse);
+  			});
+      }
+		}
 })
 
 .controller('SearchCtrl', function($scope, $http, DatabaseService, $location, $state) {
