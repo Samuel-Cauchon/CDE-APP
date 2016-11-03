@@ -207,6 +207,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     $scope.map = {};
     $scope.mapUserRegisteredToEvent = {};
     $scope.eventIdUserClicked;
+    $scope.userArr;
 
     $scope.eventRegistered = false;
     $scope.activateRegisteredButton = function(){
@@ -271,22 +272,24 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     };
     function updatePeopleAttendingEachEvent() {
       MainEvents.getUserQuery().success(function (data) {
-        var userArr = data;
+       var userArr = data;
         for (var i = 0; i < userArr.length; i++) {
+          console.log("HEREEE");
           peopleAttendingEachEvent[userArr[i].id] = {
             name: userArr[i].name
           };
         }
-      });
-      MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
+        MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
+      console.log("User Arr", userArr);
       MainEvents.getPeopleAttending().success(function (data) {
         var mapOfEventToUser = data.data;
         console.log("Map of event to user", mapOfEventToUser);
+        console.log("Peopel attending each event", peopleAttendingEachEvent);
         mapOfEventToUser.forEach(function (item) {
+          console.log("CHeCK user", (item.user));
+          console.log("Check evnet", item.event);
+          console.log("check ppl attending each event", peopleAttendingEachEvent[item.user]);
           if ((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
-            //console.log("InSIDE HERE");
-            //console.log("maEventTouser", mapOfEventToUser);
-            //console.log("Item", item);
             console.log("item.event", item.event);
             if (!$scope.map[item.event]) {
               $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
@@ -298,16 +301,16 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
             }
           }
         })
-        console.log("$scoe.mapooooo", $scope.map);
+        console.log("$scope.map", $scope.map);
         $scope.getMappingOfEventToUsers = function (id) {
           console.log("Id gotten", id);
-          MainEvents.setMapOfEventsToUsers($scope.map);
           if ($scope.map[id]) {
             console.log("$scope.map[id]", removeDuplicates($scope.map[id]));
             return removeDuplicates($scope.map[id]);
             //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
           }
         }
+      })
       })
     }
 
@@ -408,28 +411,35 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       console.log("page refresh");
     }
 
-    $scope.registerForEvent = function(eventId){
+    $scope.registerForEvent = function(eventId) {
       var uid = MainEvents.getUserId();
       console.log("UID register", uid);
       var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
-      var eventToRegister = eventId;
-      console.log("Event to register", eventId);
       var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
       console.log("REGISTER FOR EVENT");
+      var username = userNamesArrForEachId[uid].name;
+      console.log("mapOfEventTOUsers", mapOfEventsToUsers);
+      if (username && eventId && mapOfEventsToUsers) {
+        console.log("Username", username);
+        console.log("Map of events", mapOfEventsToUsers[eventId]);
+        console.log(mapOfEventsToUsers[eventId].indexOf(username));
+        if (mapOfEventsToUsers[eventId].indexOf(username) == -1) {
+          MainEvents.updatePeopleAttending(uid, eventId ).success(function (data) {
+              console.log("AFTER");
+              var serverResponse = data;
+              $scope.refreshEvents();
+              $scope.activateRegisteredButton();
+              //checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
 
-      MainEvents.updatePeopleAttending(uid, eventToRegister).success(function(data){
-        console.log("AFTER");
-          var serverResponse = data;
-          $scope.refreshEvents();
-          $scope.activateRegisteredButton();
-          //checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
-
-        })
-        .error(function(data){
-          $scope.serverResponse = htmlDecode("Data: "+data);
-          console.log("Error refreshing data");
-        });
+            })
+            .error(function (data) {
+              $scope.serverResponse = htmlDecode("Data: " + data);
+              console.log("Error refreshing data");
+            });
+        }
+      }
     }
+
 
 
   })
