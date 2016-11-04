@@ -8,7 +8,28 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, MainEvents) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, MainEvents) {
+
+	var init = function () {
+     try{
+       $scope.UUID = $cordovaDevice.getUUID();
+       DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
+         if (dataUUID[0] != null){
+           AuthService.currentUser = dataUUID[0]['user'];
+           $state.go('homeMenu.newsfeed');
+         }
+       })
+     }
+     catch (err){
+			 DatabaseService.addError(err.message).success(function(){});
+       console.log("Error " + err.message);
+     }
+   }
+
+	 ionic.Platform.ready(function(){
+       init();
+    });
+
 	$scope.dataEntered = {
 		username : "",
 		password : "",

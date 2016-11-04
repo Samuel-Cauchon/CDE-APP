@@ -55,6 +55,18 @@ angular.module('App.services', ['backand'])
         });
       },
 
+      addError: function(errorText){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/addError',
+          params: {
+            parameters: {
+              errorText: errorText
+            }
+          }
+        });
+      },
+
       searchUser: function(usernameEntered){
         return $http ({
           method: 'GET',
