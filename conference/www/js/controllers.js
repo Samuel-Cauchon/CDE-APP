@@ -8,7 +8,28 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, MainEvents) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, MainEvents) {
+
+	var init = function () {
+     try{
+       $scope.UUID = $cordovaDevice.getUUID();
+       DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
+         if (dataUUID[0] != null){
+           AuthService.currentUser = dataUUID[0]['user'];
+           $state.go('homeMenu.newsfeed');
+         }
+       })
+     }
+     catch (err){
+			 DatabaseService.addError(err.message).success(function(){});
+       console.log("Error " + err.message);
+     }
+   }
+
+	 ionic.Platform.ready(function(){
+       init();
+    });
+
 	$scope.dataEntered = {
 		username : "",
 		password : "",
@@ -302,6 +323,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
           }
         })
         console.log("$scope.map", $scope.map);
+        MainEvents.setMapOfEventsToUsers($scope.map);
         $scope.getMappingOfEventToUsers = function (id) {
           console.log("Id gotten", id);
           if ($scope.map[id]) {
@@ -414,16 +436,15 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     $scope.registerForEvent = function(eventId) {
       var uid = MainEvents.getUserId();
       console.log("UID register", uid);
+      console.log("Event ID", eventId);
       var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
       var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
-      console.log("REGISTER FOR EVENT");
+      console.log("REGISTER FOR EVENT", mapOfEventsToUsers[eventId] === undefined);
       var username = userNamesArrForEachId[uid].name;
       console.log("mapOfEventTOUsers", mapOfEventsToUsers);
       if (username && eventId && mapOfEventsToUsers) {
-        console.log("Username", username);
-        console.log("Map of events", mapOfEventsToUsers[eventId]);
-        console.log(mapOfEventsToUsers[eventId].indexOf(username));
-        if (mapOfEventsToUsers[eventId].indexOf(username) == -1) {
+        if ((mapOfEventsToUsers[eventId] === undefined) || (mapOfEventsToUsers[eventId].indexOf(username) == -1)) {
+          console.log("HERE");
           MainEvents.updatePeopleAttending(uid, eventId ).success(function (data) {
               console.log("AFTER");
               var serverResponse = data;
@@ -437,6 +458,10 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
               console.log("Error refreshing data");
             });
         }
+        console.log("CAME HERE WHICH IS GOOD")
+      }
+      else{
+        console.log("UNDEFINED username, eventID or mapOfEventToUsers!")
       }
     }
 

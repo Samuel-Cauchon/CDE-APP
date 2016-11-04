@@ -1,5 +1,7 @@
 /* Empty. Add your own CSS if you like */
-
+*{
+  font-family:'Lato', sans-serif;
+}
 #nav-icon {
 	position: relative;
 }
@@ -175,7 +177,7 @@ img.blank-profile {
 
 
 .comment-content {
-	width:300px;
+	width:100%;
   white-space: normal;
 }
 
@@ -186,7 +188,7 @@ img.blank-profile {
 }
 
 .newsfeed-background {
-	background-color: #1C4690;
+	background-color: rgba(203,221,239,1);
 }
 .body{
  /*background-image: url("city.jpg");*/
@@ -195,24 +197,61 @@ img.blank-profile {
   background-size: contain;
   /*background-repeat: no-repeat;*/
   /*background-position: 0% 5%;*/
+}
+
+.bodyLogin{
+  @extends body;
   margin-right:12%;
   margin-left: 12%;
+}
+
+.bodyNewsfeed{
+  @extends body;
+  margin-right:7%;
+  margin-left: 7%;
+  background-color: rgba(225,225,225,1);
+}
+
+.background{
+  background-image:url("yo.jpg");
+  background-repeat: no-repeat;
+  height: 100%;
+  width: auto;
 
 }
 
-.hi{
-color: rgba(255, 255, 255, 0.7)
-}
-
-.login{
+.login {
   border-left: none;
   border-right: none;
   border-top: none;
   margin-bottom: 1%;
+  background: transparent;
 }
 
-.loginButton{
+.buttonLogin{
   text-align: center;
   margin-top: 10%;
+}
 
+.button{
+  background-color: #111e45;
+  border: none;
+  color: white;
+}
+
+#postButton{
+ float: right;
+}
+
+#commentButton{
+  box-sizing: content-box;
+}
+
+.list .item, .card, .list .item-complex .item-content{
+  /*background: rgba(203,221,239,1);*/
+  /*padding: 5%;*/
+}
+
+.list .item.newsfeed {
+  border-style: none;
 }
