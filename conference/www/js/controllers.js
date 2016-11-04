@@ -789,7 +789,7 @@ $scope.updatedProfile = {
 
 })
 
-.controller('SearchCtrl', function($scope, $http, DatabaseService, $location, $state) {
+.controller('SearchCtrl', function($scope, $http, DatabaseService, SearchService) {
 	$scope.searchables = "blank";
 	$scope.searchContent = "Search";
 	$scope.entries = [];
@@ -818,7 +818,7 @@ $scope.updatedProfile = {
             $scope.entries.push("No user with this name was found.");
           }
           console.log($scope.entries);
-          // return $scope.entries;
+          SearchService.setEventArr($scope.entries);
         })
       }
       else if ($scope.searchables == "name"){
@@ -835,7 +835,7 @@ $scope.updatedProfile = {
             $scope.entries.push("No event with this name was found.");
           }
           console.log($scope.entries);
-          // return $scope.entries;
+          SearchService.setEventArr($scope.entries);
         })
       }
       else if ($scope.searchables == "location") {
@@ -851,26 +851,36 @@ $scope.updatedProfile = {
           if($scope.entries.length == 0) {
             $scope.entries.push("No events are being held at this location.");
           }
-          console.log($scope.entries);
-          // return $scope.entries;
+          SearchService.setEventArr($scope.entries);
+          //console.log(SearchService.getEventArr());
         })
       }
-      $scope.getLength = function() {
-        return $scope.entries.length;
+      // console.log(SearchService.getEventArr());
+      SearchService.setEventArr(removeDuplicates(SearchService.getEventArr()));
+      // console.log(SearchService.getEventArr());
+      $scope.getEntries = function() {
+        console.log("MADE IT HERE");
+        return $scope.entries;
       }
   }
 
-  $scope.refreshSearchPage = function(value){
-    // $scope.searchUsers(value);
-    $scope.$broadcast('scroll.refreshComplete');
-    console.log("page refresh");
-    return $scope.searchUsers(value);
-  }
-  console.log($scope.entries.length);
   $scope.getValue = function(val){
   	console.log("VALLLLL", val);
-    // $location.url('/module/:module')
-    // $state.go('.detail', {id: newId}, {notify: false})
+  }
+
+  function removeDuplicates(arr){
+    if(arr) {
+      var temp = [];
+      for (var i = 0; i < arr.length; i++) {
+        if (temp.indexOf(arr[i]) == -1) {
+          temp.push(arr[i]);
+        }
+      }
+      arr = temp;
+      temp = [];
+      return arr;
+
+    }
   }
 
   $scope.getDropdownOption = function(){

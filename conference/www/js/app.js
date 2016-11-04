@@ -146,15 +146,15 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
 		}
 	})
 
-	  // .state('homeMenu.map', {
-	  //   url: '/map',
-	  //   views: {
-	  //     'menuContent': {
-	  //       templateUrl: 'templates/map.html',
-	  //       controller: 'MapCtrl'
-	  //     }
-	  //   }
-	  // })
+	  .state('homeMenu.map', {
+	    url: '/map',
+	    views: {
+	      'menuContent': {
+	        templateUrl: 'templates/map.html',
+	        controller: 'MapCtrl'
+	      }
+	    }
+	  })
 
 	  .state('homeMenu.schedule', {
 	  	url: '/schedule',
@@ -176,25 +176,25 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
 	  	}
 	  })
 
-	  .state('homeMenu.search', {
-	  	url: '/search',
-	  	views: {
-	  		'menuContent': {
-	  			templateUrl: 'templates/search.html',
-	  			controller: 'SearchCtrl'
-	  		}
-	  	}
-	  })
-
-	  .state('homeMenu.searchfr', {
-	  	url: '/searchfr',
-	  	views: {
-	  		'menuContent': {
-	  			templateUrl: 'templates/searchfr.html',
-	  			controller: 'SearchCtrl'
-	  		}
-	  	}
-	  })
+	  // .state('homeMenu.search', {
+	  // 	url: '/search',
+	  // 	views: {
+	  // 		'menuContent': {
+	  // 			templateUrl: 'templates/search.html',
+	  // 			controller: 'SearchCtrl'
+	  // 		}
+	  // 	}
+	  // })
+      //
+	  // .state('homeMenu.searchfr', {
+	  // 	url: '/searchfr',
+	  // 	views: {
+	  // 		'menuContent': {
+	  // 			templateUrl: 'templates/searchfr.html',
+	  // 			controller: 'SearchCtrl'
+	  // 		}
+	  // 	}
+	  // })
 
 	  .state('homeMenu.sponsors', {
 	  	url: '/sponsors',
@@ -243,6 +243,23 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.filters'
 	  		}
 	  	}
 	  })
+    .state('homeMenu.contacts', {
+      url: "/contacts",
+      views: {
+      'menuContent': {
+        templateUrl: 'templates/contacts.html',
+      }
+    }
+  })
+
+    .state('homeMenu.contactsfr', {
+      url: "/contactsfr",
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/contactsfr.html',
+        }
+      }
+    })
 
 // if none of the above states are matched, use this as the fallback
 $urlRouterProvider.otherwise('/welcome');
