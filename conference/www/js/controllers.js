@@ -207,6 +207,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     $scope.map = {};
     $scope.mapUserRegisteredToEvent = {};
     $scope.eventIdUserClicked;
+    $scope.userArr;
 
     $scope.eventRegistered = false;
     $scope.activateRegisteredButton = function(){
@@ -271,22 +272,24 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
     };
     function updatePeopleAttendingEachEvent() {
       MainEvents.getUserQuery().success(function (data) {
-        var userArr = data;
+       var userArr = data;
         for (var i = 0; i < userArr.length; i++) {
+          console.log("HEREEE");
           peopleAttendingEachEvent[userArr[i].id] = {
             name: userArr[i].name
           };
         }
-      });
-      MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
+        MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
+      console.log("User Arr", userArr);
       MainEvents.getPeopleAttending().success(function (data) {
         var mapOfEventToUser = data.data;
         console.log("Map of event to user", mapOfEventToUser);
+        console.log("Peopel attending each event", peopleAttendingEachEvent);
         mapOfEventToUser.forEach(function (item) {
+          console.log("CHeCK user", (item.user));
+          console.log("Check evnet", item.event);
+          console.log("check ppl attending each event", peopleAttendingEachEvent[item.user]);
           if ((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
-            //console.log("InSIDE HERE");
-            //console.log("maEventTouser", mapOfEventToUser);
-            //console.log("Item", item);
             console.log("item.event", item.event);
             if (!$scope.map[item.event]) {
               $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
@@ -298,16 +301,16 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
             }
           }
         })
-        console.log("$scoe.mapooooo", $scope.map);
+        console.log("$scope.map", $scope.map);
         $scope.getMappingOfEventToUsers = function (id) {
           console.log("Id gotten", id);
-          MainEvents.setMapOfEventsToUsers($scope.map);
           if ($scope.map[id]) {
             console.log("$scope.map[id]", removeDuplicates($scope.map[id]));
             return removeDuplicates($scope.map[id]);
             //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
           }
         }
+      })
       })
     }
 
@@ -408,28 +411,35 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       console.log("page refresh");
     }
 
-    $scope.registerForEvent = function(eventId){
+    $scope.registerForEvent = function(eventId) {
       var uid = MainEvents.getUserId();
       console.log("UID register", uid);
       var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
-      var eventToRegister = eventId;
-      console.log("Event to register", eventId);
       var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
       console.log("REGISTER FOR EVENT");
+      var username = userNamesArrForEachId[uid].name;
+      console.log("mapOfEventTOUsers", mapOfEventsToUsers);
+      if (username && eventId && mapOfEventsToUsers) {
+        console.log("Username", username);
+        console.log("Map of events", mapOfEventsToUsers[eventId]);
+        console.log(mapOfEventsToUsers[eventId].indexOf(username));
+        if (mapOfEventsToUsers[eventId].indexOf(username) == -1) {
+          MainEvents.updatePeopleAttending(uid, eventId ).success(function (data) {
+              console.log("AFTER");
+              var serverResponse = data;
+              $scope.refreshEvents();
+              $scope.activateRegisteredButton();
+              //checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
 
-      MainEvents.updatePeopleAttending(uid, eventToRegister).success(function(data){
-        console.log("AFTER");
-          var serverResponse = data;
-          $scope.refreshEvents();
-          $scope.activateRegisteredButton();
-          //checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
-
-        })
-        .error(function(data){
-          $scope.serverResponse = htmlDecode("Data: "+data);
-          console.log("Error refreshing data");
-        });
+            })
+            .error(function (data) {
+              $scope.serverResponse = htmlDecode("Data: " + data);
+              console.log("Error refreshing data");
+            });
+        }
+      }
     }
+
 
 
   })
@@ -642,20 +652,19 @@ $scope.updatedProfile = {
 
 .controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
 
-
-
 	$scope.entry = [];
+  var currentToken = "";
 	var uid = AuthService.uid;
-	$scope.userName = "";
-	var parameters = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
-	DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
-		$scope.userName = data['name'];
-
-	});
+  $scope.userName = "";
+  DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
+    $scope.userName = data['name'];
+  });
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveTwitterFeed();
 		retrieveInfo();
+    //$scope.pushNotification();
+	  console.log("page opened");
 	})
 
 	$scope.refreshTwitterfeed = function () {
@@ -666,9 +675,10 @@ $scope.updatedProfile = {
 
 	$scope.refreshNewsfeed = function () {
 		retrieveInfo();
-		$scope.$broadcast('scroll.refreshComplete');
-		console.log("page refresh");
-	}
+    //$scope.pushNotification();
+    $scope.$broadcast('scroll.refreshComplete');
+    console.log("page refresh");
+  }
 
 	var formatNumber = function(number) {
 		if (number<10){
@@ -734,59 +744,106 @@ $scope.updatedProfile = {
 		});
 	}
 
-	$scope.like = function(likesCounter, entryId){
-		var data = {"likes": (parseInt(likesCounter) + 1)};
-		DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
-			$scope.ServerResponse = data;
-			console.log("likes updated");
-			$scope.refreshNewsfeed();
-		})
-		.error(function (data, status, header, config) {
-			$scope.ServerResponse =  htmlDecode("Data: " + data +
-				"\n\n\n\nstatus: " + status +
-				"\n\n\n\nheaders: " + header +
-				"\n\n\n\nconfig: " + config);
-			console.log("error updating likes");
-		});
-	};
+  $scope.like = function(likesCounter, entryId){
+     var data = {"likes": (parseInt(likesCounter) + 1)};
+     DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
+       $scope.ServerResponse = data;
+       console.log("likes updated");
+       $scope.refreshNewsfeed();
+     })
+       .error(function (data, status, header, config) {
+             $scope.ServerResponse =  htmlDecode("Data: " + data +
+                 "\n\n\n\nstatus: " + status +
+                 "\n\n\n\nheaders: " + header +
+                 "\n\n\n\nconfig: " + config);
+   							console.log("error updating likes");
+     });
+   };
 
 
-	function retrieveInfo(){
-		DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
-			for (i=0; i < data.length; i++){
-				$scope.entry[i] = {name:data[i]['name'],
-				date:formatDate(data[i]['date']),
-				content:data[i]['content'],
-				commentid: data[i]['commentid'],
-				id: data[i]['id'],
-				likes: data[i]['likes']};
-			}
-		})
-		.error(function (data, status, header, config) {
-			$scope.ServerResponse =  htmlDecode("Data: " + data +
-				"\n\n\n\nstatus: " + status +
-				"\n\n\n\nheaders: " + header +
-				"\n\n\n\nconfig: " + config);
-			console.log("error getting data");
-		});
-	}
+  function retrieveInfo(){
+    DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
+      for (i=0; i < data.length; i++){
+          $scope.entry[i] = {name:data[i]['name'],
+                            date:formatDate(data[i]['date']),
+                            content:data[i]['content'],
+                            commentid: data[i]['commentid'],
+                            id: data[i]['id'],
+                            likes: data[i]['likes']};
+      }
+    })
+    .error(function (data, status, header, config) {
+        $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+            console.log("error getting data");
+   });
+ };
 
+ var message = {};
+ var events = [];
 
-  // $scope.items = [];
-  //
-  // PersonService.GetFeed().then(function(items){
-  //   $scope.items = items;
-  // });
-  //
-  // $scope.doRefresh = function() {
-  //   PersonService.GetNewUser().then(function(items){
-  //     $scope.items = items.concat($scope.items);
-  //
-  //     //Stop the ion-refresher from spinning
-  //     $scope.$broadcast('scroll.refreshComplete');
-  //   });
-  // };
+ var push = new Ionic.Push({
+   "debug": true
+ });
 
+ push.register(function(token) {
+   console.log("My Device token:",token.token);
+   currentToken = token.token;
+   push.saveToken(token);  // persist the token in the Ionic Platform
+ });
+
+ DatabaseService.getData('/1/query/data/getUserEventTimes').success(function(data){
+   for(i=0; i<data.length; i++){
+     if (data[i]['User'] == uid){
+       events.push({eventName:data[i]['Name'], eventTime:formatDate(data[i]['Starttime'])});
+       message = {
+          "tokens": [currentToken],
+          "profile": "conference",
+          "notification": {
+            "message": events[0].eventName+" starts in 30 min!"
+           }
+         }
+     }
+   }
+  //  console.log(events);
+  //  console.log(message);
+ });
+
+//sort events by most recent first
+//after notification is sent, pop most recent event
+ $scope.pushNotification = function() {
+  //    console.log("the current token is", currentToken);
+	//		console.log(message);
+  //    console.log(events);
+      var timestamp = new Date();
+      var currentDay = timestamp.getDate();
+      var currentHours = timestamp.getHours();
+      var currentMin = timestamp.getMinutes();
+      var dayTimeResult = events[0].eventTime.split(" ");
+      var eventDay = parseInt(dayTimeResult[1]);
+      var eventTime = dayTimeResult[3];
+      var eventHours = parseInt(eventTime.split(":")[0]);
+      var eventMin = parseInt(eventTime.split(":")[1]);
+      console.log(currentDay+" current day and "+eventDay+" event day");
+      console.log(currentHours+" current hours and "+eventHours+" event hours");
+      if((currentDay == eventDay) && ((currentHours == eventHours) || ((currentHours + 1) == eventHours))){
+        console.log("we're posting a push");
+  			$http.defaults.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmYTAyYjU0ZS0wNmNmLTRmYmUtYmQ3MS0yMzBjMWQ0YmU1OGEifQ.w0RzP2rQjOFjYruB3jq-SHIdq8JOBGp2pFk_R_qzNGQ';
+  			$http.defaults.headers.common['Content-Type'] = 'application/json';
+  			$http.post("https://api.ionic.io/push/notifications", JSON.stringify(message)).success(function() {
+  				//pushed notification to user;
+  			})
+  			.error(function (data, status, header, config) {
+  			$scope.ServerResponse =  htmlDecode("Data: " + data +
+  				"\n\n\n\nstatus: " + status +
+  				"\n\n\n\nheaders: " + header +
+  				"\n\n\n\nconfig: " + config);
+  			console.log($scope.ServerResponse);
+  			});
+      }
+		}
 })
 
 .controller('SearchCtrl', function($scope, $http, DatabaseService, SearchService) {

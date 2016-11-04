@@ -8,12 +8,12 @@
 				<div ng-show="editName == null">
 					<h2>
 						{{profile.name}}
-						<button class="button-calm" ng-click="startEditName()">Modifier</button>
+						<button class="button button-small button-calm" ng-click="startEditName()">Modifier</button>
 					</h2>
 				</div>
 				<div class="edit-name" ng-show="editName != null">
 					<input ng-model="updatedProfile.newName" placeholder="25 characters maximum" maxlength="25"></input>
-					<button class="button-calm" ng-click="endEditName()">Modifier</button>
+					<button class="button button-small button-calm" ng-click="endEditName()">Modifier</button>
 				</div>
 				<div  class="edit-profession" ng-show="editProfession == null">
 					<h2>
@@ -23,7 +23,7 @@
 				</div>
 				<div class="edit-profession" ng-show="editProfession != null">
 					<input ng-model="updatedProfile.newProfession" placeholder="25 characters maximum" maxlength="25"></input>
-					<button class="button-calm" ng-click="endEditProfession()">Modifier</button>
+					<button class="button button-small button-calm" ng-click="endEditProfession()">Modifier</button>
 				</div>
 			</div>
 
@@ -37,7 +37,7 @@
 					(<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberRegional">)</input>
 					<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberFirstPart">-</input>
 					<input size="4" maxlength="4" ng-model="updatedProfile.newPhonenumberSecondPart"></input>
-					<button class="button-calm" ng-click="endEditPhone()">Modifier</button>
+					<button class="button button-small button-calm" ng-click="endEditPhone()">Modifier</button>
 				</div>
 			</div>
 
@@ -46,19 +46,19 @@
 					<input id="fileInputFr" type="file" accept="*/*" ng-model="filename" />
 				</div>
 				<div class="row">
-					<button class="button-calm" ng-click="imageChangedFr()">Envoyer</button>
+					<button class="button button-calm" ng-click="imageChangedFr()">Envoyer</button>
 				</div>
 			</form>
 
 			<div class="item item-body">
 				<div ng-show="editDescription == null">
 					<p>{{profile.description}}</p>
-					<button class="button-calm" ng-click="startEditDescription()">Modifier</button>
+					<button class="button button-calm" ng-click="startEditDescription()">Modifier</button>
 				</div>
 				<div class="edit-description" ng-show="editDescription != null" class="edit-description">
 					<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
-					<button class="button-calm" ng-click="endEditDescription()">Modifier</button>
-					<button class="button-calm" ng-click="clearAll()">Effacer Tout</button>
+					<button class="button button-calm" ng-click="endEditDescription()">Modifier</button>
+					<button class="button button-calm" ng-click="clearAll()">Effacer Tout</button>
 				</div>
 			</div>
 

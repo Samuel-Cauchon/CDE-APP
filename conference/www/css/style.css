@@ -154,8 +154,65 @@ img.blank-profile {
 	transform: translateY(-50%);
 }
 
+
 .inner h2{
   letter-spacing:0.1em;
   text-transform: uppercase;
   color: #111e45;
+}
+
+.user-name {
+	font-size: 150%;
+}
+
+.comment-date {
+	font-size: 75%;
+}
+
+.user-post {
+	font-weight: bold;
+}
+
+
+.comment-content {
+	width:300px;
+  white-space: normal;
+}
+
+
+.button-calm {
+	padding-top: 0.1%;
+	padding-bottom: 0.1%;
+}
+
+.newsfeed-background {
+	background-color: #1C4690;
+}
+.body{
+ /*background-image: url("city.jpg");*/
+  max-width: 100%;
+  height: auto;
+  background-size: contain;
+  /*background-repeat: no-repeat;*/
+  /*background-position: 0% 5%;*/
+  margin-right:12%;
+  margin-left: 12%;
+
+}
+
+.hi{
+color: rgba(255, 255, 255, 0.7)
+}
+
+.login{
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  margin-bottom: 1%;
+}
+
+.loginButton{
+  text-align: center;
+  margin-top: 10%;
+
 }
