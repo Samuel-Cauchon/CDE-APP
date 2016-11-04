@@ -533,7 +533,7 @@ $scope.updatedProfile = {
 
   $scope.userMap = [];
   var eventList = {};
-  $scope.isUser = 1;
+  // $scope.isUser = 1;
   DatabaseService.getAllEvents().success(function(data) {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
@@ -543,13 +543,13 @@ $scope.updatedProfile = {
     }
 
     var currentUser = "";
-    if($scope.isUser == 1) {
+    // if($scope.isUser == 1) {
       currentUser = AuthService.uid;
-    } else {
-      DatabaseService.getID(AuthService.userSelected).success(function(data){
-        currentUser = data[0]['id'];
-      })
-    }
+    // } else {
+    //   DatabaseService.getID(AuthService.userSelected).success(function(data){
+    //     currentUser = data[0]['id'];
+    //   })
+    // }
 
     MainEvents.getPeopleAttending().success(function(data){
       var mapOfEvents = data.data;
@@ -591,7 +591,7 @@ $scope.updatedProfile = {
 })
 
 
-.controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+.controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, MainEvents) {
 
 
 	$scope.profile = {
@@ -619,6 +619,55 @@ $scope.updatedProfile = {
 		})
 	})
 
+  $scope.userMap = [];
+  var eventList = {};
+  // $scope.isUser = 1;
+  DatabaseService.getAllEvents().success(function(data) {
+    var eventArr = data;
+    for (var i = 0; i < eventArr.length; i++) {
+      eventList[eventArr[i].id] = {
+        name: eventArr[i].name
+      };
+    }
+
+    var currentUser = "";
+    // if($scope.isUser == 1) {
+    // currentUser = AuthService.uid;
+    // } else {
+      DatabaseService.getID(AuthService.userSelected).success(function(data){
+        currentUser = data;
+      })
+    // }
+
+    MainEvents.getPeopleAttending().success(function(data){
+      var mapOfEvents = data.data;
+      mapOfEvents.forEach(function(item) {
+        if(currentUser == item.user) {
+          if ($scope.userMap.indexOf(item) == -1) {
+            $scope.userMap.push(eventList[item.event].name);
+          }
+        }
+      })
+      $scope.userMap = removeDuplicates($scope.userMap);
+      console.log($scope.userMap);
+      $scope.userEvents = function(){
+        return $scope.userMap;
+      }
+    })
+  });
+
+  function removeDuplicates(arr){
+    var temp = [];
+    for (var i=0; i < arr.length; i++){
+      if(temp.indexOf(arr[i]) == -1){
+        temp.push(arr[i]);
+      }
+    }
+    arr = temp;
+    temp = [];
+    return arr;
+
+  }
 })
 
 // .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
@@ -784,66 +833,66 @@ $scope.updatedProfile = {
  var message = {};
  var events = [];
 
- var push = new Ionic.Push({
-   "debug": true
- });
+ // var push = new Ionic.Push({
+ //   "debug": true
+ // });
+ //
+ // push.register(function(token) {
+ //   console.log("My Device token:",token.token);
+ //   currentToken = token.token;
+ //   push.saveToken(token);  // persist the token in the Ionic Platform
+ // });
 
- push.register(function(token) {
-   console.log("My Device token:",token.token);
-   currentToken = token.token;
-   push.saveToken(token);  // persist the token in the Ionic Platform
- });
-
- DatabaseService.getData('/1/query/data/getUserEventTimes').success(function(data){
-   for(i=0; i<data.length; i++){
-     if (data[i]['User'] == uid){
-       events.push({eventName:data[i]['Name'], eventTime:formatDate(data[i]['Starttime'])});
-       message = {
-          "tokens": [currentToken],
-          "profile": "conference",
-          "notification": {
-            "message": events[0].eventName+" starts in 30 min!"
-           }
-         }
-     }
-   }
+ // DatabaseService.getData('/1/query/data/getUserEventTimes').success(function(data){
+ //   for(i=0; i<data.length; i++){
+ //     if (data[i]['User'] == uid){
+ //       events.push({eventName:data[i]['Name'], eventTime:formatDate(data[i]['Starttime'])});
+ //       message = {
+ //          "tokens": [currentToken],
+ //          "profile": "conference",
+ //          "notification": {
+ //            "message": events[0].eventName+" starts in 30 min!"
+ //           }
+ //         }
+ //     }
+ //   }
   //  console.log(events);
   //  console.log(message);
- });
+ // });
 
 //sort events by most recent first
 //after notification is sent, pop most recent event
- $scope.pushNotification = function() {
+//  $scope.pushNotification = function() {
   //    console.log("the current token is", currentToken);
 	//		console.log(message);
   //    console.log(events);
-      var timestamp = new Date();
-      var currentDay = timestamp.getDate();
-      var currentHours = timestamp.getHours();
-      var currentMin = timestamp.getMinutes();
-      var dayTimeResult = events[0].eventTime.split(" ");
-      var eventDay = parseInt(dayTimeResult[1]);
-      var eventTime = dayTimeResult[3];
-      var eventHours = parseInt(eventTime.split(":")[0]);
-      var eventMin = parseInt(eventTime.split(":")[1]);
-      console.log(currentDay+" current day and "+eventDay+" event day");
-      console.log(currentHours+" current hours and "+eventHours+" event hours");
-      if((currentDay == eventDay) && ((currentHours == eventHours) || ((currentHours + 1) == eventHours))){
-        console.log("we're posting a push");
-  			$http.defaults.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmYTAyYjU0ZS0wNmNmLTRmYmUtYmQ3MS0yMzBjMWQ0YmU1OGEifQ.w0RzP2rQjOFjYruB3jq-SHIdq8JOBGp2pFk_R_qzNGQ';
-  			$http.defaults.headers.common['Content-Type'] = 'application/json';
-  			$http.post("https://api.ionic.io/push/notifications", JSON.stringify(message)).success(function() {
-  				//pushed notification to user;
-  			})
-  			.error(function (data, status, header, config) {
-  			$scope.ServerResponse =  htmlDecode("Data: " + data +
-  				"\n\n\n\nstatus: " + status +
-  				"\n\n\n\nheaders: " + header +
-  				"\n\n\n\nconfig: " + config);
-  			console.log($scope.ServerResponse);
-  			});
-      }
-		}
+  //     var timestamp = new Date();
+  //     var currentDay = timestamp.getDate();
+  //     var currentHours = timestamp.getHours();
+  //     var currentMin = timestamp.getMinutes();
+  //     var dayTimeResult = events[0].eventTime.split(" ");
+  //     var eventDay = parseInt(dayTimeResult[1]);
+  //     var eventTime = dayTimeResult[3];
+  //     var eventHours = parseInt(eventTime.split(":")[0]);
+  //     var eventMin = parseInt(eventTime.split(":")[1]);
+  //     console.log(currentDay+" current day and "+eventDay+" event day");
+  //     console.log(currentHours+" current hours and "+eventHours+" event hours");
+  //     if((currentDay == eventDay) && ((currentHours == eventHours) || ((currentHours + 1) == eventHours))){
+  //       console.log("we're posting a push");
+  // 			$http.defaults.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmYTAyYjU0ZS0wNmNmLTRmYmUtYmQ3MS0yMzBjMWQ0YmU1OGEifQ.w0RzP2rQjOFjYruB3jq-SHIdq8JOBGp2pFk_R_qzNGQ';
+  // 			$http.defaults.headers.common['Content-Type'] = 'application/json';
+  // 			$http.post("https://api.ionic.io/push/notifications", JSON.stringify(message)).success(function() {
+  // 				//pushed notification to user;
+  // 			})
+  // 			.error(function (data, status, header, config) {
+  // 			$scope.ServerResponse =  htmlDecode("Data: " + data +
+  // 				"\n\n\n\nstatus: " + status +
+  // 				"\n\n\n\nheaders: " + header +
+  // 				"\n\n\n\nconfig: " + config);
+  // 			console.log($scope.ServerResponse);
+  // 			});
+  //     }
+	// 	}
 })
 
 .controller('SearchCtrl', function($scope, $http, DatabaseService, SearchService) {

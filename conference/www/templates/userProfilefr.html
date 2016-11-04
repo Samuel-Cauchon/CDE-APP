@@ -1,5 +1,6 @@
-<ion-view view-title="Profil" ng-init="initCtrl()">
-	<ion-content class="has-header">		
+<!--<ion-view view-title="Profil" ng-init="initCtrl()">-->
+<ion-view view-title="Profil">
+	<ion-content class="has-header">
 		<div class="list card">
 			<div class="profile-img">
 				<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}" />
@@ -21,14 +22,27 @@
 			<div class="item item-body">
 				<p>{{profile.description}}</p>
 			</div>
-			<div class="button-bar">
-				<a class="button button-block button-positive" ng-href="#" onclick="window.open('http://www.facebook.com/', '_system', 'location=yes'); return false;">
-					Facebook
-				</a>
-				<a class="button button-block button-calm" ng-href="#" onclick="window.open('http://www.twitter.com/', '_system', 'location=yes'); return false;">
-					Twitter
-				</a>
-			</div>
+      <div>
+        <h4>Événements</h4>
+        <ion-scroll style="height:100px" class="scrollVertical" direction="y">
+          <div class="list">
+            <div ng-repeat="n in userEvents() | orderBy"  >
+              <div class="item item-divider" >
+                {{ n }}
+              </div>
+            </div>
+          </div>
+        </ion-scroll>
+      </div>
+    </div>
+			<!--<div class="button-bar">-->
+				<!--<a class="button button-block button-positive" ng-href="#" onclick="window.open('http://www.facebook.com/', '_system', 'location=yes'); return false;">-->
+					<!--Facebook-->
+				<!--</a>-->
+				<!--<a class="button button-block button-calm" ng-href="#" onclick="window.open('http://www.twitter.com/', '_system', 'location=yes'); return false;">-->
+					<!--Twitter-->
+				<!--</a>-->
+			<!--</div>-->
 		</div>
 	</ion-content>
 </ion-view>
