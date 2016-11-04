@@ -198,10 +198,12 @@ img.blank-profile {
   margin-right:12%;
   margin-left: 12%;
 
+
 }
 
-.hi{
-color: rgba(255, 255, 255, 0.7)
+.background{
+  background-color: #b0c4de;
+
 }
 
 .login{
