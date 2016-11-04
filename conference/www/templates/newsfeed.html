@@ -44,10 +44,10 @@
           Post
         </button>
       </div>
-      <div class="list card newsfeed-background">
-        <div class="item">
+
           <ion-list>
-            <ion-item ng-repeat="item in entry" ng-hide="item.commentid != '0'">
+            <ion-item class="newsfeed" ng-repeat="item in entry" ng-hide="item.commentid != '0'">
+              <div class="card" style="margin-top:1%">
               <div class="user-post">{{item.name}}<br></div>
               <div class="comment-date">{{item.date}}<br></div>
               <div class="comment-content">{{item.content}}<br></div>
@@ -71,9 +71,10 @@
                   <!-- {{comment.id}}<br>
                   {{comment.commentid}}<br> -->
                 </ion-item>
+                </div>
+            </ion-item>
           </ion-list>
-        </div>
-      </div>
+
 
             <!-- <ion-refresher on-refresh="doRefresh()"></ion-refresher>
             <ion-list>

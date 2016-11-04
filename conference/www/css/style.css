@@ -177,7 +177,7 @@ img.blank-profile {
 
 
 .comment-content {
-	width:300px;
+	width:100%;
   white-space: normal;
 }
 
@@ -188,7 +188,7 @@ img.blank-profile {
 }
 
 .newsfeed-background {
-	background-color: #1C4690;
+	background-color: rgba(203,221,239,1);
 }
 .body{
  /*background-image: url("city.jpg");*/
@@ -209,6 +209,7 @@ img.blank-profile {
   @extends body;
   margin-right:7%;
   margin-left: 7%;
+  background-color: rgba(225,225,225,1);
 }
 
 .background{
@@ -246,3 +247,11 @@ img.blank-profile {
   box-sizing: content-box;
 }
 
+.list .item, .card, .list .item-complex .item-content{
+  /*background: rgba(203,221,239,1);*/
+  /*padding: 5%;*/
+}
+
+.list .item.newsfeed {
+  border-style: none;
+}
