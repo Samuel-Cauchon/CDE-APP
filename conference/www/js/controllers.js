@@ -302,6 +302,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
           }
         })
         console.log("$scope.map", $scope.map);
+        MainEvents.setMapOfEventsToUsers($scope.map);
         $scope.getMappingOfEventToUsers = function (id) {
           console.log("Id gotten", id);
           if ($scope.map[id]) {
@@ -421,7 +422,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       console.log("mapOfEventTOUsers", mapOfEventsToUsers);
       if (username && eventId && mapOfEventsToUsers) {
         console.log("Username", username);
-        console.log("Map of events", mapOfEventsToUsers[eventId]);
+        console.log("Map of events", mapOfEventsToUsers);
         console.log(mapOfEventsToUsers[eventId].indexOf(username));
         if (mapOfEventsToUsers[eventId].indexOf(username) == -1) {
           MainEvents.updatePeopleAttending(uid, eventId ).success(function (data) {
