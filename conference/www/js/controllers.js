@@ -470,10 +470,11 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
   })
 
   .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents) {
+
     $scope.editPhone = null;
     $scope.editDescription = null;
-    $scope.editBirthdate = null;
-    $scope.editDescription = null;
+    $scope.editProfession = null;
+    $scope.editName = null;
 
 
     $scope.startEditPhone = function(){
@@ -489,19 +490,32 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       })
     }
 
-    $scope.startEditBirthdate = function(){
-      $scope.editBirthdate = "1";
+
+    $scope.startEditProfession = function(){
+      $scope.editProfession = "1";
     }
 
-    $scope.endEditBirthdate= function(){
-      DatabaseService.updateBirthdate($scope.updatedProfile.newBirthdateDay+"-"+$scope.updatedProfile.newBirthdateMonth+"-"+$scope.updatedProfile.newBirthdateYear, AuthService.currentUser).success(function(){
-        DatabaseService.GetBirthday(AuthService.currentUser).success(function(databirthdate){
-          $scope.profile.birthdate = databirthdate[0]['birthdate'];
-          $scope.editBirthdate = null;
+    $scope.endEditProfession= function(){
+      DatabaseService.updateProfession($scope.updatedProfile.newProfession, AuthService.currentUser).success(function(){
+        DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
+          $scope.profile.profession = dataprofession[0]['profession'];
+          $scope.editProfession = null;
         })
       })
     }
 
+    $scope.startEditName = function(){
+      $scope.editName = "1";
+    }
+
+    $scope.endEditName= function(){
+      DatabaseService.updateName(AuthService.currentUser,$scope.updatedProfile.newName).success(function(){
+        DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+          $scope.profile.name = dataname[0]['name'];
+          $scope.editName = null;
+        })
+      })
+    }
 
     $scope.startEditDescription = function(){
       $scope.editDescription = "1";

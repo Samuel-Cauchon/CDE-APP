@@ -133,6 +133,19 @@ angular.module('App.services', ['backand'])
         });
       },
 
+      updateName: function(username, newName){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/updateName',
+          params: {
+            parameters: {
+              username: username,
+              newName: newName
+            }
+          }
+        });
+      },
+
       GetPhoneNumber: function(user){
         return $http ({
           method: 'GET',
@@ -233,6 +246,19 @@ angular.module('App.services', ['backand'])
           params: {
             parameters: {
               newPhonenumber: newPhoneNumber,
+              user: user
+            }
+          }
+        });
+      },
+
+      updateProfession: function(newProfession, user){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/updateProfession',
+          params: {
+            parameters: {
+              newProfession: newProfession,
               user: user
             }
           }

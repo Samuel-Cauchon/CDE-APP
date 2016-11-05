@@ -243,15 +243,30 @@ img.blank-profile {
  float: right;
 }
 
+.float-Right{
+  float: right;
+}
 #commentButton{
-  box-sizing: content-box;
+  box-sizing: content-box ;
 }
 
-.list .item, .card, .list .item-complex .item-content{
+#profileButton{}
+
+/*.list .item, .card, .list .item-complex .item-content{*/
   /*background: rgba(203,221,239,1);*/
   /*padding: 5%;*/
+/*}*/
+
+/*.list .item.newsfeed {*/
+  /*border-style: none;*/
+/*}*/
+
+.userProfile{
+
 }
 
-.list .item.newsfeed {
-  border-style: none;
+.frenchButton{
+  position:absolute;
+  margin-right: 5%;
+  margin-top: 7%;
 }
