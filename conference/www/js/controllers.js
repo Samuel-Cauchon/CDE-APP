@@ -12,7 +12,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 	var init = function () {
      try{
-       $scope.UUID = device.device;
+       $scope.UUID = $cordovaDevice.getUUID();
        DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
          if (dataUUID[0] != null){
            AuthService.currentUser = dataUUID[0]['user'];
