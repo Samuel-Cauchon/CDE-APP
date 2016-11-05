@@ -12,7 +12,7 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
 
 	var init = function () {
      try{
-       $scope.UUID = $cordovaDevice.getUUID();
+       $scope.UUID = device.device;
        DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
          if (dataUUID[0] != null){
            AuthService.currentUser = dataUUID[0]['user'];
@@ -21,12 +21,12 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
        })
      }
      catch (err){
-			 DatabaseService.addError(err.message).success(function(){});
-       console.log("Error " + err.message);
+		DatabaseService.addError(err.message).success(function(){});
+       	console.log("Error " + err.message);
      }
    }
 
-	 ionic.Platform.ready(function(){
+	ionic.Platform.ready(function(){
        init();
     });
 
