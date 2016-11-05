@@ -614,6 +614,19 @@ angular.module('App.services', ['backand'])
     }
   })
 
+  .service('SearchService', function() {
+    var eventArr;
+    return {
+      setEventArr: function(arr){
+        eventArr = arr;
+        console.log(eventArr);
+      },
+      getEventArr: function(){
+        return eventArr;
+      }
+    }
+  })
+
   .factory('Base64', function(){
     var self = this;
     self.encode = function (input) {

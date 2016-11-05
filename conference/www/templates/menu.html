@@ -19,9 +19,9 @@
     <ion-content>
       <ion-list>
         <div ng-show="currentLanguage != 'french'">
-          <ion-item menu_close ng-href="#/homeMenu/search">
-            Search
-          </ion-item>
+          <!--<ion-item menu_close ng-href="#/homeMenu/search">-->
+            <!--Search-->
+          <!--</ion-item>-->
           <ion-item menu-close ng-href="#/homeMenu/newsfeed">
             Newsfeed
           </ion-item>
@@ -37,9 +37,12 @@
   		    <ion-item menu-close ng-href="#/homeMenu/speakers">
             Speakers
           </ion-item>
-          <!--<ion-item menu-close ng-href="#/homeMenu/map">
+          <ion-item menu-close ng-href="#/homeMenu/map">
             Map
-          </ion-item>-->
+          </ion-item>
+          <ion-item menu-close ng-href="#/homeMenu/contacts">
+            Resources
+          </ion-item>
   		    <ion-item menu-close ng-href="#/homeMenu/sponsors">
             Sponsors
           </ion-item>
@@ -52,9 +55,9 @@
         </div>
 
         <div ng-show="currentLanguage == 'french'">
-          <ion-item menu_close ng-href="#/homeMenu/searchfr">
-            Recherche
-          </ion-item>
+          <!--<ion-item menu_close ng-href="#/homeMenu/searchfr">-->
+            <!--Recherche-->
+          <!--</ion-item>-->
           <ion-item menu-close ng-href="#/homeMenu/newsfeedfr">
             Fil d'Actualité
           </ion-item>
@@ -70,10 +73,12 @@
           <ion-item menu-close ng-href="#/homeMenu/speakersfr">
             Conférenciers
           </ion-item>
-          <!--
           <ion-item menu-close ng-href="#/homeMenu/map">
             Carte
-          </ion-item>-->
+          </ion-item>
+          <ion-item menu-close ng-href="#/homeMenu/contactsfr">
+            Coordonnées
+          </ion-item>
           <ion-item menu-close ng-href="#/homeMenu/sponsorsfr">
             Partenaires
           </ion-item>

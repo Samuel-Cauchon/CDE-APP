@@ -13,13 +13,15 @@
         <input type="submit" id="submit" value="Search" ng-click="getValue(searchContent)" />
       </form>
 
-      <div ng-if="getLength() > 0">
-        <ul>
-            <li ng-repeat="d in returnEvents() | orderBy">
-              {{ d }}
-            </li>
-        </ul>
-      </div>
+      <ion-scroll class="scrollVertical" direction="y">
+        <div class="list">
+          <div ng-repeat="n in getEntries() track by $index | orderBy"  >
+            <div class="item item-divider" >
+              <h3 id="openBox">{{ n }}</h3>
+            </div>
+          </div>
+        </div>
+      </ion-scroll>
     </ion-content>
   </ion-view>
 </div>
