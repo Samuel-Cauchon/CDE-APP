@@ -163,6 +163,11 @@ img.blank-profile {
   color: #111e45;
 }
 
+.capitalize{
+  text-transform: uppercase;
+  font-family:'Lato', sans-serif;
+}
+
 .user-name {
 	font-size: 150%;
 }
@@ -269,4 +274,19 @@ img.blank-profile {
   position:absolute;
   margin-right: 5%;
   margin-top: 7%;
+}
+
+.font-size-small{
+  font-size: 75%;
+}
+
+.font-size-title{
+  font-size: 150%;
+}
+
+.item-schedule {
+  border-color: #b2b2b2 !important;
+  background-color: rgba(59, 89, 152,0.7) !important;
+  color: white !important;
+  margin: 2% auto;
 }

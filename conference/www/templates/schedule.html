@@ -16,15 +16,14 @@
     <br></br>
     <ion-list>
       <div ng-repeat="entity in events | orderBy : 'starttime'" class="inner">
-        <ion-item class="item-stable"
+        <ion-item class="item-stable item-schedule"
                   ng-click="toggleGroup(entity);getIdOfEvent(entity.id)"
                   ng-class="{active: isGroupShown(entity)}">
           <i class="icon" ng-class="isGroupShown(entity) ? 'ion-minus' : 'ion-plus'"></i>
           &nbsp;
-          <i class="ion-calendar"></i>
-          <b>{{entity.name}}</b>
+          <div class="font-size-small" style="display:inline-block">{{entity.starttime}} - {{entity.endtime}}</div>
+          <div class="font-size-title capitalize" id="openBox">{{entity.name}}</div>
           <p></p>
-          {{entity.starttime}} - {{entity.endtime}}
         </ion-item>
         <ion-item class="item-accordion"
                   ng-if="isGroupShown(entity)">
@@ -41,7 +40,7 @@
           <h3 id="openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
           <p></p>
-          <h2><b>Users Attending ({{ numberOfPeopleAttending }}):</b></h2>
+          <h2><b>Users Attending ({{ numberOfPeopleAttending || 0 }}):</b></h2>
           <ion-scroll style="height:100px" class="scrollVertical" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
