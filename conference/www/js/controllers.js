@@ -1,4 +1,4 @@
-angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
+angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 .run(function($rootScope) {
 	$rootScope.currentLanguage = "english";
@@ -21,12 +21,12 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
        })
      }
      catch (err){
-			 DatabaseService.addError(err.message).success(function(){});
-       console.log("Error " + err.message);
+		DatabaseService.addError(err.message).success(function(){});
+       	console.log("Error " + err.message);
      }
    }
 
-	 ionic.Platform.ready(function(){
+	ionic.Platform.ready(function(){
        init();
     });
 
@@ -327,7 +327,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
         $scope.getMappingOfEventToUsers = function (id) {
           console.log("Id gotten", id);
           if ($scope.map[id]) {
-            console.log("$scope.map[id]", removeDuplicates($scope.map[id]));
+          //  console.log("$scope.map[id]", (removeDuplicates($scope.map[id])).length);
+            $scope.numberOfPeopleAttending = (removeDuplicates($scope.map[id])).length;
             return removeDuplicates($scope.map[id]);
             //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
           }
@@ -419,7 +420,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       }
 
       if(ind == 1){
-        $scope.events = MainEvents.getEventArrayWithFixedTiming('second');
+        $scope.events = MainEvents.getEventArrayWithFixedTiming('second')
+        console.log("Scope.events second day", $scope.events);
       }
 
       if(ind == 2){

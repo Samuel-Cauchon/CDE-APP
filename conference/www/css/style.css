@@ -123,6 +123,16 @@ div.edit-description textarea {
 #openBox{
   width:350px;
   white-space: normal;
+  margin-bottom: 5%;
+
+}
+
+.bigger{
+  font-size: 105% !important;
+}
+
+.title-bigger{
+  font-size: 112% !important;
 }
 p.small{
   line-height: 1.2;
@@ -161,6 +171,10 @@ img.blank-profile {
   letter-spacing:0.1em;
   text-transform: uppercase;
   color: #111e45;
+}
+
+.capitalize{
+  font-family:'Lato', sans-serif;
 }
 
 .user-name {
@@ -269,4 +283,35 @@ img.blank-profile {
   position:absolute;
   margin-right: 5%;
   margin-top: 7%;
+}
+
+.font-size-small{
+  font-size: 100%;
+}
+
+.font-size-title{
+  font-size: 150%;
+}
+
+.item-schedule {
+  border-color: #b2b2b2 !important;
+  background-color: rgba(44, 117, 188, 0.7) !important;
+  color: white !important;
+  margin: 2% auto;
+}
+
+.border-white{
+  border-color: white; !important
+}
+
+.icon-plus{
+  margin-top: 7%; !important
+  margin-right: 50% !important;
+}
+
+.item-people-attending{
+  background-color: white !important;
+
+  /*border-color: white !important;*/
+  /*text-align: center;*/
 }
