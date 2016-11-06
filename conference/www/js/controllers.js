@@ -1,4 +1,4 @@
-angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
+angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 .run(function($rootScope) {
 	$rootScope.currentLanguage = "english";
