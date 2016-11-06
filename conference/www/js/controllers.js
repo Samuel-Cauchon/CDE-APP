@@ -21,12 +21,12 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
        })
      }
      catch (err){
-			 DatabaseService.addError(err.message).success(function(){});
-       console.log("Error " + err.message);
+		DatabaseService.addError(err.message).success(function(){});
+       	console.log("Error " + err.message);
      }
    }
 
-	 ionic.Platform.ready(function(){
+	ionic.Platform.ready(function(){
        init();
     });
 
