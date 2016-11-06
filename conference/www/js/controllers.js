@@ -740,7 +740,7 @@ $scope.updatedProfile = {
 })
 
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
+.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
 
 	$scope.entry = [];
   var currentToken = "";
@@ -751,17 +751,10 @@ $scope.updatedProfile = {
   });
 
 	$scope.$on('$ionicView.enter', function () {
-		retrieveTwitterFeed();
 		retrieveInfo();
     //$scope.pushNotification();
 	  console.log("page opened");
 	})
-
-	$scope.refreshTwitterfeed = function () {
-		retrieveTwitterFeed();
-		$scope.$broadcast('scroll.refreshComplete');
-		console.log("page refresh");
-	}
 
 	$scope.refreshNewsfeed = function () {
 		retrieveInfo();
@@ -797,16 +790,6 @@ $scope.updatedProfile = {
 		return month+" "+day+" at "+hour+":"+min;
 	};
 
-	function retrieveTwitterFeed(){
-		TwitterREST.sync().then(function(tweets){
-			console.log(tweets);
-			$scope.tweets = tweets.statuses;
-		});
-
-		$scope.innapBrowser = function (value) {
-			window.open(value, '_blank');
-		};
-	}
 
 	$scope.postComment = function(id) {
 		var comment = document.getElementById(id).value;
