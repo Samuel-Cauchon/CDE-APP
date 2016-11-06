@@ -34,7 +34,7 @@
           <h3 class="bigger" id="openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
           <h2><b>Users Attending ({{ numberOfPeopleAttending || 0 }}):</b></h2>
-          <ion-scroll style="height:100px" class="scrollVertical" direction="y">
+          <ion-scroll style="height:108px" class="scrollVertical" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
@@ -43,18 +43,19 @@
               </div>
             </div>
           </ion-scroll>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
-          <p></p>
 
-          <button class="button" ng-class="(eventRegistered || registered) ? 'button-balanced' : 'button-assertive'"
+          <!--<button class="button" ng-class="(eventRegistered || registered) ? 'button-balanced' : 'button-assertive'"-->
+                  <!--ng-click="registerForEvent(entity.id)"-->
+                  <!--type="button"-->
+                  <!--style="display: block; margin: 0 auto">-->
+            <!--{{ (eventRegistered) ? 'Registered' : 'Register' }}-->
+          <!--</button>-->
+
+          <button class="button button-assertive"
                   ng-click="registerForEvent(entity.id)"
                   type="button"
                   style="display: block; margin: 0 auto">
-            {{ (eventRegistered) ? 'Registered' : 'Register' }}
+            Register
           </button>
 
           <!--<button class="btn" style="display: block; margin: 0 auto" ng-click="registerForEvent(entity.id)">-->
