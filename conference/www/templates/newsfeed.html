@@ -3,36 +3,11 @@
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
-  <ion-tabs class="tabs-top tabs-stable">
-    <ion-tab title="Twitter Feed">
-      <iom-header-bar class="bar-subheader bar-stable">
-        <a class="tab-item">Twitter Feed</a>
-      </iom-header-bar>
-      <ion-content>
-				<ion-refresher on-refresh="refreshTwitterfeed()"></ion-refresher>
-				<div class="list">
-
-      <a class="item item-avatar" ng-repeat="tweet in tweets">
-        <img ng-src="{{ tweet.user.profile_image_url }}">
-        <h2>{{ tweet.user.name }}</h2>
-        <small>@{{ tweet.user.screen_name }}</small>
-        <small class="time"> {{ tweet.created_at | formatTwitterDate}}</small>
-        <p compile="tweet.text | formatTwitterText"></p>
-      </a>
-
-    </div>
-      </ion-content>
-    </ion-tab>
-
-    <ion-tab title="App Feed">
-      <iom-header-bar class="bar-subheader bar-stable">
-        <a class="tab-item">App Feed</a>
-      </iom-header-bar>
       <link href="css/ionicons.css" rel="stylesheet">
       <link href="css/style.css" rel="stylesheet">
       <ion-content class="has-header">
-        <div class="bodyNewsfeed">
       <ion-refresher on-refresh="refreshNewsfeed()"></ion-refresher>
+      <div class="bodyNewsfeed">
       <div class="item">
         <div class="user-name">
         {{userName}}
@@ -53,8 +28,6 @@
               <div class="comment-content">{{item.content}}<br></div>
               <i class="ion-thumbsup"></i>
               {{item.likes}}<br>
-              <!-- {{item.id}}<br>
-              {{item.commentid}}<br> -->
               <button class="button" id="commentButton" ng-click="like(item.likes, item.id)">
                 <i class="ion-heart"></i>
                 Like</button>
@@ -68,23 +41,10 @@
                   {{comment.name}}<br>
                   <div class="comment-date">{{comment.date}}<br></div>
                   <div class="comment-content">{{comment.content}}<br></div>
-                  <!-- {{comment.id}}<br>
-                  {{comment.commentid}}<br> -->
                 </ion-item>
                 </div>
             </ion-item>
           </ion-list>
-
-
-            <!-- <ion-refresher on-refresh="doRefresh()"></ion-refresher>
-            <ion-list>
-              <ion-item class="item-avatar" ng-repeat="item in items">
-                {{item.user.name.first}} {{item.user.name.last}}
-                <p>{{item.user.location.city}} {{item.user.password}}</p>
-              </ion-item>
-            </ion-list> -->
         </div>
     </ion-content>
-  </ion-tab>
-</ion-tabs>
 </ion-view>
