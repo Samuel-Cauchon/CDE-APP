@@ -419,7 +419,8 @@ angular.module('App.controllers', ['ngOpenFB', 'ngCordova', 'App.services'])
       }
 
       if(ind == 1){
-        $scope.events = MainEvents.getEventArrayWithFixedTiming('second');
+        $scope.events = MainEvents.getEventArrayWithFixedTiming('second')
+        console.log("Scope.events second day", $scope.events);
       }
 
       if(ind == 2){
