@@ -711,33 +711,33 @@ $scope.updatedProfile = {
   }
 })
 
-// .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
-//
-//
-// 	var options = {timeout: 10000, enableHighAccuracy: true};
-//
-// 	var script = window.document.createElement('script');
-// 	script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
-// 	window.document.head.appendChild(script);
-//
-// 	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
-//
-//
-// 		var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-//
-// 		var mapOptions = {
-// 			center: latLng,
-// 			zoom: 15,
-// 			mapTypeId: google.maps.MapTypeId.ROADMAP
-// 		};
-//
-// 		$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-//
-// 	}, function(error){
-// 		console.log("Could not get location");
-// 	});
-//
-// })
+.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
+
+
+	var options = {timeout: 10000, enableHighAccuracy: true};
+
+	var script = window.document.createElement('script');
+	script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
+	window.document.head.appendChild(script);
+
+	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+
+		var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+		var mapOptions = {
+			center: latLng,
+			zoom: 15,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+
+		$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+	}, function(error){
+		console.log("Could not get location");
+	});
+
+})
 
 
 .controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, PersonService, AuthService, TwitterREST) {
