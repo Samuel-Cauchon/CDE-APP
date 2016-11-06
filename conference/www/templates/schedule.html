@@ -10,8 +10,6 @@
   <ion-content>
     <p></p>
     <div class="font-size-title capitalize" style="text-align:center">
-      <!--<p>Friday,</p>-->
-      <!--<p></p>-->
       <p>{{ putNewDate(defaultDate.clientSide, dates) }}</p>
       <i class="ion-android-arrow-dropdown icon-large-size icon-right" ng-click="popover.show($event)" ></i>
     </div>
@@ -33,14 +31,14 @@
           <h3 class="bigger" id="openBox">{{ entity.place }}</h3>
           <span ng-if="entity.speaker != null">
           <h2><b>Speaker(s)</b></h2>
-          <h3 id="openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
+          <h3 class="bigger" id="openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
           <h2><b>Users Attending ({{ numberOfPeopleAttending || 0 }}):</b></h2>
           <ion-scroll style="height:100px" class="scrollVertical" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
-                  <h3 id="openBox">{{ n }}</h3>
+                  <h3 class="bigger" id="openBox">{{ n }}</h3>
                 </div>
               </div>
             </div>
