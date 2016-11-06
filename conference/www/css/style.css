@@ -286,7 +286,7 @@ img.blank-profile {
 }
 
 .font-size-small{
-  font-size: 75%;
+  font-size: 100%;
 }
 
 .font-size-title{
@@ -295,7 +295,7 @@ img.blank-profile {
 
 .item-schedule {
   border-color: #b2b2b2 !important;
-  background-color: rgba(59, 89, 152,0.7) !important;
+  background-color: rgba(44, 117, 188, 0.7) !important;
   color: white !important;
   margin: 2% auto;
 }
