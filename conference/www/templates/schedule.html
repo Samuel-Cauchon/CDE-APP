@@ -19,32 +19,26 @@
         <ion-item class="item-stable item-schedule"
                   ng-click="toggleGroup(entity);getIdOfEvent(entity.id)"
                   ng-class="{active: isGroupShown(entity)}">
-          <i class="icon" ng-class="isGroupShown(entity) ? 'ion-minus' : 'ion-plus'"></i>
+          <i class="icon icon-right icon-plus icon-medium-size" ng-class="isGroupShown(entity) ? 'ion-minus' : 'ion-plus'"></i>
           &nbsp;
           <div class="font-size-small" style="display:inline-block">{{entity.starttime}} - {{entity.endtime}}</div>
           <div class="font-size-title capitalize" id="openBox">{{entity.name}}</div>
-          <p></p>
         </ion-item>
-        <ion-item class="item-accordion"
+        <ion-item class="item-accordion border-white"
                   ng-if="isGroupShown(entity)">
-          <p></p>
-          <h2><b>Description:</b></h2>
-          <h3 id="openBox">{{ entity.description }}</h3>
-          <p></p>
-          <h2><b>Where:</b></h2>
-          <h3 id="openBox">{{ entity.place }}</h3>
-          <p></p>
+          <h2 class="title-bigger"><b>Description:</b></h2>
+          <h3 class="bigger" id="openBox">{{ entity.description }}</h3>
+          <h2 class="title-bigger"><b>Where:</b></h2>
+          <h3 class="bigger" id="openBox">{{ entity.place }}</h3>
           <span ng-if="entity.speaker != null">
           <h2><b>Speaker(s)</b></h2>
-          <p></p>
           <h3 id="openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
-          <p></p>
           <h2><b>Users Attending ({{ numberOfPeopleAttending || 0 }}):</b></h2>
           <ion-scroll style="height:100px" class="scrollVertical" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
-                <div class="item item-divider" >
+                <div class="item item-divider  item-people-attending" >
                   <h3 id="openBox">{{ n }}</h3>
                 </div>
               </div>

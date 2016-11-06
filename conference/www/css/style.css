@@ -123,6 +123,16 @@ div.edit-description textarea {
 #openBox{
   width:350px;
   white-space: normal;
+  margin-bottom: 5%;
+
+}
+
+.bigger{
+  font-size: 105% !important;
+}
+
+.title-bigger{
+  font-size: 112% !important;
 }
 p.small{
   line-height: 1.2;
@@ -164,7 +174,6 @@ img.blank-profile {
 }
 
 .capitalize{
-  text-transform: uppercase;
   font-family:'Lato', sans-serif;
 }
 
@@ -289,4 +298,20 @@ img.blank-profile {
   background-color: rgba(59, 89, 152,0.7) !important;
   color: white !important;
   margin: 2% auto;
+}
+
+.border-white{
+  border-color: white; !important
+}
+
+.icon-plus{
+  margin-top: 7%; !important
+  margin-right: 50% !important;
+}
+
+.item-people-attending{
+  background-color: white !important;
+
+  /*border-color: white !important;*/
+  /*text-align: center;*/
 }
