@@ -327,7 +327,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
         $scope.getMappingOfEventToUsers = function (id) {
           console.log("Id gotten", id);
           if ($scope.map[id]) {
-            console.log("$scope.map[id]", removeDuplicates($scope.map[id]));
+          //  console.log("$scope.map[id]", (removeDuplicates($scope.map[id])).length);
+            $scope.numberOfPeopleAttending = (removeDuplicates($scope.map[id])).length;
             return removeDuplicates($scope.map[id]);
             //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
           }
