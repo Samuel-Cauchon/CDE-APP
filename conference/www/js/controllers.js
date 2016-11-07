@@ -8,7 +8,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, MainEvents) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, $ionicPopup, MainEvents) {
 
 	var init = function () {
      try{
@@ -47,38 +47,59 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 	$scope.Login = function () {
 		DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
-	  //Check if the username exist...
-	  if (dataUser[0] != null){
-		//Maybe an unecessary second check of the corectnes of the username...
-		if (dataUser[0]['username'] === $scope.dataEntered.username){
-			DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
-			//Check if the password is correct.
-				if (dataPass[0]['password'] === $scope.dataEntered.password){
-					AuthService.currentUser = $scope.dataEntered.username;
-					AuthService.uid = dataUser[0]['id'];
-          MainEvents.setUserId(AuthService.uid);
-					DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
-					if ($rootScope.currentLanguage != "french"){
-						$state.go('homeMenu.newsfeed');
-					}
-					else{
-						$state.go('homeMenu.newsfeedfr');
-					}
-				}
-				else{
-					alert("Could not login! Wrong Input!")
-				}
-			});
-		}
-		else{
-			alert("Could not login! Wrong Input!")
-		}
-	}
-	else{
-		alert("Could not login! Wrong Input!")
-	}
-});
-	};
+            //Check if the username exist...
+            if($scope.dataEntered.username === "" && $scope.dataEntered.password === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered username and password.'
+                });
+//                alert("Please enter a registered username and password.")
+            }
+            else if ($scope.dataEntered.username === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered username.'
+                });
+            }
+            else if ($scope.dataEntered.password === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered password.'
+                });
+            }    
+            else {
+                if(dataUser.length === 0){
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Please enter a registered username.'
+                    });
+                }
+                else if (dataUser[0]['username'] === $scope.dataEntered.username){
+                    DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
+                        //Check if the password is correct.
+                        if(dataPass.length === 0){
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Please enter the password for your CDE account.'
+                            });
+                        }
+                        else if (dataPass[0]['password'] === $scope.dataEntered.password){
+                            AuthService.currentUser = $scope.dataEntered.username;
+                            AuthService.uid = dataUser[0]['id'];
+                            MainEvents.setUserId(AuthService.uid);
+                            DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            if ($rootScope.currentLanguage != "french"){
+                                $state.go('homeMenu.newsfeed');
+                            }
+                            else{
+                                $state.go('homeMenu.newsfeedfr');
+                            }
+                        }
+                    });
+                }
+                else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Please enter a registered username.'
+                    });
+                }
+            }
+        });
+    };
 
 	$scope.Register = function () {
 		if($rootScope.currentLanguage != "french"){
