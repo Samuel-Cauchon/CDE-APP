@@ -63,7 +63,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
                 var alertPopup = $ionicPopup.alert({
                     title: 'Please enter a registered password.'
                 });
-            }    
+            }
             else {
                 if(dataUser.length === 0){
                     var alertPopup = $ionicPopup.alert({
@@ -733,30 +733,30 @@ $scope.updatedProfile = {
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
+  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
-
-	var options = {timeout: 10000, enableHighAccuracy: true};
-
-	var script = window.document.createElement('script');
-	script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
-	window.document.head.appendChild(script);
-
-	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
-
-
-		var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-		var mapOptions = {
-			center: latLng,
-			zoom: 15,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-
-		$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-	}, function(error){
-		console.log("Could not get location");
-	});
+	// var options = {timeout: 10000, enableHighAccuracy: true};
+    //
+	// var script = window.document.createElement('script');
+	// script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
+	// window.document.head.appendChild(script);
+    //
+	// $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    //
+    //
+	// 	var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    //
+	// 	var mapOptions = {
+	// 		center: latLng,
+	// 		zoom: 15,
+	// 		mapTypeId: google.maps.MapTypeId.ROADMAP
+	// 	};
+    //
+	// 	$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    //
+	// }, function(error){
+	// 	console.log("Could not get location");
+	// });
 
 })
 

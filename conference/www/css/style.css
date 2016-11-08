@@ -336,3 +336,7 @@ table.supporters{
   margin: 0 auto;
   text-align: center;
 }
+
+.angular-google-map-container {
+  height: 100%;
+}
