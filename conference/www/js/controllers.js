@@ -10,7 +10,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, MainEvents) {
 
-	var init = function () {
+	$scope.init = function () {
      try{
        $scope.UUID = $cordovaDevice.getUUID();
        DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
@@ -21,14 +21,10 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
        })
      }
      catch (err){
-		DatabaseService.addError(err.message).success(function(){});
+		    DatabaseService.addError(err.message).success(function(){});
        	console.log("Error " + err.message);
      }
-   }
-
-	ionic.Platform.ready(function(){
-       init();
-    });
+  }
 
 	$scope.dataEntered = {
 		username : "",
