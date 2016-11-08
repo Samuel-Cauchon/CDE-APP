@@ -159,7 +159,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, $ionicPopup){
 
 	$scope.dataEnteredRegister = {
 		username : "",
@@ -171,45 +171,41 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 	function checkForm()
 	{
-		if($scope.dataEnteredRegister.username == "") {
-			alert("Error: Username cannot be blank!");
+		if($scope.dataEnteredRegister.username == "" || $scope.dataEnteredRegister.password == "" || $scope.dataEnteredRegister.passwordConfirmation == "" ) {
+			var alertPopup = $ionicPopup.alert({
+                        title: 'Some extra information is required.'
+            });
 			return false;
 		}
 		re = /^\w+$/;
 		if(!re.test($scope.dataEnteredRegister.username)) {
-			alert("Error: Username must contain only letters, numbers and underscores!");
+            var alertPopup = $ionicPopup.alert({
+                        title: 'Please type your username as only letters, numbers and underscores.'
+            });
 			return false;
 		}
-
-		if($scope.dataEnteredRegister.password != "" && $scope.dataEnteredRegister.password == $scope.dataEnteredRegister.passwordConfirmation) {
-			if($scope.dataEnteredRegister.password < 6) {
-				alert("Error: Password must contain at least six characters!");
-				return false;
-			}
-			if($scope.dataEnteredRegister.password == $scope.dataEnteredRegister.username) {
-				alert("Error: Password must be different from Username!");
-				return false;
-			}
-			re = /[0-9]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one number (0-9)!");
-				return false;
-			}
-			re = /[a-z]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one lowercase letter (a-z)!");
-				return false;
-			}
-			re = /[A-Z]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one uppercase letter (A-Z)!");
-				return false;
-			}
-		} else {
-			alert("Error: Please check that you've entered and confirmed your password!");
+        DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+            console.log(dataUser)
+            if(dataUser.length > 0){
+                var alertPopup = $ionicPopup.alert({
+                        title: 'This username is already registered.'
+                });
+                return false;
+            }
+        });
+        if($scope.dataEnteredRegister.password != $scope.dataEnteredRegister.passwordConfirmation){
+            var alertPopup = $ionicPopup.alert({
+                        title: 'Passwords don\'t match.'
+            });
 			return false;
-		}
-
+        }
+        if($scope.dataEnteredRegister.password.length < 6) {
+            var alertPopup = $ionicPopup.alert({
+                        title: 'Please enter a password having at least 6 characters.'
+            });
+			return false;
+        }
+        console.log("NO ERROR FOUND!")
 		return true;
 	};
 
