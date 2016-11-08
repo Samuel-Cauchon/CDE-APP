@@ -26,19 +26,19 @@
         <ion-item class="item-accordion border-white"
                   ng-if="isGroupShown(entity)">
           <h2 class="title-bigger"><b>Description:</b></h2>
-          <h3 class="bigger" id="openBox">{{ entity.description }}</h3>
+          <h3 class="bigger openBox">{{ entity.description }}</h3>
           <h2 class="title-bigger"><b>Where:</b></h2>
-          <h3 class="bigger" id="openBox">{{ entity.place }}</h3>
+          <h3 class="bigger openBox">{{ entity.place }}</h3>
           <span ng-if="entity.speaker != null">
           <h2><b>Speaker(s)</b></h2>
-          <h3 class="bigger" id="openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
+          <h3 class="bigger openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
           <h2><b>Users Attending ({{ numberOfPeopleAttending || 0 }}):</b></h2>
-          <ion-scroll style="height:108px" class="scrollVertical" direction="y">
+          <ion-scroll style="height:115px" class="scrollVertical" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
-                  <h3 class="bigger" id="openBox">{{ n }}</h3>
+                  <h3 class="bigger openBox">{{ n }}</h3>
                 </div>
               </div>
             </div>
@@ -51,7 +51,7 @@
             <!--{{ (eventRegistered) ? 'Registered' : 'Register' }}-->
           <!--</button>-->
 
-          <button class="button button-assertive"
+          <button class="button button-assertive buttonLogin"
                   ng-click="registerForEvent(entity.id)"
                   type="button"
                   style="display: block; margin: 0 auto">
@@ -71,12 +71,13 @@
 <script id="templates/popover.html" type="text/ng-template">
   <ion-popover-view style="width:300px !important">
     <ion-header-bar>
-      <h1 class="title">Select A Date</h1>
+      <h1 class="title-bigger">Select A Date</h1>
     </ion-header-bar>
     <ion-content>
       <ion-radio ng-repeat="item in dates"
                  ng-value="item.value"
-                 ng-model="defaultDate.clientSide">
+                 ng-model="defaultDate.clientSide"
+                 ng-class="text-align-center ">
         {{ item.text }}
       </ion-radio>
     </ion-content>
@@ -115,7 +116,7 @@
           <ion-item class="item-accordion"
                     ng-if="isGroupShown(entity)">
             Description
-            <p id="openBox">{{ entity.description }}</p>
+            <p class="openBox">{{ entity.description }}</p>
             <p>Emplacement:</p>
             <p></p>
             {{ entity.place }}

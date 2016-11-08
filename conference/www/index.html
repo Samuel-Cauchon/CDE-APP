@@ -36,7 +36,8 @@
             if (window.cordova) {
                 console.log("Running in Cordova, will bootstrap AngularJS once 'deviceready' event fires.");
                 document.addEventListener('deviceready', function () {
-                    console.log("Deviceready event has fired, bootstrapping AngularJS.");
+                    console.log(device.cordova);
+                    console.log("Deviceready event has fired, bootstrapping AngularJS.");   
                     angular.bootstrap(document.body, ['App']);
                 }, false);
             } else {

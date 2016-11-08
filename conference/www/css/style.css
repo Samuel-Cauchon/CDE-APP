@@ -120,7 +120,7 @@ div.edit-description textarea {
 	font-size: 12px;
 }
 
-#openBox{
+.openBox{
   width:350px;
   white-space: normal;
   margin-bottom: 5%;
@@ -244,7 +244,7 @@ img.blank-profile {
 
 .buttonLogin{
   text-align: center;
-  margin-top: 10%;
+  margin-top: 10% !important;
 }
 
 .button{
@@ -314,6 +314,10 @@ img.blank-profile {
 
   /*border-color: white !important;*/
   /*text-align: center;*/
+}
+
+.text-align-center{
+  text-align: center;
 }
 
 .recims{
