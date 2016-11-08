@@ -262,6 +262,22 @@ img.blank-profile {
 }
 #commentButton{
   box-sizing: content-box ;
+    background-color: white;
+    border: 5px;
+    border-color: aqua;
+    border-right: 1px;
+    color: #111e45;
+    margin-left: 50%;
+}
+
+#likeButton{
+  box-sizing: content-box ;
+    background-color: white;
+    border: 1px;
+    border-color: aqua;
+    border-right: 1px;
+    color: #111e45;
+    margin-right: 50%;
 }
 
 #profileButton{}

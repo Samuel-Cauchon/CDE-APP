@@ -11,100 +11,100 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, $ionicPopup, MainEvents) {
 
 	$scope.init = function () {
-   try{
-     $scope.UUID = $cordovaDevice.getUUID();
-     DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
-       if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "'{{UUID}}'")){
-         AuthService.currentUser = dataUUID[0]['user'];
-         $state.go('homeMenu.newsfeed');
-       }
-     })
-   }
-   catch (err){
-    DatabaseService.addError(err.message).success(function(){});
-    console.log("Error " + err.message);
+     try{
+       $scope.UUID = $cordovaDevice.getUUID();
+       DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
+         if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "'{{UUID}}'")){
+           AuthService.currentUser = dataUUID[0]['user'];
+           $state.go('homeMenu.newsfeed');
+         }
+       })
+     }
+     catch (err){
+		    DatabaseService.addError(err.message).success(function(){});
+       	console.log("Error " + err.message);
+     }
   }
-}
 
-$scope.dataEntered = {
-  username : "",
-  password : "",
-};
+	$scope.dataEntered = {
+		username : "",
+		password : "",
+	};
 
-$scope.goFrench = function(){
-  $rootScope.currentLanguage = "french";
-  $state.go('welcomefr');
-}
+	$scope.goFrench = function(){
+		$rootScope.currentLanguage = "french";
+		$state.go('welcomefr');
+	}
 
-$scope.goEnglish = function(){
-  $rootScope.currentLanguage = "english";
-  $state.go('welcome');
-}
+	$scope.goEnglish = function(){
+		$rootScope.currentLanguage = "english";
+		$state.go('welcome');
+	}
 
-$scope.Login = function () {
-  DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
+	$scope.Login = function () {
+		DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
             //Check if the username exist...
             if($scope.dataEntered.username === "" && $scope.dataEntered.password === ""){
-              var alertPopup = $ionicPopup.alert({
-                title: 'Please enter a registered username and password.'
-              });
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered username and password.'
+                });
 //                alert("Please enter a registered username and password.")
-}
-else if ($scope.dataEntered.username === ""){
-  var alertPopup = $ionicPopup.alert({
-    title: 'Please enter a registered username.'
-  });
-}
-else if ($scope.dataEntered.password === ""){
-  var alertPopup = $ionicPopup.alert({
-    title: 'Please enter a registered password.'
-  });
-}
-else {
-  if(dataUser.length === 0){
-    var alertPopup = $ionicPopup.alert({
-      title: 'Please enter a registered username.'
-    });
-  }
-  else if (dataUser[0]['username'] === $scope.dataEntered.username){
-    DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
+            }
+            else if ($scope.dataEntered.username === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered username.'
+                });
+            }
+            else if ($scope.dataEntered.password === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered password.'
+                });
+            }
+            else {
+                if(dataUser.length === 0){
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Please enter a registered username.'
+                    });
+                }
+                else if (dataUser[0]['username'] === $scope.dataEntered.username){
+                    DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
                         //Check if the password is correct.
                         if(dataPass.length === 0){
-                          var alertPopup = $ionicPopup.alert({
-                            title: 'Please enter the password for your CDE account.'
-                          });
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Please enter the password for your CDE account.'
+                            });
                         }
                         else if (dataPass[0]['password'] === $scope.dataEntered.password){
-                          AuthService.currentUser = $scope.dataEntered.username;
-                          AuthService.uid = dataUser[0]['id'];
-                          MainEvents.setUserId(AuthService.uid);
-                          DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
-                          if ($rootScope.currentLanguage != "french"){
-                            $state.go('homeMenu.newsfeed');
-                          }
-                          else{
-                            $state.go('homeMenu.newsfeedfr');
-                          }
+                            AuthService.currentUser = $scope.dataEntered.username;
+                            AuthService.uid = dataUser[0]['id'];
+                            MainEvents.setUserId(AuthService.uid);
+                            DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            if ($rootScope.currentLanguage != "french"){
+                                $state.go('homeMenu.newsfeed');
+                            }
+                            else{
+                                $state.go('homeMenu.newsfeedfr');
+                            }
                         }
-                      });
-  }
-  else{
-    var alertPopup = $ionicPopup.alert({
-      title: 'Please enter a registered username.'
-    });
-  }
-}
-});
-};
+                    });
+                }
+                else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Please enter a registered username.'
+                    });
+                }
+            }
+        });
+    };
 
-$scope.Register = function () {
-  if($rootScope.currentLanguage != "french"){
-   $state.go('register');
- }
- else{
-   $state.go('registerfr');
- }
-};
+	$scope.Register = function () {
+		if($rootScope.currentLanguage != "french"){
+			$state.go('register');
+		}
+		else{
+			$state.go('registerfr');
+		}
+	};
 
 })
 
@@ -159,53 +159,55 @@ $scope.Register = function () {
 
 	$scope.dataEnteredRegister = {
 		username : "",
+		name : "",
 		password : "",
-		passwordConfirmation : "",
 	};
 
 
 
 	function checkForm()
 	{
-		if($scope.dataEnteredRegister.username == "" || $scope.dataEnteredRegister.password == "" || $scope.dataEnteredRegister.passwordConfirmation == "" ) {
+		if($scope.dataEnteredRegister.username == "" || $scope.dataEnteredRegister.password == "" || $scope.dataEnteredRegister.name == "" ) {
 			var alertPopup = $ionicPopup.alert({
-        title: 'Some extra information is required.'
-      });
+                        title: 'Some extra information is required.'
+            });
 			return false;
 		}
 		re = /^\w+$/;
 		if(!re.test($scope.dataEnteredRegister.username)) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Please type your username as only letters, numbers and underscores.'
-      });
-      return false;
-    }
-    DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
-      console.log(dataUser)
-      if(dataUser.length > 0){
-        var alertPopup = $ionicPopup.alert({
-          title: 'This username is already registered.'
+            var alertPopup = $ionicPopup.alert({
+                title: 'Please type your username as only letters, numbers and underscores.'
+            });
+			return false;
+		}
+        DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+            console.log(dataUser);
+            if(dataUser.length > 0){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'This username is already registered.'
+                });
+                return false;
+            }
         });
-        return false;
-      }
-    });
-    if($scope.dataEnteredRegister.password.length < 6) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Please enter a password having at least 6 characters.'
-      });
-      return false;
-    }
-    console.log("NO ERROR FOUND!")
-    return true;
-  };
+        if($scope.dataEnteredRegister.password.length < 6) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Please enter a password having at least 6 characters.'
+            });
+			return false;
+        }
+        console.log("NO ERROR FOUND!")
+		return true;
+	};
 
-  $scope.Register = function () {
-    DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+	$scope.Register = function () {
+		DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
 		//Check if the username exist...
 		if (dataUser[0] == null && checkForm()){
 			DatabaseService.getMaxId().success(function(maxId){
 				DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
 					AuthService.currentUser = $scope.dataEnteredRegister.username;
+					AuthService.uid = maxId[0]['Max(id)']+1;
+			//		MainEvents.setUserId(AuthService.uid);
 					if ($rootScope.currentLanguage != "french"){
 						$state.go('homeMenu.newsfeed');
 					}
@@ -217,170 +219,170 @@ $scope.Register = function () {
 			})
 		}
 	})
-  };
+	};
 
-  $scope.Cancel = function () {
-    if ($rootScope.currentLanguage != "french"){
-     $state.go('welcome');
-   }
-   else{
-     $state.go('welcomefr');
-   }
- };
+	$scope.Cancel = function () {
+		if ($rootScope.currentLanguage != "french"){
+			$state.go('welcome');
+		}
+		else{
+			$state.go('welcomefr');
+		}
+	};
 })
 
-.controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
+  .controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
 
-  var peopleAttendingEachEvent = {};
-  $scope.map = {};
-  $scope.mapUserRegisteredToEvent = {};
-  $scope.eventIdUserClicked;
-  $scope.userArr;
+    var peopleAttendingEachEvent = {};
+    $scope.map = {};
+    $scope.mapUserRegisteredToEvent = {};
+    $scope.eventIdUserClicked;
+    $scope.userArr;
 
-  $scope.eventRegistered = false;
-  $scope.activateRegisteredButton = function(){
-    $scope.eventRegistered = !$scope.eventRegistered;
-  }
+    $scope.eventRegistered = false;
+    $scope.activateRegisteredButton = function(){
+      $scope.eventRegistered = !$scope.eventRegistered;
+    }
 
 
-  $scope.$on('$ionicView.enter', function () {
-    updatePeopleAttendingEachEvent();
-    console.log("page opened");
-  })
-
-  $scope.getIdOfEvent= function(eventId){
-    $scope.eventIdUserClicked = eventId;
-  }
-
-  $scope.dates = [
-  {text: 'November 18, 2016', value:1},
-  {text: 'November 19, 2016', value: 2},
-  {text: 'November 20, 2016', value: 3}
-  ];
-
-  $scope.datesFrench = [
-  {text: '18 novembre 2016', value: 1},
-  {text: '19 novembre 2016', value: 2},
-  {text: '20 novembre 2016', value: 3}
-  ]
-
-  $scope.defaultDate = {
-    clientSide: '1'
-  }
-  $scope.putNewDate = function(datePickedVal, dateArr){
-    var index;
-    dateArr.some(function(entry, i){
-      if (entry.value == datePickedVal){
-        index =i;
-      }
+    $scope.$on('$ionicView.enter', function () {
+      updatePeopleAttendingEachEvent();
+      console.log("page opened");
     })
 
-    if (index <= 2) {
-      setDateForRepetition(index);
-      return dateArr[index].text;
+    $scope.getIdOfEvent= function(eventId){
+      $scope.eventIdUserClicked = eventId;
     }
-  }
 
-  $scope.toggleGroup = function(group) {
-    if ($scope.isGroupShown(group)) {
-      $scope.shownGroup = null;
-    } else {
-      $scope.shownGroup = group;
+    $scope.dates = [
+      {text: 'November 18, 2016', value:1},
+      {text: 'November 19, 2016', value: 2},
+      {text: 'November 20, 2016', value: 3}
+    ];
+
+    $scope.datesFrench = [
+      {text: '18 novembre 2016', value: 1},
+      {text: '19 novembre 2016', value: 2},
+      {text: '20 novembre 2016', value: 3}
+    ]
+
+    $scope.defaultDate = {
+      clientSide: '1'
     }
-  };
-
-  $ionicPopover.fromTemplateUrl('templates/popover.html', {
-    scope: $scope,
-  }).then(function(popover) {
-    $scope.popover = popover;
-  });
-
-  $scope.isGroupShown = function(group) {
-    return $scope.shownGroup === group;
-  };
-  function updatePeopleAttendingEachEvent() {
-    MainEvents.getUserQuery().success(function (data) {
-     var userArr = data;
-     for (var i = 0; i < userArr.length; i++) {
-      console.log("HEREEE");
-      peopleAttendingEachEvent[userArr[i].id] = {
-        name: userArr[i].name
-      };
-    }
-    MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
-    console.log("User Arr", userArr);
-    MainEvents.getPeopleAttending().success(function (data) {
-      var mapOfEventToUser = data.data;
-      console.log("Map of event to user", mapOfEventToUser);
-      console.log("Peopel attending each event", peopleAttendingEachEvent);
-      mapOfEventToUser.forEach(function (item) {
-        console.log("CHeCK user", (item.user));
-        console.log("Check evnet", item.event);
-        console.log("check ppl attending each event", peopleAttendingEachEvent[item.user]);
-        if ((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
-          console.log("item.event", item.event);
-          if (!$scope.map[item.event]) {
-            $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
-            console.log("CAme here");
-          }
-          else {
-            $scope.map[item.event].push(peopleAttendingEachEvent[item.user].name);
-            console.log("Came here too",peopleAttendingEachEvent[item.user].name );
-          }
+    $scope.putNewDate = function(datePickedVal, dateArr){
+      var index;
+      dateArr.some(function(entry, i){
+        if (entry.value == datePickedVal){
+          index =i;
         }
       })
-      console.log("$scope.map", $scope.map);
-      MainEvents.setMapOfEventsToUsers($scope.map);
-      $scope.getMappingOfEventToUsers = function (id) {
-        console.log("Id gotten", id);
-        if ($scope.map[id]) {
+
+      if (index <= 2) {
+        setDateForRepetition(index);
+        return dateArr[index].text;
+      }
+    }
+
+    $scope.toggleGroup = function(group) {
+      if ($scope.isGroupShown(group)) {
+        $scope.shownGroup = null;
+      } else {
+        $scope.shownGroup = group;
+      }
+    };
+
+    $ionicPopover.fromTemplateUrl('templates/popover.html', {
+      scope: $scope,
+    }).then(function(popover) {
+      $scope.popover = popover;
+    });
+
+    $scope.isGroupShown = function(group) {
+      return $scope.shownGroup === group;
+    };
+    function updatePeopleAttendingEachEvent() {
+      MainEvents.getUserQuery().success(function (data) {
+       var userArr = data;
+        for (var i = 0; i < userArr.length; i++) {
+          console.log("HEREEE");
+          peopleAttendingEachEvent[userArr[i].id] = {
+            name: userArr[i].name
+          };
+        }
+        MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
+      console.log("User Arr", userArr);
+      MainEvents.getPeopleAttending().success(function (data) {
+        var mapOfEventToUser = data.data;
+        console.log("Map of event to user", mapOfEventToUser);
+        console.log("Peopel attending each event", peopleAttendingEachEvent);
+        mapOfEventToUser.forEach(function (item) {
+          console.log("CHeCK user", (item.user));
+          console.log("Check evnet", item.event);
+          console.log("check ppl attending each event", peopleAttendingEachEvent[item.user]);
+          if ((item.user) && (item.event) && peopleAttendingEachEvent[item.user]) {
+            console.log("item.event", item.event);
+            if (!$scope.map[item.event]) {
+              $scope.map[item.event] = [peopleAttendingEachEvent[item.user].name];
+              console.log("CAme here");
+            }
+            else {
+              $scope.map[item.event].push(peopleAttendingEachEvent[item.user].name);
+              console.log("Came here too",peopleAttendingEachEvent[item.user].name );
+            }
+          }
+        })
+        console.log("$scope.map", $scope.map);
+        MainEvents.setMapOfEventsToUsers($scope.map);
+        $scope.getMappingOfEventToUsers = function (id) {
+          console.log("Id gotten", id);
+          if ($scope.map[id]) {
           //  console.log("$scope.map[id]", (removeDuplicates($scope.map[id])).length);
-          $scope.numberOfPeopleAttending = (removeDuplicates($scope.map[id])).length;
-          return removeDuplicates($scope.map[id]);
+            $scope.numberOfPeopleAttending = (removeDuplicates($scope.map[id])).length;
+            return removeDuplicates($scope.map[id]);
             //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
           }
         }
       })
-  })
-  }
-
-
-  function removeDuplicates(arr){
-    if(arr) {
-      var temp = [];
-      for (var i = 0; i < arr.length; i++) {
-        if (temp.indexOf(arr[i]) == -1) {
-          temp.push(arr[i]);
-        }
-      }
-      arr = temp;
-      temp = [];
-      return arr;
-
+      })
     }
-  }
 
-  $scope.registered = false;
-  $scope.preRegistered = function(){
-    $scope.registered = !$scope.registered;
-  }
 
-  function checkIfUserHasRegisteredToEvent(uid, mapOfIdsToUsernames, eventId, mapOfEventsToRegister) {
-    if (uid && mapOfIdsToUsernames && eventId && mapOfEventsToRegister) {
-      var username = mapOfIdsToUsernames[uid].name;
-      console.log("Username", username);
-      console.log("Map of events to register", mapOfEventsToRegister);
-      for (var key in mapOfEventsToRegister) {
-        var obj = mapOfEventsToRegister[key];
-        console.log("OBJ", obj);
-        if (obj.indexOf(username) !== -1) {
-          console.log("HEREEEE");
-          $scope.mapUserRegisteredToEvent[key]= ({'value': true});
+    function removeDuplicates(arr){
+      if(arr) {
+        var temp = [];
+        for (var i = 0; i < arr.length; i++) {
+          if (temp.indexOf(arr[i]) == -1) {
+            temp.push(arr[i]);
+          }
         }
-        else{
-          $scope.mapUserRegisteredToEvent[key] = ({'value': false});
-        }
+        arr = temp;
+        temp = [];
+        return arr;
+
       }
+    }
+
+    $scope.registered = false;
+    $scope.preRegistered = function(){
+      $scope.registered = !$scope.registered;
+    }
+
+    function checkIfUserHasRegisteredToEvent(uid, mapOfIdsToUsernames, eventId, mapOfEventsToRegister) {
+      if (uid && mapOfIdsToUsernames && eventId && mapOfEventsToRegister) {
+        var username = mapOfIdsToUsernames[uid].name;
+        console.log("Username", username);
+        console.log("Map of events to register", mapOfEventsToRegister);
+        for (var key in mapOfEventsToRegister) {
+          var obj = mapOfEventsToRegister[key];
+          console.log("OBJ", obj);
+          if (obj.indexOf(username) !== -1) {
+            console.log("HEREEEE");
+            $scope.mapUserRegisteredToEvent[key]= ({'value': true});
+          }
+          else{
+            $scope.mapUserRegisteredToEvent[key] = ({'value': false});
+          }
+        }
 
         //$scope.mapUserRegisteredToEvent = removeDuplicates($scope.mapUserRegisteredToEvent);
         console.log("MAPP", $scope.mapUserRegisteredToEvent)
@@ -455,17 +457,17 @@ $scope.Register = function () {
         if ((mapOfEventsToUsers[eventId] === undefined) || (mapOfEventsToUsers[eventId].indexOf(username) == -1)) {
           console.log("HERE");
           MainEvents.updatePeopleAttending(uid, eventId ).success(function (data) {
-            console.log("AFTER");
-            var serverResponse = data;
-            $scope.refreshEvents();
-            $scope.activateRegisteredButton();
+              console.log("AFTER");
+              var serverResponse = data;
+              $scope.refreshEvents();
+              $scope.activateRegisteredButton();
               //checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
 
             })
-          .error(function (data) {
-            $scope.serverResponse = htmlDecode("Data: " + data);
-            console.log("Error refreshing data");
-          });
+            .error(function (data) {
+              $scope.serverResponse = htmlDecode("Data: " + data);
+              console.log("Error refreshing data");
+            });
         }
         console.log("CAME HERE WHICH IS GOOD")
       }
@@ -478,7 +480,7 @@ $scope.Register = function () {
 
   })
 
-.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents, $http, Backand) {
+  .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents) {
 
   $scope.editPhone = null;
   $scope.editDescription = null;
@@ -518,7 +520,6 @@ $scope.Register = function () {
               alert(err.data);
             });
         }
-
         reader.readAsDataURL(file);
       }
       else {
@@ -555,102 +556,101 @@ $scope.Register = function () {
 
   }
 
+    $scope.startEditPhone = function(){
+      $scope.editPhone = "1";
+    }
 
-  $scope.startEditPhone = function(){
-    $scope.editPhone = "1";
-  }
-
-  $scope.endEditPhone= function(){
-    DatabaseService.updatePhonenumber("("+$scope.updatedProfile.newPhonenumberRegional+") "+$scope.updatedProfile.newPhonenumberFirstPart+"-"+$scope.updatedProfile.newPhonenumberSecondPart, AuthService.currentUser).success(function(){
-      DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
-        $scope.profile.phonenumber = dataphone[0]['phonenumber'];
-        $scope.editPhone = null;
+    $scope.endEditPhone= function(){
+      DatabaseService.updatePhonenumber("("+$scope.updatedProfile.newPhonenumberRegional+") "+$scope.updatedProfile.newPhonenumberFirstPart+"-"+$scope.updatedProfile.newPhonenumberSecondPart, AuthService.currentUser).success(function(){
+        DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+          $scope.profile.phonenumber = dataphone[0]['phonenumber'];
+          $scope.editPhone = null;
+        })
       })
-    })
-  }
+    }
 
 
-  $scope.startEditProfession = function(){
-    $scope.editProfession = "1";
-  }
+    $scope.startEditProfession = function(){
+      $scope.editProfession = "1";
+    }
 
-  $scope.endEditProfession= function(){
-    DatabaseService.updateProfession($scope.updatedProfile.newProfession, AuthService.currentUser).success(function(){
-      DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
-        $scope.profile.profession = dataprofession[0]['profession'];
-        $scope.editProfession = null;
+    $scope.endEditProfession= function(){
+      DatabaseService.updateProfession($scope.updatedProfile.newProfession, AuthService.currentUser).success(function(){
+        DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
+          $scope.profile.profession = dataprofession[0]['profession'];
+          $scope.editProfession = null;
+        })
       })
-    })
-  }
+    }
 
-  $scope.startEditName = function(){
-    $scope.editName = "1";
-  }
+    $scope.startEditName = function(){
+      $scope.editName = "1";
+    }
 
-  $scope.endEditName= function(){
-    DatabaseService.updateName(AuthService.currentUser,$scope.updatedProfile.newName).success(function(){
-      DatabaseService.getName(AuthService.currentUser).success(function(dataname){
-        $scope.profile.name = dataname[0]['name'];
-        $scope.editName = null;
+    $scope.endEditName= function(){
+      DatabaseService.updateName(AuthService.currentUser,$scope.updatedProfile.newName).success(function(){
+        DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+          $scope.profile.name = dataname[0]['name'];
+          $scope.editName = null;
+        })
       })
-    })
-  }
+    }
 
-  $scope.startEditDescription = function(){
-    $scope.editDescription = "1";
-  }
+    $scope.startEditDescription = function(){
+      $scope.editDescription = "1";
+    }
 
-  $scope.endEditDescription= function(){
-   DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
-    DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
-     $scope.profile.description = datadescription[0]['description'];
-     $scope.editDescription = null;
-   })
-  })
- }
+$scope.endEditDescription= function(){
+	DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
+		DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+			$scope.profile.description = datadescription[0]['description'];
+			$scope.editDescription = null;
+		})
+	})
+}
 
- $scope.profile = {
-   name:"",
-   imgName:"",
-   phonenumber:"",
-   profession:"",
-   description:""
- }
-
-
- DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
-   DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
-    DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
-     DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
-      DatabaseService.getName(AuthService.currentUser).success(function(dataname){
-       $scope.profile.name = dataname[0]['name'];
-       $scope.profile.imgName = dataImg[0]['photo'];
-       $scope.profile.phonenumber = dataphone[0]['phonenumber'];
-       $scope.profile.profession = dataprofession[0]['profession'];
-       $scope.profile.description = datadescription[0]['description'];
-     })
-    })
-   })
-  })
- })
-
- $scope.updatedProfile = {
-
-   newName:"",
-
-   newProfession:"",
-
-   newPhonenumberRegional:"",
-   newPhonenumberFirstPart:"",
-   newPhonenumberSecondPart:"",
-
-   newDescription:""
+$scope.profile = {
+	name:"",
+	imgName:"",
+	phonenumber:"",
+	profession:"",
+	description:""
+}
 
 
- }
+DatabaseService.GetPhoneNumber(AuthService.currentUser).success(function(dataphone){
+	DatabaseService.GetProfession(AuthService.currentUser).success(function(dataprofession){
+		DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
+			DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
+				DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+					$scope.profile.name = dataname[0]['name'];
+					$scope.profile.imgName = dataImg[0]['photo'];
+					$scope.profile.phonenumber = dataphone[0]['phonenumber'];
+					$scope.profile.profession = dataprofession[0]['profession'];
+					$scope.profile.description = datadescription[0]['description'];
+				})
+			})
+		})
+	})
+})
 
- $scope.userMap = [];
- var eventList = {};
+$scope.updatedProfile = {
+
+	newName:"",
+
+	newProfession:"",
+
+	newPhonenumberRegional:"",
+	newPhonenumberFirstPart:"",
+	newPhonenumberSecondPart:"",
+
+	newDescription:""
+
+
+}
+
+  $scope.userMap = [];
+  var eventList = {};
   // $scope.isUser = 1;
   DatabaseService.getAllEvents().success(function(data) {
     var eventArr = data;
@@ -821,118 +821,118 @@ $scope.Register = function () {
 
 	$scope.entry = [];
   var currentToken = "";
-  var uid = AuthService.uid;
+	var uid = AuthService.uid;
   $scope.userName = "";
   DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
     $scope.userName = data['name'];
   });
 
-  $scope.$on('$ionicView.enter', function () {
-    retrieveInfo();
+	$scope.$on('$ionicView.enter', function () {
+		retrieveInfo();
     //$scope.pushNotification();
-    console.log("page opened");
-  })
+	  console.log("page opened");
+	})
 
-  $scope.refreshNewsfeed = function () {
-    retrieveInfo();
+	$scope.refreshNewsfeed = function () {
+		retrieveInfo();
     //$scope.pushNotification();
     $scope.$broadcast('scroll.refreshComplete');
     console.log("page refresh");
   }
 
-  var formatNumber = function(number) {
-    if (number<10){
-     return "0"+number
-   } else {
-     return ""+number
-   }
+	var formatNumber = function(number) {
+		if (number<10){
+			return "0"+number
+		} else {
+			return ""+number
+		}
+	};
+
+
+	var getMonth = function(monthNumber) {
+		months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		return months[parseInt(monthNumber) -1];
+	};
+
+	var formatDate = function(datetime) {
+		var result = datetime.split("-");
+		var year = result[0];
+		var month = getMonth(result[1]);
+		var res = result[2].split("T");
+		var day = res[0];
+		var time = res[1].split(":");
+		var hour = time[0];
+		var min = time[1];
+
+		return month+" "+day+" at "+hour+":"+min;
+	};
+
+
+	$scope.postComment = function(id) {
+		var comment = document.getElementById(id).value;
+		var timestamp = new Date();
+		var day = formatNumber(timestamp.getDate());
+		var month = formatNumber(timestamp.getMonth()+1);
+		var year = timestamp.getFullYear();
+		var hours = formatNumber(timestamp.getHours());
+		var min = formatNumber(timestamp.getMinutes());
+		var sec = formatNumber(timestamp.getSeconds());
+		var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
+		var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
+		DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
+			$scope.ServerResponse = data;
+			console.log("comment saved");
+			$scope.refreshNewsfeed();
+			document.getElementById(id).value = null;
+		})
+		.error(function (data, status, header, config) {
+			$scope.ServerResponse =  htmlDecode("Data: " + data +
+				"\n\n\n\nstatus: " + status +
+				"\n\n\n\nheaders: " + header +
+				"\n\n\n\nconfig: " + config);
+			console.log("error saving comment");
+		});
+	}
+
+  $scope.like = function(likesCounter, entryId){
+     var data = {"likes": (parseInt(likesCounter) + 1)};
+     DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
+       $scope.ServerResponse = data;
+       console.log("likes updated");
+       $scope.refreshNewsfeed();
+     })
+       .error(function (data, status, header, config) {
+             $scope.ServerResponse =  htmlDecode("Data: " + data +
+                 "\n\n\n\nstatus: " + status +
+                 "\n\n\n\nheaders: " + header +
+                 "\n\n\n\nconfig: " + config);
+   							console.log("error updating likes");
+     });
+   };
+
+
+  function retrieveInfo(){
+    DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
+      for (i=0; i < data.length; i++){
+          $scope.entry[i] = {name:data[i]['name'],
+                            date:formatDate(data[i]['date']),
+                            content:data[i]['content'],
+                            commentid: data[i]['commentid'],
+                            id: data[i]['id'],
+                            likes: data[i]['likes']};
+      }
+    })
+    .error(function (data, status, header, config) {
+        $scope.ServerResponse =  htmlDecode("Data: " + data +
+            "\n\n\n\nstatus: " + status +
+            "\n\n\n\nheaders: " + header +
+            "\n\n\n\nconfig: " + config);
+            console.log("error getting data");
+   });
  };
 
-
- var getMonth = function(monthNumber) {
-  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  return months[parseInt(monthNumber) -1];
-};
-
-var formatDate = function(datetime) {
-  var result = datetime.split("-");
-  var year = result[0];
-  var month = getMonth(result[1]);
-  var res = result[2].split("T");
-  var day = res[0];
-  var time = res[1].split(":");
-  var hour = time[0];
-  var min = time[1];
-
-  return month+" "+day+" at "+hour+":"+min;
-};
-
-
-$scope.postComment = function(id) {
-  var comment = document.getElementById(id).value;
-  var timestamp = new Date();
-  var day = formatNumber(timestamp.getDate());
-  var month = formatNumber(timestamp.getMonth()+1);
-  var year = timestamp.getFullYear();
-  var hours = formatNumber(timestamp.getHours());
-  var min = formatNumber(timestamp.getMinutes());
-  var sec = formatNumber(timestamp.getSeconds());
-  var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
-  var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
-  DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
-   $scope.ServerResponse = data;
-   console.log("comment saved");
-   $scope.refreshNewsfeed();
-   document.getElementById(id).value = null;
- })
-  .error(function (data, status, header, config) {
-   $scope.ServerResponse =  htmlDecode("Data: " + data +
-    "\n\n\n\nstatus: " + status +
-    "\n\n\n\nheaders: " + header +
-    "\n\n\n\nconfig: " + config);
-   console.log("error saving comment");
- });
-}
-
-$scope.like = function(likesCounter, entryId){
- var data = {"likes": (parseInt(likesCounter) + 1)};
- DatabaseService.updateData('/1/objects/pushBoard/'+entryId, data).success(function(data){
-   $scope.ServerResponse = data;
-   console.log("likes updated");
-   $scope.refreshNewsfeed();
- })
- .error(function (data, status, header, config) {
-   $scope.ServerResponse =  htmlDecode("Data: " + data +
-     "\n\n\n\nstatus: " + status +
-     "\n\n\n\nheaders: " + header +
-     "\n\n\n\nconfig: " + config);
-   console.log("error updating likes");
- });
-};
-
-
-function retrieveInfo(){
-  DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
-    for (i=0; i < data.length; i++){
-      $scope.entry[i] = {name:data[i]['name'],
-      date:formatDate(data[i]['date']),
-      content:data[i]['content'],
-      commentid: data[i]['commentid'],
-      id: data[i]['id'],
-      likes: data[i]['likes']};
-    }
-  })
-  .error(function (data, status, header, config) {
-    $scope.ServerResponse =  htmlDecode("Data: " + data +
-      "\n\n\n\nstatus: " + status +
-      "\n\n\n\nheaders: " + header +
-      "\n\n\n\nconfig: " + config);
-    console.log("error getting data");
-  });
-};
-
-var message = {};
-var events = [];
+ var message = {};
+ var events = [];
 
  // var push = new Ionic.Push({
  //   "debug": true
@@ -1001,67 +1001,67 @@ var events = [];
 	$scope.searchContent = "Search";
 	$scope.entries = [];
 	$scope.searchUsers = function(){
-    console.log($scope.searchables);
-    console.log($scope.searchContent);
-    if ($scope.searchables == "blank") {
-      console.log("No Category Selected - unsearchable");
-      $scope.entries.push("Please select a category from the dropdown menu to search!");
-    }
-    else if ($scope.searchContent== "Search") {
-      console.log("Blank Search");
-      $scope.entries.push("Please enter something in the search box to search!");
-    }
-    else if ($scope.searchables == "user"){
-      console.log("User search");
-      DatabaseService.getUsers().success(function(data){
-        for (i=0; i < data.length; i++){
-          var dbsmash = data[i]['name'].split(" ").join("").toLowerCase();
-          var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
-          if(dbsmash.includes(searchsmash)){
-            $scope.entries.push(data[i]['name']);
+      console.log($scope.searchables);
+      console.log($scope.searchContent);
+      if ($scope.searchables == "blank") {
+        console.log("No Category Selected - unsearchable");
+        $scope.entries.push("Please select a category from the dropdown menu to search!");
+      }
+      else if ($scope.searchContent== "Search") {
+        console.log("Blank Search");
+        $scope.entries.push("Please enter something in the search box to search!");
+      }
+      else if ($scope.searchables == "user"){
+        console.log("User search");
+        DatabaseService.getUsers().success(function(data){
+          for (i=0; i < data.length; i++){
+            var dbsmash = data[i]['name'].split(" ").join("").toLowerCase();
+            var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
+            if(dbsmash.includes(searchsmash)){
+              $scope.entries.push(data[i]['name']);
+            }
           }
-        }
-        if($scope.entries.length == 0) {
-          $scope.entries.push("No user with this name was found.");
-        }
-        console.log($scope.entries);
-        SearchService.setEventArr($scope.entries);
-      })
-    }
-    else if ($scope.searchables == "name"){
-     console.log("Event by name");
-     DatabaseService.getAllEvents().success(function(data){
-      for (i=0; i < data.length; i++){
-        var dbsmash = data[i]['name'].split(" ").join("").toLowerCase();
-        var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
-        if(dbsmash.includes(searchsmash)){
-          $scope.entries.push(data[i]['name']);
-        }
+          if($scope.entries.length == 0) {
+            $scope.entries.push("No user with this name was found.");
+          }
+          console.log($scope.entries);
+          SearchService.setEventArr($scope.entries);
+        })
       }
-      if($scope.entries.length == 0) {
-        $scope.entries.push("No event with this name was found.");
+      else if ($scope.searchables == "name"){
+      	console.log("Event by name");
+        DatabaseService.getAllEvents().success(function(data){
+          for (i=0; i < data.length; i++){
+            var dbsmash = data[i]['name'].split(" ").join("").toLowerCase();
+            var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
+            if(dbsmash.includes(searchsmash)){
+              $scope.entries.push(data[i]['name']);
+            }
+          }
+          if($scope.entries.length == 0) {
+            $scope.entries.push("No event with this name was found.");
+          }
+          console.log($scope.entries);
+          SearchService.setEventArr($scope.entries);
+        })
       }
-      console.log($scope.entries);
-      SearchService.setEventArr($scope.entries);
-    })
-   }
-   else if ($scope.searchables == "location") {
-     console.log("Event by location");
-     DatabaseService.getAllEvents().success(function(data){
-      for (i=0; i < data.length; i++){
-        var dbsmash = data[i]['place'].split(" ").join("").toLowerCase();
-        var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
-        if(dbsmash.includes(searchsmash)){
-          $scope.entries.push(data[i]['name']);
-        }
-      }
-      if($scope.entries.length == 0) {
-        $scope.entries.push("No events are being held at this location.");
-      }
-      SearchService.setEventArr($scope.entries);
+      else if ($scope.searchables == "location") {
+      	console.log("Event by location");
+        DatabaseService.getAllEvents().success(function(data){
+          for (i=0; i < data.length; i++){
+            var dbsmash = data[i]['place'].split(" ").join("").toLowerCase();
+            var searchsmash = $scope.searchContent.split(" ").join("").toLowerCase();
+            if(dbsmash.includes(searchsmash)){
+              $scope.entries.push(data[i]['name']);
+            }
+          }
+          if($scope.entries.length == 0) {
+            $scope.entries.push("No events are being held at this location.");
+          }
+          SearchService.setEventArr($scope.entries);
           //console.log(SearchService.getEventArr());
         })
-   }
+      }
       // console.log(SearchService.getEventArr());
       SearchService.setEventArr(removeDuplicates(SearchService.getEventArr()));
       // console.log(SearchService.getEventArr());
@@ -1069,13 +1069,13 @@ var events = [];
         console.log("MADE IT HERE");
         return $scope.entries;
       }
-    }
+  }
 
-    $scope.getValue = function(val){
-     console.log("VALLLLL", val);
-   }
+  $scope.getValue = function(val){
+  	console.log("VALLLLL", val);
+  }
 
-   function removeDuplicates(arr){
+  function removeDuplicates(arr){
     if(arr) {
       var temp = [];
       for (var i = 0; i < arr.length; i++) {

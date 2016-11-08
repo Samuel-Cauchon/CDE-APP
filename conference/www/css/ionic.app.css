@@ -5654,7 +5654,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
  * --------------------------------------------------
  */
 .item {
-  border-color: #ddd;
+  border-color: #fff;
   background-color: #fff;
   color: #444;
   position: relative;
@@ -6595,12 +6595,13 @@ button.item.item-button-right {
 .card,
 .list-inset {
   overflow: hidden;
-  margin: 20px 10px;
+  margin: 20px -5px;
   border-radius: 2px;
   background-color: #fff; }
 
 .card {
-  padding-top: 1px;
+  padding-top: 10px;
+  padding-left: 10px;    
   padding-bottom: 1px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
   .card .item {

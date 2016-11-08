@@ -348,6 +348,7 @@ angular.module('App.services', ['backand'])
           params: {
             parameters: {
               id: id,
+              name: data.name,
               username: data.username,
               password: data.password
             }
