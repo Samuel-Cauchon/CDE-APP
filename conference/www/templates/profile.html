@@ -46,14 +46,14 @@
 				<!--</div>-->
 			<!--</div>-->
 
-			<!--<form role="form" name="uploadForm">-->
-				<!--<div class="row">-->
-					<!--<input id="fileInput" type="file" accept="*/*" ng-model="filename" />-->
-				<!--</div>-->
-				<!--<div class="row">-->
-					<!--<button class="button" ng-click="imageChanged()">Submit</button>-->
-				<!--</div>-->
-			<!--</form>-->
+			<form role="form" name="uploadForm">
+				<div class="row">
+					<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
+				</div>
+				<div class="row">
+					<button class="button" ng-click="imageChanged()">Submit</button>
+				</div>
+			</form>
 			<div class="item item-body">
 				<div ng-show="editDescription == null">
 					<p>{{profile.description || "Tell us a little about yourself and what you want to learn this weekend!"}}</p>
