@@ -302,7 +302,6 @@ img.blank-profile {
 
 .border-white{
   border-color: white; !important
-
 }
 
 .icon-plus{
@@ -319,4 +318,25 @@ img.blank-profile {
 
 .text-align-center{
   text-align: center;
+}
+
+.recims{
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+table.supporters{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.spimg{
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.angular-google-map-container {
+  height: 100%;
 }

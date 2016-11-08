@@ -8,7 +8,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, MainEvents) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, $ionicPopup, MainEvents) {
 
 	$scope.init = function () {
      try{
@@ -43,38 +43,59 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 	$scope.Login = function () {
 		DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
-	  //Check if the username exist...
-	  if (dataUser[0] != null){
-		//Maybe an unecessary second check of the corectnes of the username...
-		if (dataUser[0]['username'] === $scope.dataEntered.username){
-			DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
-			//Check if the password is correct.
-				if (dataPass[0]['password'] === $scope.dataEntered.password){
-					AuthService.currentUser = $scope.dataEntered.username;
-					AuthService.uid = dataUser[0]['id'];
-          MainEvents.setUserId(AuthService.uid);
-					DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
-					if ($rootScope.currentLanguage != "french"){
-						$state.go('homeMenu.newsfeed');
-					}
-					else{
-						$state.go('homeMenu.newsfeedfr');
-					}
-				}
-				else{
-					alert("Could not login! Wrong Input!")
-				}
-			});
-		}
-		else{
-			alert("Could not login! Wrong Input!")
-		}
-	}
-	else{
-		alert("Could not login! Wrong Input!")
-	}
-});
-	};
+            //Check if the username exist...
+            if($scope.dataEntered.username === "" && $scope.dataEntered.password === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered username and password.'
+                });
+//                alert("Please enter a registered username and password.")
+            }
+            else if ($scope.dataEntered.username === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered username.'
+                });
+            }
+            else if ($scope.dataEntered.password === ""){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Please enter a registered password.'
+                });
+            }
+            else {
+                if(dataUser.length === 0){
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Please enter a registered username.'
+                    });
+                }
+                else if (dataUser[0]['username'] === $scope.dataEntered.username){
+                    DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
+                        //Check if the password is correct.
+                        if(dataPass.length === 0){
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Please enter the password for your CDE account.'
+                            });
+                        }
+                        else if (dataPass[0]['password'] === $scope.dataEntered.password){
+                            AuthService.currentUser = $scope.dataEntered.username;
+                            AuthService.uid = dataUser[0]['id'];
+                            MainEvents.setUserId(AuthService.uid);
+                            DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            if ($rootScope.currentLanguage != "french"){
+                                $state.go('homeMenu.newsfeed');
+                            }
+                            else{
+                                $state.go('homeMenu.newsfeedfr');
+                            }
+                        }
+                    });
+                }
+                else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Please enter a registered username.'
+                    });
+                }
+            }
+        });
+    };
 
 	$scope.Register = function () {
 		if($rootScope.currentLanguage != "french"){
@@ -134,7 +155,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, $ionicPopup){
 
 	$scope.dataEnteredRegister = {
 		username : "",
@@ -146,45 +167,35 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 	function checkForm()
 	{
-		if($scope.dataEnteredRegister.username == "") {
-			alert("Error: Username cannot be blank!");
+		if($scope.dataEnteredRegister.username == "" || $scope.dataEnteredRegister.password == "" || $scope.dataEnteredRegister.passwordConfirmation == "" ) {
+			var alertPopup = $ionicPopup.alert({
+                        title: 'Some extra information is required.'
+            });
 			return false;
 		}
 		re = /^\w+$/;
 		if(!re.test($scope.dataEnteredRegister.username)) {
-			alert("Error: Username must contain only letters, numbers and underscores!");
+            var alertPopup = $ionicPopup.alert({
+                title: 'Please type your username as only letters, numbers and underscores.'
+            });
 			return false;
 		}
-
-		if($scope.dataEnteredRegister.password != "" && $scope.dataEnteredRegister.password == $scope.dataEnteredRegister.passwordConfirmation) {
-			if($scope.dataEnteredRegister.password < 6) {
-				alert("Error: Password must contain at least six characters!");
-				return false;
-			}
-			if($scope.dataEnteredRegister.password == $scope.dataEnteredRegister.username) {
-				alert("Error: Password must be different from Username!");
-				return false;
-			}
-			re = /[0-9]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one number (0-9)!");
-				return false;
-			}
-			re = /[a-z]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one lowercase letter (a-z)!");
-				return false;
-			}
-			re = /[A-Z]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one uppercase letter (A-Z)!");
-				return false;
-			}
-		} else {
-			alert("Error: Please check that you've entered and confirmed your password!");
+        DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+            console.log(dataUser)
+            if(dataUser.length > 0){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'This username is already registered.'
+                });
+                return false;
+            }
+        });
+        if($scope.dataEnteredRegister.password.length < 6) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Please enter a password having at least 6 characters.'
+            });
 			return false;
-		}
-
+        }
+        console.log("NO ERROR FOUND!")
 		return true;
 	};
 
@@ -708,30 +719,30 @@ $scope.updatedProfile = {
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
+  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
-
-	var options = {timeout: 10000, enableHighAccuracy: true};
-
-	var script = window.document.createElement('script');
-	script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
-	window.document.head.appendChild(script);
-
-	$cordovaGeolocation.getCurrentPosition(options).then(function(position){
-
-
-		var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-		var mapOptions = {
-			center: latLng,
-			zoom: 15,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-
-		$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-	}, function(error){
-		console.log("Could not get location");
-	});
+	// var options = {timeout: 10000, enableHighAccuracy: true};
+    //
+	// var script = window.document.createElement('script');
+	// script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
+	// window.document.head.appendChild(script);
+    //
+	// $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    //
+    //
+	// 	var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    //
+	// 	var mapOptions = {
+	// 		center: latLng,
+	// 		zoom: 15,
+	// 		mapTypeId: google.maps.MapTypeId.ROADMAP
+	// 	};
+    //
+	// 	$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    //
+	// }, function(error){
+	// 	console.log("Could not get location");
+	// });
 
 })
 

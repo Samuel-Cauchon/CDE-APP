@@ -1,14 +1,20 @@
-<div ng-show="language != french">
-	<ion-view view-title="Map">
-	  <ion-content>
-	    <div id="map" data-tap-disabled="true"></div>
-	  </ion-content>
-	</ion-view>
-</div>
-<div ng-show="language == french">
-	<ion-view view-title="Carte">
-	  <ion-content>
-	    <div id="map" data-tap-disabled="true"></div>
-	  </ion-content>
-	</ion-view>
-</div>
+<!--<div ng-show="language != french">-->
+	<!--<ion-view view-title="Map">-->
+	  <!--<ion-content>-->
+	    <!--<div id="map" data-tap-disabled="true"></div>-->
+	  <!--</ion-content>-->
+	<!--</ion-view>-->
+<!--</div>-->
+<!--<div ng-show="language == french">-->
+	<!--<ion-view view-title="Carte">-->
+	  <!--<ion-content>-->
+	    <!--<div id="map" data-tap-disabled="true"></div>-->
+	  <!--</ion-content>-->
+	<!--</ion-view>-->
+<!--</div>-->
+
+<ion-view view-title="Map">
+  <ion-content data-tap-disabled="true">
+    <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+  </ion-content>
+</ion-view>
