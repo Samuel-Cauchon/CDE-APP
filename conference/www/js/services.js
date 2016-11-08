@@ -79,6 +79,31 @@ angular.module('App.services', ['backand'])
         });
       },
 
+      searchImg: function(imgEntered){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/searchImg',
+          params: {
+            parameters: {
+              imageName: imgEntered
+            }
+          }
+        });
+      },
+
+      updateImg: function(username, imgEntered){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/updateImg',
+          params: {
+            parameters: {
+              name: username,
+              photo: imgEntered
+            }
+          }
+        });
+      },
+
       searchPass: function(usernameEntered, passwordEntered){
         return $http ({
           method: 'GET',
