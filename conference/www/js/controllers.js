@@ -180,7 +180,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 		re = /^\w+$/;
 		if(!re.test($scope.dataEnteredRegister.username)) {
             var alertPopup = $ionicPopup.alert({
-                        title: 'Please type your username as only letters, numbers and underscores.'
+                title: 'Please type your username as only letters, numbers and underscores.'
             });
 			return false;
 		}
@@ -188,20 +188,14 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
             console.log(dataUser)
             if(dataUser.length > 0){
                 var alertPopup = $ionicPopup.alert({
-                        title: 'This username is already registered.'
+                    title: 'This username is already registered.'
                 });
                 return false;
             }
         });
-        if($scope.dataEnteredRegister.password != $scope.dataEnteredRegister.passwordConfirmation){
-            var alertPopup = $ionicPopup.alert({
-                        title: 'Passwords don\'t match.'
-            });
-			return false;
-        }
         if($scope.dataEnteredRegister.password.length < 6) {
             var alertPopup = $ionicPopup.alert({
-                        title: 'Please enter a password having at least 6 characters.'
+                title: 'Please enter a password having at least 6 characters.'
             });
 			return false;
         }
