@@ -315,3 +315,20 @@ img.blank-profile {
   /*border-color: white !important;*/
   /*text-align: center;*/
 }
+
+.recims{
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+table.supporters{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.spimg{
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
