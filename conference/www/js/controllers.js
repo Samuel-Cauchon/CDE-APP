@@ -547,6 +547,8 @@ $scope.Register = function () {
     });
   };
 
+
+
    // register to change event on input file
   function init() {
     var fileInput = document.getElementById('fileInput');
