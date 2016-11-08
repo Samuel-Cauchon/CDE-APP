@@ -1,4 +1,4 @@
-angular.module('App.controllers', ['ngCordova', 'App.services'])
+angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'])
 
 .run(function($rootScope) {
 	$rootScope.currentLanguage = "english";
@@ -500,7 +500,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
     var imageExist = false;
     var file = fileInput.files[0];
     var reader = new FileReader();
-            
+
     DatabaseService.searchImg(file.name).success(function(data){
       if (data[0] == undefined){
         imageExist = true;
@@ -530,7 +530,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
   };
 
   function upload(filename, filedata) {
-    // By calling the files action with POST method in will perform 
+    // By calling the files action with POST method in will perform
     // an upload of the file into Backand Storage
     return $http({
       method: 'POST',
@@ -790,13 +790,13 @@ $scope.updatedProfile = {
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
-  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+  // $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
 	// var options = {timeout: 10000, enableHighAccuracy: true};
     //
-	// var script = window.document.createElement('script');
-	// script.src = 'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=InitMapCb';
-	// window.document.head.appendChild(script);
+    // var script = window.document.createElement('script');
+    // script.src = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyDG8JKjni7gEZsFUhoke1xAfrU0Ok_SMTw&callback=InitMapCb';
+    // window.document.head.appendChild(script);
     //
 	// $cordovaGeolocation.getCurrentPosition(options).then(function(position){
     //
@@ -811,9 +811,42 @@ $scope.updatedProfile = {
     //
 	// 	$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
     //
+    // navigator.geolocation.getCurrentPosition(function(pos) {
+     //  map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+     //  var myLocation = new google.maps.Marker({
+     //    position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+     //    map: map,
+     //    title: "My Location"
+     //  });
+    // });
+    //
+    // $scope.map = map;
+    //
 	// }, function(error){
 	// 	console.log("Could not get location");
 	// });
+
+  ionic.Platform.ready(function() {
+    var myLatlng = new google.maps.LatLng(12.96,77.65);
+
+    var mapOptions = {
+      center: myLatlng,
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    $scope.mapCreated = function(map) {
+      var latlngPlace = new google.maps.LatLng(45.778954,3.095466);
+      var marker = new google.maps.Marker({
+        map: map,
+        position: latlngPlace
+      });
+
+      $scope.map = map;
+    };
+  });
 
 })
 
