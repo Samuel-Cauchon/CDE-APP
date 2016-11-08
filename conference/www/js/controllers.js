@@ -10,11 +10,10 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, $ionicPopup, MainEvents) {
 
-	$scope.init = function () {
      try{
        $scope.UUID = $cordovaDevice.getUUID();
        DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
-         if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "'{{UUID}}'")){
+         if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "\'{{UUID}}\'")){
            AuthService.currentUser = dataUUID[0]['user'];
            $state.go('homeMenu.newsfeed');
          }
@@ -24,7 +23,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 		    DatabaseService.addError(err.message).success(function(){});
        	console.log("Error " + err.message);
      }
-  }
+
 
 	$scope.dataEntered = {
 		username : "",
