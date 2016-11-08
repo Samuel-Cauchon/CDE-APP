@@ -78,7 +78,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
                             AuthService.currentUser = $scope.dataEntered.username;
                             AuthService.uid = dataUser[0]['id'];
                             MainEvents.setUserId(AuthService.uid);
-                            DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            if ($scope.UUID != undefined){
+                              DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            }
                             if ($rootScope.currentLanguage != "french"){
                                 $state.go('homeMenu.newsfeed');
                             }
