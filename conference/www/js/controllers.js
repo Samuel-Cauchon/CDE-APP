@@ -10,25 +10,20 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, $ionicPopup, MainEvents) {
 
-	var init = function () {
      try{
        $scope.UUID = $cordovaDevice.getUUID();
        DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
-         if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "'{{UUID}}'")){
+         if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "\'{{UUID}}\'")){
            AuthService.currentUser = dataUUID[0]['user'];
            $state.go('homeMenu.newsfeed');
          }
        })
      }
      catch (err){
-		DatabaseService.addError(err.message).success(function(){});
+		    DatabaseService.addError(err.message).success(function(){});
        	console.log("Error " + err.message);
      }
-   }
 
-	ionic.Platform.ready(function(){
-       init();
-    });
 
 	$scope.dataEntered = {
 		username : "",
@@ -82,7 +77,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
                             AuthService.currentUser = $scope.dataEntered.username;
                             AuthService.uid = dataUser[0]['id'];
                             MainEvents.setUserId(AuthService.uid);
-                            DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            if ($scope.UUID != undefined){
+                              DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            }
                             if ($rootScope.currentLanguage != "french"){
                                 $state.go('homeMenu.newsfeed');
                             }
@@ -159,57 +156,47 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
+.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, $ionicPopup){
 
 	$scope.dataEnteredRegister = {
 		username : "",
+		name : "",
 		password : "",
-		passwordConfirmation : "",
 	};
 
 
 
 	function checkForm()
 	{
-		if($scope.dataEnteredRegister.username == "") {
-			alert("Error: Username cannot be blank!");
+		if($scope.dataEnteredRegister.username == "" || $scope.dataEnteredRegister.password == "" || $scope.dataEnteredRegister.name == "" ) {
+			var alertPopup = $ionicPopup.alert({
+                        title: 'Some extra information is required.'
+            });
 			return false;
 		}
 		re = /^\w+$/;
 		if(!re.test($scope.dataEnteredRegister.username)) {
-			alert("Error: Username must contain only letters, numbers and underscores!");
+            var alertPopup = $ionicPopup.alert({
+                title: 'Please type your username as only letters, numbers and underscores.'
+            });
 			return false;
 		}
-
-		if($scope.dataEnteredRegister.password != "" && $scope.dataEnteredRegister.password == $scope.dataEnteredRegister.passwordConfirmation) {
-			if($scope.dataEnteredRegister.password < 6) {
-				alert("Error: Password must contain at least six characters!");
-				return false;
-			}
-			if($scope.dataEnteredRegister.password == $scope.dataEnteredRegister.username) {
-				alert("Error: Password must be different from Username!");
-				return false;
-			}
-			re = /[0-9]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one number (0-9)!");
-				return false;
-			}
-			re = /[a-z]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one lowercase letter (a-z)!");
-				return false;
-			}
-			re = /[A-Z]/;
-			if(!re.test($scope.dataEnteredRegister.password)) {
-				alert("Error: password must contain at least one uppercase letter (A-Z)!");
-				return false;
-			}
-		} else {
-			alert("Error: Please check that you've entered and confirmed your password!");
+        DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+            console.log(dataUser);
+            if(dataUser.length > 0){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'This username is already registered.'
+                });
+                return false;
+            }
+        });
+        if($scope.dataEnteredRegister.password.length < 6) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Please enter a password having at least 6 characters.'
+            });
 			return false;
-		}
-
+        }
+        console.log("NO ERROR FOUND!")
 		return true;
 	};
 
@@ -220,6 +207,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 			DatabaseService.getMaxId().success(function(maxId){
 				DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
 					AuthService.currentUser = $scope.dataEnteredRegister.username;
+					AuthService.uid = maxId[0]['Max(id)']+1;
+			//		MainEvents.setUserId(AuthService.uid);
 					if ($rootScope.currentLanguage != "french"){
 						$state.go('homeMenu.newsfeed');
 					}
@@ -494,11 +483,79 @@ angular.module('App.controllers', ['ngCordova', 'App.services'])
 
   .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents) {
 
-    $scope.editPhone = null;
-    $scope.editDescription = null;
-    $scope.editProfession = null;
-    $scope.editName = null;
+  $scope.editPhone = null;
+  $scope.editDescription = null;
+  $scope.editProfession = null;
+  $scope.editName = null;
+  $scope.imageUrl = null;
+  $scope.filename = null;
 
+  var baseUrl = '/1/objects/';
+  var baseActionUrl = baseUrl + 'action/'
+  var objectName = 'user';
+  var filesActionName = 'img';
+
+  // input file onchange callback
+  $scope.imageChanged = function() {
+    var imageExist = false;
+    var file = fileInput.files[0];
+    var reader = new FileReader();
+            
+    DatabaseService.searchImg(file.name).success(function(data){
+      if (data[0] == undefined){
+        imageExist = true;
+      }
+      else {
+        imageExist = false;
+      }
+      //read file content
+      if (imageExist == true){
+        reader.onload = function(e) {
+        upload(file.name, e.currentTarget.result).then(function(res) {
+          $scope.imageUrl = res.data.url;
+          $scope.filename = file.name;
+          DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+          })
+          $scope.profile.imgName = file.name;
+        },  function(err){
+              alert(err.data);
+            });
+        }
+        reader.readAsDataURL(file);
+      }
+      else {
+        alert("Change the name of the image! // Veuillez changer le nom de l'image!");
+      }
+    })
+  };
+
+  function upload(filename, filedata) {
+    // By calling the files action with POST method in will perform 
+    // an upload of the file into Backand Storage
+    return $http({
+      method: 'POST',
+      url : Backand.getApiUrl() + baseActionUrl +  objectName,
+      params:{
+        "name": filesActionName
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // you need to provide the file name and the file data
+      data: {
+        "filename": filename,
+        "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
+      }
+    });
+  };
+
+
+
+   // register to change event on input file
+  function init() {
+    var fileInput = document.getElementById('fileInput');
+
+  }
 
     $scope.startEditPhone = function(){
       $scope.editPhone = "1";

@@ -253,15 +253,31 @@ img.blank-profile {
   color: white;
 }
 
+#likeButton{
+    background-color: #75D1F7 ;
+    border: none;
+    color: #111e45;
+    margin-left: -10;
+    border-radius: 0px;
+    min-width: 47%;
+}
+
+#commentButton{
+    background-color: #75D1F7 ;
+    border: none;
+    color: #111e45;
+/*    border-left: solid 1px #111e45;*/
+    border-radius: 0px;
+/*    border-right: solid 1px #111e45;*/
+    min-width: 47%;
+}
+
 #postButton{
  float: right;
 }
 
 .float-Right{
   float: right;
-}
-#commentButton{
-  box-sizing: content-box ;
 }
 
 #profileButton{}

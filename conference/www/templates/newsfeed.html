@@ -10,32 +10,36 @@
       <div class="bodyNewsfeed">
       <div class="item">
         <div class="user-name">
-        {{userName}}
+        Hello {{userName}} !
       </div>
-        <label class="item item-input">
-          <input type="text" id=0 placeholder="Say Something">
+
+          
+                    
+    <div class="item item-input-inset">
+        <label class="item item-input-wrapper">		
+            <input type="text" id=0 placeholder="What's on your mind?">
         </label>
-        <button class="button" id="postButton" ng-click="postComment(0)">
-          Post
-        </button>
-      </div>
+        <button class="button" id="postButton" ng-click="postComment(0)">Post</button>
+    </div>
 
           <ion-list>
             <ion-item class="newsfeed" ng-repeat="item in entry" ng-hide="item.commentid != '0'">
               <div class="card" style="margin-top:1%">
               <div class="user-post">{{item.name}}<br></div>
               <div class="comment-date">{{item.date}}<br></div>
+                  </br>
               <div class="comment-content">{{item.content}}<br></div>
-              <i class="ion-thumbsup"></i>
-              {{item.likes}}<br>
-              <button class="button" id="commentButton" ng-click="like(item.likes, item.id)">
+                  </br>
+              <button class="button" id="likeButton" ng-click="like(item.likes, item.id)">
                 <i class="ion-heart"></i>
-                Like</button>
+              {{item.likes}}<br></button>
               <button class="button" id="commentButton" ng-click="postComment({{item.id}})">
                 <i class="ion-chatbubble"></i>
                 Comment</button>
+              </br>
+                          </br>
               <label class="item item-input">
-                <input type="text" id={{item.id}} placeholder="Comment">
+                <input type="text" id={{item.id}} placeholder="Write a reply..."  >
               </label>
                 <ion-item ng-repeat="comment in entry" ng-if="item.id == comment.commentid">
                   {{comment.name}}<br>
