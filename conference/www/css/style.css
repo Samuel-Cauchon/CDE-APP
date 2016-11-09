@@ -272,6 +272,13 @@ img.blank-profile {
     min-width: 47%;
 }
 
+#commentsBox{
+    background-color: #EEEEEE ;
+    margin-left: -17px;
+    padding: 17px;
+    margin-right: 13px;
+}
+
 #postButton{
  float: right;
 }

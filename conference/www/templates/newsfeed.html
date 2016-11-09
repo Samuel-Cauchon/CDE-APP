@@ -37,9 +37,8 @@
                 <i class="ion-chatbubble"></i>
                 Comment</button>
               </br>
-                          </br>
               <label class="item item-input">
-                <input type="text" id={{item.id}} placeholder="Write a reply..."  >
+                <input type="text" id="commentsBox" placeholder="Write a reply...">
               </label>
                 <ion-item ng-repeat="comment in entry" ng-if="item.id == comment.commentid">
                   {{comment.name}}<br>
