@@ -254,18 +254,18 @@ img.blank-profile {
 }
 
 #likeButton{
-    background-color: #75D1F7 ;
+    background-color: #111e45 ;
     border: none;
-    color: #111e45;
+    color: white;
     margin-left: -10;
     border-radius: 0px;
     min-width: 47%;
 }
 
 #commentButton{
-    background-color: #75D1F7 ;
+    background-color: #111e45 ;
     border: none;
-    color: #111e45;
+    color: white;
 /*    border-left: solid 1px #111e45;*/
     border-radius: 0px;
 /*    border-right: solid 1px #111e45;*/
