@@ -277,6 +277,7 @@ img.blank-profile {
     margin-left: -17px;
     padding: 17px;
     margin-right: 13px;
+    min-height: 47px;
 }
 
 #postButton{
