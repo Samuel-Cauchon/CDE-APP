@@ -125,15 +125,18 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 	};
 })
 
-.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, $location, DatabaseService, AuthService, $rootScope, $route) {
 
 	$scope.goFrench = function() {
 		$rootScope.currentLanguage = "french";
+    $state.go('homeMenu.optionsfr');
 	};
 
 	$scope.goEnglish = function() {
 		$rootScope.currentLanguage = "english";
-	};
+    $state.go('homeMenu.options');
+  };
+
 })
 
 .controller('UsersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
@@ -729,7 +732,6 @@ $scope.updatedProfile = {
 		description:""
 	}
 
-
 	DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
 		DatabaseService.GetProfession(AuthService.userSelected).success(function(dataprofession){
 			DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataImg){
@@ -748,7 +750,6 @@ $scope.updatedProfile = {
 
   $scope.userMap = [];
   var eventList = {};
-  // $scope.isUser = 1;
   DatabaseService.getAllEvents().success(function(data) {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
@@ -758,13 +759,11 @@ $scope.updatedProfile = {
     }
 
     var currentUser = "";
-    // if($scope.isUser == 1) {
-    // currentUser = AuthService.uid;
-    // } else {
-      DatabaseService.getID(AuthService.userSelected).success(function(data){
-        currentUser = data;
-      })
-    // }
+    DatabaseService.getID(AuthService.userSelected).success(function(data){
+      currentUser = data[0]['id'];
+      console.log(currentUser)
+    })
+    // console.log(currentUser);
 
     MainEvents.getPeopleAttending().success(function(data){
       var mapOfEvents = data.data;

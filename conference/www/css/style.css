@@ -426,3 +426,10 @@ table.supporters{
 .angular-google-map-container {
   height: 100%;
 }
+
+.optpg {
+  margin-top: 30%;
+  width: 75%;
+  margin-right: auto;
+  margin-left: auto;
+}

@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.directives'])//, 'uiGmapgoogle-maps'])
+angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.directives', 'ngRoute'])//, 'uiGmapgoogle-maps'])
 
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider, BackandProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider, BackandProvider, $routeProvider) {
 
 	BackandProvider.setAppName('cdeapp');
 	BackandProvider.setSignUpToken('69d128da-583c-47c8-bd58-131567dfe8c6');
@@ -244,15 +244,15 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.directiv
 	  	}
 	  })
 
-	   .state('homeMenu.optionsfr', {
-	  	url: '/optionsfr',
-	  	views: {
-	  		'menuContent': {
-	  			templateUrl: 'templates/optionsfr.html',
-	  			controller: 'OptionCtrl'
-	  		}
-	  	}
-	  })
+    .state('homeMenu.optionsfr', {
+      url: '/optionsfr',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/optionsfr.html',
+          controller: 'OptionCtrl'
+        }
+      }
+    })
 
     .state('homeMenu.contacts', {
       url: "/contacts",
