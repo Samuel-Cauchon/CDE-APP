@@ -108,6 +108,14 @@ margin-left: 4%;
     max-height: 30px;
 }
 
+#openBox {
+    padding-left: 5px;
+}
+
+#cardSchedule{
+    margin-left: 10px;
+    margin-right: 10px;
+}
 /*
 #events{
         border-bottom: solid;
@@ -373,7 +381,7 @@ img.blank-profile {
 
 .item-schedule {
   border-color: #b2b2b2 !important;
-  background-color: rgba(44, 117, 188, 0.7) !important;
+  background-color: #2C75BC !important;
   color: white !important;
   margin: 2% auto;
 }

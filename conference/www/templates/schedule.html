@@ -11,14 +11,14 @@
     <p></p>
     <div class="font-size-title capitalize" style="text-align:center">
       <p>{{ putNewDate(defaultDate.clientSide, dates) }}</p>
-      <i class="ion-android-arrow-dropdown icon-large-size icon-right" ng-click="popover.show($event)" ></i>
+      <i style="padding-right:10px;" class="icon ion-android-more-vertical icon-large-size icon-right" ng-click="popover.show($event)" ></i>
     </div>
     <ion-list>
       <div ng-repeat="entity in events | orderBy : 'starttime'" class="inner">
-        <ion-item class="item-stable item-schedule"
+        <ion-item id="cardSchedule" class="item-stable item-schedule"
                   ng-click="toggleGroup(entity);getIdOfEvent(entity.id)"
                   ng-class="{active: isGroupShown(entity)}">
-          <i class="icon icon-right icon-plus icon-medium-size" ng-class="isGroupShown(entity) ? 'ion-minus' : 'ion-plus'"></i>
+          <i class="ion-android-arrow-dropdown icon-large-size icon-right activated " ng-class="isGroupShown(entity) ? 'icon ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i>
           &nbsp;
           <div class="font-size-small" style="display:inline-block">{{entity.starttime}} - {{entity.endtime}}</div>
           <div class="font-size-title capitalize" id="openBox">{{entity.name}}</div>
@@ -98,7 +98,7 @@
       <p></p>
       <div class="bar bar-header bar-calm nav-icon">
         <h1 class="title">{{ putNewDate(defaultDate.clientSide, datesFrench) }}</h1>
-        <i class="ion-android-arrow-dropdown icon-large-size icon-right" ng-click="popover.show($event)" ></i>
+        <i class="icon ion-android-more-vertical icon-large-size icon-right" ng-click="popover.show($event)" ></i>
       </div>
       <br></br>
       <ion-list>
