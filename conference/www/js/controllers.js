@@ -871,6 +871,9 @@ $scope.updatedProfile = {
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveInfo();
+		DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+	    $scope.userName = dataname[0]['name'];
+	  });
     //$scope.pushNotification();
 	  console.log("page opened");
 	})
