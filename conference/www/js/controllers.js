@@ -861,9 +861,9 @@ $scope.updatedProfile = {
   var currentToken = "";
 	var uid = AuthService.uid;
   $scope.userName = "";
-  DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
-    $scope.userName = data['name'];
-  });
+  DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+    $scope.userName = dataname[0]['name'];
+  })
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveInfo();
