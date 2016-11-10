@@ -485,9 +485,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
   })
 
-  .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents) {
+  .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents, $http, Backand) {
 
-  $scope.editPhone = null;
+  $scope.editPhoto = null;
   $scope.editDescription = null;
   $scope.editProfession = null;
   $scope.editName = null;
@@ -561,8 +561,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
   }
 
-    $scope.startEditPhone = function(){
-      $scope.editPhone = "1";
+    $scope.startEditPhoto = function(){
+      $scope.editPhoto = "1";
+    }
+
+    $scope.endEditPhoto = function(){
+      $scope.editPhoto = null;
     }
 
     $scope.endEditPhone= function(){
