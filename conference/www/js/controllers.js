@@ -125,15 +125,22 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 	};
 })
 
-.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope) {
+.controller('OptionCtrl', function ($scope, $ionicPlatform, $state, $location, DatabaseService, AuthService, $rootScope, $route) {
 
 	$scope.goFrench = function() {
 		$rootScope.currentLanguage = "french";
+    console.log($location.path());
+    $location.path('/optionsfr.html');
+    $route.reload();
 	};
 
 	$scope.goEnglish = function() {
 		$rootScope.currentLanguage = "english";
-	};
+    console.log($location.path());
+    $location.path('/options.html');
+    $route.reload();
+  };
+
 })
 
 .controller('UsersPageCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope){
