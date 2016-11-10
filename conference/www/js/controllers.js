@@ -129,12 +129,10 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 	$scope.goFrench = function() {
 		$rootScope.currentLanguage = "french";
-    $state.go('homeMenu.optionsfr');
 	};
 
 	$scope.goEnglish = function() {
 		$rootScope.currentLanguage = "english";
-    $state.go('homeMenu.options');
   };
 
 })
