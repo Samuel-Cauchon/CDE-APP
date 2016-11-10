@@ -10,15 +10,16 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, $ionicPopup, MainEvents) {
 
-     try{
-       $scope.UUID = $cordovaDevice.getUUID();
-       DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
-         if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "\'{{UUID}}\'")){
-           AuthService.currentUser = dataUUID[0]['user'];
-           $state.go('homeMenu.newsfeed');
-         }
-       })
-     }
+  try{
+    $rootScope.UUID = $cordovaDevice.getUUID();
+    DatabaseService.searchUUID($rootScope.UUID).success(function(dataUUID){
+      if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "\'{{UUID}}\'")){
+        AuthService.currentUser = dataUUID[0]['username'];
+        AuthService.uid = dataUUID[0]['id'];
+        $state.go('homeMenu.newsfeed');
+      }
+     })
+  }
      catch (err){
 		    DatabaseService.addError(err.message).success(function(){});
        	console.log("Error " + err.message);
@@ -77,8 +78,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
                             AuthService.currentUser = $scope.dataEntered.username;
                             AuthService.uid = dataUser[0]['id'];
                             MainEvents.setUserId(AuthService.uid);
-                            if ($scope.UUID != undefined){
-                              DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            if ($rootScope.UUID != undefined){
+                              DatabaseService.updateUUID($rootScope.UUID, AuthService.currentUser).success(function(){})
                             }
                             if ($rootScope.currentLanguage != "french"){
                                 $state.go('homeMenu.newsfeed');
@@ -114,6 +115,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 	$scope.Logout = function () {
 		DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
 		AuthService.currentUser = "";
+    AuthService.uid = "";
 		if ($rootScope.currentLanguage != "french"){
 			$state.go('welcome');
 		}
@@ -156,7 +158,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, $ionicPopup){
+.controller('RegisterCtrl', function($scope,$cordovaDevice, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, $ionicPopup){
 
 	$scope.dataEnteredRegister = {
 		username : "",
@@ -181,42 +183,44 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             });
 			return false;
 		}
-        DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
-            console.log(dataUser);
-            if(dataUser.length > 0){
-                var alertPopup = $ionicPopup.alert({
-                    title: 'This username is already registered.'
-                });
-                return false;
-            }
+    DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+      console.log(dataUser);
+      if(dataUser[0]['username'] != null){
+        var alertPopup = $ionicPopup.alert({
+          title: 'This username is already registered.'
         });
-        if($scope.dataEnteredRegister.password.length < 6) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Please enter a password having at least 6 characters.'
-            });
-			return false;
-        }
-        console.log("NO ERROR FOUND!")
-		return true;
+        return false;
+      }
+    });
+    if($scope.dataEnteredRegister.password.length < 6) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Please enter a password having at least 6 characters.'
+      });
+		return false;
+  }
+  console.log("NO ERROR FOUND!")
+	return true;
 	};
 
 	$scope.Register = function () {
 		DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
 		//Check if the username exist...
 		if (dataUser[0] == null && checkForm()){
-			DatabaseService.getMaxId().success(function(maxId){
-				DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
-					AuthService.currentUser = $scope.dataEnteredRegister.username;
-					AuthService.uid = maxId[0]['Max(id)']+1;
-			//		MainEvents.setUserId(AuthService.uid);
-					if ($rootScope.currentLanguage != "french"){
-						$state.go('homeMenu.newsfeed');
-					}
-					else{
-						$state.go('homeMenu.newsfeedfr');
-
-					}
-				})
+		  DatabaseService.createNewUser($scope.dataEnteredRegister).success(function(data){
+			  AuthService.currentUser = $scope.dataEnteredRegister.username;
+        DatabaseService.getID($scope.dataEnteredRegister.username).success(function(dataID){
+          AuthService.uid = dataID[0]['id'];
+          if ($rootScope.UUID != undefined){
+            DatabaseService.updateUUID($rootScope.UUID, AuthService.currentUser).success(function(){})
+          }
+          if ($rootScope.currentLanguage != "french"){
+            $state.go('homeMenu.newsfeed');
+          }
+          else{
+            $state.go('homeMenu.newsfeedfr');
+          }
+        })
+			  //		MainEvents.setUserId(AuthService.uid);
 			})
 		}
 	})
@@ -853,12 +857,15 @@ $scope.updatedProfile = {
   var currentToken = "";
 	var uid = AuthService.uid;
   $scope.userName = "";
-  DatabaseService.getData('/1/objects/user/'+uid).success(function(data){
-    $scope.userName = data['name'];
-  });
+  DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+    $scope.userName = dataname[0]['name'];
+  })
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveInfo();
+		DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+	    $scope.userName = dataname[0]['name'];
+	  });
     //$scope.pushNotification();
 	  console.log("page opened");
 	})

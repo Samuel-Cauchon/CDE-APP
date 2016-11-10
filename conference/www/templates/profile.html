@@ -1,16 +1,15 @@
-<!--<ion-view view-title="Profile" ng-init="initCtrl()">-->
-<ion-view view-title="Profile" ng-init="init()>
+<ion-view view-title="Profile" ng-init="init()">
 	<ion-content class="has-header">
-		<div class="list card">
-			<div class="profile-img">
+		<div class="list card" id="cardProfile">
+			<div class="profile-img" id="wide">
 				<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
 			</div>
-      <i class="ion-camera icon-large-size float-Right"></i>
-			<div class="item item-avatar profile-avatar" align="center">
+            <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="startEditPhoto()"></i>
+			<div class="item item-avatar profile-avatar" align="center" id="info">
 				<!--<img class="blank-profile" src="blank-profile.png" />-->
 				<div ng-show="editName == null">
 					<h1 style="display:inline;">
-						{{profile.name || "Name"}}
+						{{profile.name || "Your name"}}
 					</h1>
           <h2 style="display:inline;">
             <i class="ion-edit" ng-click="startEditName()"></i>
@@ -22,31 +21,17 @@
 				</div>
 				<div  class="edit-profession" ng-show="editProfession == null">
 					<h2>
-						{{profile.profession || "Enter Profession"}}
+						{{profile.profession || "Your profession "}}
 						<i class="ion-edit" ng-click="startEditProfession()"></i>
 					</h2>
 				</div>
 				<div class="edit-profession" ng-show="editProfession != null">
 					<input ng-model="updatedProfile.newProfession" placeholder="25 characters maximum" maxlength="25"></input>
-          <i class="ion-ios-checkmark icon-medium-size" ng-click="endEditProfession()"></i>
+          			<i class="ion-ios-checkmark icon-medium-size" ng-click="endEditProfession()"></i>
 				</div>
 			</div>
 
-			<!--<div class="item item-icon-left profile-telephone" align="center">-->
-				<!--<i class="icon ion-ios-telephone"></i>-->
-				<!--<div ng-show="editPhone == null">-->
-					<!--{{profile.phonenumber}}-->
-					<!--<i class="ion-edit" ng-click="startEditPhone()"></i>-->
-				<!--</div>-->
-				<!--<div ng-show="editPhone != null">-->
-					<!--(<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberRegional">)</input>-->
-					<!--<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberFirstPart">-</input>-->
-					<!--<input size="4" maxlength="4" ng-model="updatedProfile.newPhonenumberSecondPart"></input>-->
-					<!--<i class="ion-ios-checkmark icon-medium-size" ng-click="endEditPhone()"></i>-->
-				<!--</div>-->
-			<!--</div>-->
-
-			<form role="form" name="uploadForm">
+			<form role="form" name="uploadForm" ng-show="editPhoto == null">
 				<div class="row">
 					<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
 				</div>
@@ -54,26 +39,31 @@
 					<button class="button" ng-click="imageChanged()">Submit</button>
 				</div>
 			</form>
+            </br>
+                                                                    
 			<div class="item item-body">
 				<div ng-show="editDescription == null">
-					<p>{{profile.description || "Tell us a little about yourself and what you want to learn this weekend!"}}</p>
-					<button class="button float-Right" ng-click="startEditDescription()">Edit</button>
+					<p>
+                        {{profile.description || "Tell us a little about yourself and what you want to learn this weekend!"}}
+                        <i class="ion-edit" ng-click="startEditDescription()"></i>   
+                    </p>                                                                                                 
 				</div>
 				<div class="edit-description" ng-show="editDescription != null" class="edit-description">
 					<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
-          <div class="float-Right">
-					<button class="button" ng-click="endEditDescription()">Save</button>
-					<!--<button class="button" ng-click="clearAll()">Clear all</button>-->
-            </div>
+          			<div class="float-Right">
+						<button class="button" ng-click="endEditDescription()" id="saveButton">Save</button>
+            		</div>
 				</div>
 			</div>
+			</br>
 			<div>
-				<h3 style="text-align: center">Events Attending</h3>
-				<ion-scroll style="height:100px" class="scrollVertical" direction="y">
+				<h3 style="text-align: center">Your registered events</h3>
+                <br/>
+				<ion-scroll style="height:200px; margin-right: 10px;" class="scrollVertical" direction="y">
 					<div class="list">
-						<div ng-repeat="n in userEvents() | orderBy"  >
-							<div class="item item-divider" >
-								{{ n }}
+						<div id="events" ng-repeat="n in userEvents() | orderBy"  >
+							<div id="row" class="item item-divider" >
+								- {{ n }}
 							</div>
 						</div>
 					</div>

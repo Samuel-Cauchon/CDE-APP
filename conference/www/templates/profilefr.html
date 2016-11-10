@@ -1,80 +1,93 @@
 <ion-view view-title="Profil">
 	<ion-content class="has-header">
-		<div class="list card">
-			<div class="profile-img">
+		<div class="list card" id="cardProfile">
+			<div class="profile-img" id="wide">
 				<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
 			</div>
-			<div class="item item-avatar profile-avatar" align="center">
+            <i class="ion-camera icon-large-size float-Right" id="narrow"></i>
+			<div class="item item-avatar profile-avatar" align="center" id="info">
+				<!--<img class="blank-profile" src="blank-profile.png" />-->
 				<div ng-show="editName == null">
-					<h2>
-						{{profile.name}}
-						<button class="button button-small button-calm" ng-click="startEditName()">Modifier</button>
-					</h2>
+					<h1 style="display:inline;">
+						{{profile.name || "Votre nom"}}
+					</h1>
+          <h2 style="display:inline;">
+            <i class="ion-edit" ng-click="startEditName()"></i>
+          </h2>
 				</div>
 				<div class="edit-name" ng-show="editName != null">
 					<input ng-model="updatedProfile.newName" placeholder="25 characters maximum" maxlength="25"></input>
-					<button class="button button-small button-calm" ng-click="endEditName()">Modifier</button>
+					<i class="ion-ios-checkmark icon-medium-size" ng-click="endEditName()"></i>
 				</div>
 				<div  class="edit-profession" ng-show="editProfession == null">
 					<h2>
-						{{profile.profession}}
-						<button class="button-calm" ng-click="startEditProfession()">Modifier</button>
+						{{profile.profession || "Votre profession "}}
+						<i class="ion-edit" ng-click="startEditProfession()"></i>
 					</h2>
 				</div>
 				<div class="edit-profession" ng-show="editProfession != null">
 					<input ng-model="updatedProfile.newProfession" placeholder="25 characters maximum" maxlength="25"></input>
-					<button class="button button-small button-calm" ng-click="endEditProfession()">Modifier</button>
+          <i class="ion-ios-checkmark icon-medium-size" ng-click="endEditProfession()"></i>
 				</div>
 			</div>
 
-			<div class="item item-icon-left profile-telephone" align="center">
-				<i class="icon ion-ios-telephone"></i>
-				<div ng-show="editPhone == null">
-					{{profile.phonenumber}}
-					<button class="button-calm" ng-click="startEditPhone()">Modifier</button>
-				</div>
-				<div ng-show="editPhone != null">
-					(<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberRegional">)</input>
-					<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberFirstPart">-</input>
-					<input size="4" maxlength="4" ng-model="updatedProfile.newPhonenumberSecondPart"></input>
-					<button class="button button-small button-calm" ng-click="endEditPhone()">Modifier</button>
-				</div>
-			</div>
+			<!--<div class="item item-icon-left profile-telephone" align="center">-->
+				<!--<i class="icon ion-ios-telephone"></i>-->
+				<!--<div ng-show="editPhone == null">-->
+					<!--{{profile.phonenumber}}-->
+					<!--<i class="ion-edit" ng-click="startEditPhone()"></i>-->
+				<!--</div>-->
+				<!--<div ng-show="editPhone != null">-->
+					<!--(<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberRegional">)</input>-->
+					<!--<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberFirstPart">-</input>-->
+					<!--<input size="4" maxlength="4" ng-model="updatedProfile.newPhonenumberSecondPart"></input>-->
+					<!--<i class="ion-ios-checkmark icon-medium-size" ng-click="endEditPhone()"></i>-->
+				<!--</div>-->
+			<!--</div>-->
 
+<!--
 			<form role="form" name="uploadForm">
 				<div class="row">
 					<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
 				</div>
 				<div class="row">
-					<button class="button button-calm" ng-click="imageChanged()">Envoyer</button>
+					<button class="button" ng-click="imageChanged()">Submit</button>
 				</div>
 			</form>
-
+-->
+            </br>
+                                                                    
 			<div class="item item-body">
 				<div ng-show="editDescription == null">
-					<p>{{profile.description}}</p>
-					<button class="button button-calm" ng-click="startEditDescription()">Modifier</button>
+					<p>
+                        {{profile.description || "Parlez-nous un peu de vous et comment vous appréciez votre expérience!"}}
+                        <i class="ion-edit" ng-click="startEditDescription()"></i>   
+                    </p>
+                                                                                                                           
+<!--					<button class="button float-Right" ng-click="startEditDescription()"><i class="ion-edit"></i>   Edit</button>-->
 				</div>
 				<div class="edit-description" ng-show="editDescription != null" class="edit-description">
-					<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
-					<button class="button button-calm" ng-click="endEditDescription()">Modifier</button>
-					<button class="button button-calm" ng-click="clearAll()">Effacer Tout</button>
+					<textarea maxlength="250" placeholder="250 caractères maximum" ng-model="updatedProfile.newDescription"></textarea>
+          <div class="float-Right">
+					<button class="button" ng-click="endEditDescription()" id="saveButton">Sauvegarder</button>
+					<!--<button class="button" ng-click="clearAll()">Clear all</button>-->
+            </div>
 				</div>
 			</div>
-
+                                                                    </br>
 			<div>
-				<h4>Événements</h4>
-				<ion-scroll style="height:100px" class="scrollVertical" direction="y">
+				<h3 style="text-align: center">Vos événements</h3>
+                                              <br>
+				<ion-scroll style="height:200px; margin-right: 10px;" class="scrollVertical" direction="y">
 					<div class="list">
-						<div ng-repeat="n in userEvents() | orderBy"  >
-							<div class="item item-divider" >
-								{{ n }}
+						<div id="events" ng-repeat="n in userEvents() | orderBy"  >
+							<div id="row" class="item item-divider" >
+								- {{ n }}
 							</div>
 						</div>
 					</div>
 				</ion-scroll>
 			</div>
-
 			<!--<div class="button-bar">-->
 				<!--<a class="button button-block button-positive" ng-href="#" onclick="window.open('http://www.facebook.com/', '_system', 'location=yes'); return false;">-->
 					<!--Facebook-->
