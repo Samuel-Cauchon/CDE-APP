@@ -1,5 +1,4 @@
-<!--<ion-view view-title="Profile" ng-init="initCtrl()">-->
-<ion-view view-title="Profile" ng-init="init()>
+<ion-view view-title="Profile" ng-init="init()">
 	<ion-content class="has-header">
 		<div class="list card" id="cardProfile">
 			<div class="profile-img" id="wide">
@@ -63,22 +62,19 @@
 					<p>
                         {{profile.description || "Tell us a little about yourself and what you want to learn this weekend!"}}
                         <i class="ion-edit" ng-click="startEditDescription()"></i>   
-                    </p>
-                                                                                                                           
-<!--					<button class="button float-Right" ng-click="startEditDescription()"><i class="ion-edit"></i>   Edit</button>-->
+                    </p>                                                                                                 
 				</div>
 				<div class="edit-description" ng-show="editDescription != null" class="edit-description">
 					<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
-          <div class="float-Right">
-					<button class="button" ng-click="endEditDescription()" id="saveButton">Save</button>
-					<!--<button class="button" ng-click="clearAll()">Clear all</button>-->
-            </div>
+          			<div class="float-Right">
+						<button class="button" ng-click="endEditDescription()" id="saveButton">Save</button>
+            		</div>
 				</div>
 			</div>
-                                                                    </br>
+			</br>
 			<div>
 				<h3 style="text-align: center">Your registered events</h3>
-                                              <br>
+                <br/>
 				<ion-scroll style="height:200px; margin-right: 10px;" class="scrollVertical" direction="y">
 					<div class="list">
 						<div id="events" ng-repeat="n in userEvents() | orderBy"  >
