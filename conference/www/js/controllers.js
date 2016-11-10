@@ -114,7 +114,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 	$scope.Logout = function () {
 		DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
-		AuthService.currentUser = "";
+		AuthService.currentUser = null;
+    AuthService.uid = null;
 		if ($rootScope.currentLanguage != "french"){
 			$state.go('welcome');
 		}
