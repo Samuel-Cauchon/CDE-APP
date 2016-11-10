@@ -183,23 +183,23 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             });
 			return false;
 		}
-        DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
-            console.log(dataUser);
-            if(dataUser.length > 0){
-                var alertPopup = $ionicPopup.alert({
-                    title: 'This username is already registered.'
-                });
-                return false;
-            }
+    DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
+      console.log(dataUser);
+      if(dataUser[0]['username'] != null){
+        var alertPopup = $ionicPopup.alert({
+          title: 'This username is already registered.'
         });
-        if($scope.dataEnteredRegister.password.length < 6) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Please enter a password having at least 6 characters.'
-            });
-			return false;
-        }
-        console.log("NO ERROR FOUND!")
-		return true;
+        return false;
+      }
+    });
+    if($scope.dataEnteredRegister.password.length < 6) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Please enter a password having at least 6 characters.'
+      });
+		return false;
+  }
+  console.log("NO ERROR FOUND!")
+	return true;
 	};
 
 	$scope.Register = function () {
