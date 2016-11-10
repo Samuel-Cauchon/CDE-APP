@@ -4,7 +4,8 @@
 			<div class="profile-img" id="wide">
 				<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
 			</div>
-            <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="startEditPhoto()"></i>
+            <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="startEditPhoto()" ng-show="editPhoto == null"></i>
+            <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="endEditPhoto()" ng-show="editPhoto != null"></i>
 			<div class="item item-avatar profile-avatar" align="center" id="info">
 				<!--<img class="blank-profile" src="blank-profile.png" />-->
 				<div ng-show="editName == null">
@@ -31,14 +32,17 @@
 				</div>
 			</div>
 
-			<form role="form" name="uploadForm" ng-show="editPhoto == null">
-				<div class="row">
-					<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
-				</div>
-				<div class="row">
-					<button class="button" ng-click="imageChanged()">Submit</button>
-				</div>
-			</form>
+			<div ng-show="editPhoto != null">
+				<form role="form" name="uploadForm">
+					<div class="row">
+						<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
+					</div>
+					<div class="row">
+						<button class="button" ng-click="imageChanged()">Submit</button>
+					</div>
+				</form>
+			</div>
+
             </br>
                                                                     
 			<div class="item item-body">
