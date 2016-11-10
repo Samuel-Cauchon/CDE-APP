@@ -158,7 +158,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, $ionicPopup){
+.controller('RegisterCtrl', function($scope,$cordovaDevice, $ionicPlatform, $state, DatabaseService, AuthService, $rootScope, $ionicPopup){
 
 	$scope.dataEnteredRegister = {
 		username : "",
@@ -206,19 +206,22 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 		DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
 		//Check if the username exist...
 		if (dataUser[0] == null && checkForm()){
-			DatabaseService.getMaxId().success(function(maxId){
-				DatabaseService.createNewUser($scope.dataEnteredRegister, maxId[0]['Max(id)']+1).success(function(data){
-					AuthService.currentUser = $scope.dataEnteredRegister.username;
-					AuthService.uid = maxId[0]['Max(id)']+1;
-			//		MainEvents.setUserId(AuthService.uid);
-					if ($rootScope.currentLanguage != "french"){
-						$state.go('homeMenu.newsfeed');
-					}
-					else{
-						$state.go('homeMenu.newsfeedfr');
-
-					}
-				})
+		  DatabaseService.createNewUser($scope.dataEnteredRegister).success(function(data){
+			  AuthService.currentUser = $scope.dataEnteredRegister.username;
+        DatabaseService.getID($scope.dataEnteredRegister.username).success(function(dataID){
+          AuthService.uid = dataID[0]['id'];
+          $scope.UUID = $cordovaDevice.getUUID();
+          if ($scope.UUID != undefined){
+            DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+          }
+          if ($rootScope.currentLanguage != "french"){
+            $state.go('homeMenu.newsfeed');
+          }
+          else{
+            $state.go('homeMenu.newsfeedfr');
+          }
+        })
+			  //		MainEvents.setUserId(AuthService.uid);
 			})
 		}
 	})

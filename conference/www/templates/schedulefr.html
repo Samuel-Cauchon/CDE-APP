@@ -10,7 +10,7 @@
   <ion-content>
     <p></p>
     <div class="font-size-title capitalize" style="text-align:center">
-      <p>{{ putNewDate(defaultDate.clientSide, dates) }}</p>
+      <p>{{ putNewDate(defaultDate.clientSide, datesFrench) }}</p>
       <i style="padding-right:10px;" class="icon ion-android-more-vertical icon-large-size icon-right" ng-click="popover.show($event)" ></i>
     </div>
     <ion-list>
@@ -80,7 +80,7 @@
       <h1 class="title-bigger">Choisissez une date</h1>
     </ion-header-bar>
     <ion-content>
-      <ion-radio ng-repeat="item in dates"
+      <ion-radio ng-repeat="item in datesFrench"
                  ng-value="item.value"
                  ng-model="defaultDate.clientSide"
                  ng-class="text-align-center ">
