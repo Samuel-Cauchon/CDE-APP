@@ -129,10 +129,22 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 	$scope.goFrench = function() {
 		$rootScope.currentLanguage = "french";
+<<<<<<< HEAD
+=======
+    // console.log($location.path());
+    // $location.path('/homeMenu/optionsfr');
+    // $route.reload();
+>>>>>>> 6081fe61a3b4bfb8ea759b5ea1f20b822becdea6
 	};
 
 	$scope.goEnglish = function() {
 		$rootScope.currentLanguage = "english";
+<<<<<<< HEAD
+=======
+    // console.log($location.path());
+    // $location.path('/homeMenu/options');
+    // $route.reload();
+>>>>>>> 6081fe61a3b4bfb8ea759b5ea1f20b822becdea6
   };
 
 })
