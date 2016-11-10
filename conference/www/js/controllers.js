@@ -11,8 +11,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $state, DatabaseService, AuthService, $cordovaDevice, $rootScope, $ionicPopup, MainEvents) {
 
   try{
-    $scope.UUID = $cordovaDevice.getUUID();
-    DatabaseService.searchUUID($scope.UUID).success(function(dataUUID){
+    $rootScope.UUID = $cordovaDevice.getUUID();
+    DatabaseService.searchUUID($rootScope.UUID).success(function(dataUUID){
       if ((dataUUID[0] != null) && (dataUUID[0]['UUID'] != "\'{{UUID}}\'")){
         AuthService.currentUser = dataUUID[0]['username'];
         AuthService.uid = dataUUID[0]['id'];
@@ -78,8 +78,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
                             AuthService.currentUser = $scope.dataEntered.username;
                             AuthService.uid = dataUser[0]['id'];
                             MainEvents.setUserId(AuthService.uid);
-                            if ($scope.UUID != undefined){
-                              DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+                            if ($rootScope.UUID != undefined){
+                              DatabaseService.updateUUID($rootScope.UUID, AuthService.currentUser).success(function(){})
                             }
                             if ($rootScope.currentLanguage != "french"){
                                 $state.go('homeMenu.newsfeed');
@@ -114,8 +114,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 	$scope.Logout = function () {
 		DatabaseService.updateUUID("", AuthService.currentUser).success(function(){})
-		AuthService.currentUser = null;
-    AuthService.uid = null;
+		AuthService.currentUser = "";
+    AuthService.uid = "";
 		if ($rootScope.currentLanguage != "french"){
 			$state.go('welcome');
 		}
@@ -210,9 +210,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 			  AuthService.currentUser = $scope.dataEnteredRegister.username;
         DatabaseService.getID($scope.dataEnteredRegister.username).success(function(dataID){
           AuthService.uid = dataID[0]['id'];
-          $scope.UUID = $cordovaDevice.getUUID();
-          if ($scope.UUID != undefined){
-            DatabaseService.updateUUID($scope.UUID, AuthService.currentUser).success(function(){})
+          if ($rootScope.UUID != undefined){
+            DatabaseService.updateUUID($rootScope.UUID, AuthService.currentUser).success(function(){})
           }
           if ($rootScope.currentLanguage != "french"){
             $state.go('homeMenu.newsfeed');
