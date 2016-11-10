@@ -244,16 +244,6 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.directiv
 	  	}
 	  })
 
-    .state('homeMenu.optionsfr', {
-      url: '/optionsfr',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/optionsfr.html',
-          controller: 'OptionCtrl'
-        }
-      }
-    })
-
     .state('homeMenu.contacts', {
       url: "/contacts",
       views: {

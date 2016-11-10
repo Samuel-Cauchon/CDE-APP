@@ -129,16 +129,16 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 	$scope.goFrench = function() {
 		$rootScope.currentLanguage = "french";
-    console.log($location.path());
-    $location.path('/optionsfr.html');
-    $route.reload();
+    // console.log($location.path());
+    // $location.path('/homeMenu/optionsfr');
+    // $route.reload();
 	};
 
 	$scope.goEnglish = function() {
 		$rootScope.currentLanguage = "english";
-    console.log($location.path());
-    $location.path('/options.html');
-    $route.reload();
+    // console.log($location.path());
+    // $location.path('/homeMenu/options');
+    // $route.reload();
   };
 
 })

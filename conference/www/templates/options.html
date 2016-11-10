@@ -1,5 +1,5 @@
 <div ng-show="currentLanguage != 'french'">
-	<ion-view view-title="Languages">
+	<ion-view view-title="Languages/Langues">
 		<ion-modal-view>
   			<ion-header-bar>
     			<h1 class="title">Languages</h1>
@@ -10,15 +10,15 @@
 	  	</ion-modal-view>
 	  </ion-view>
 </div>
-<!--<div ng-show="currentLanguage == 'french'">-->
-	<!--<ion-view view-title="Langues">-->
-		<!--<ion-modal-view>-->
-		  	<!--<ion-header-bar>-->
-		    	<!--<h1 class="title">Langues</h1>-->
-		  	<!--</ion-header-bar>-->
-  			<!--<ion-content class="padding">-->
-  				<!--<button class="button optpg col text-center" ng-click="goEnglish()">Press to go in English!</button>-->
-  			<!--</ion-content>-->
-  		<!--</ion-modal-view>-->
-  	<!--</ion-view>-->
-<!--</div>-->
+<div ng-show="currentLanguage == 'french'">
+	<ion-view view-title="Langues/Langues">
+		<ion-modal-view>
+		  	<ion-header-bar>
+		    	<h1 class="title">Langues</h1>
+		  	</ion-header-bar>
+  			<ion-content class="padding">
+  				<button class="button optpg col text-center" ng-click="goEnglish()">Press to go in English!</button>
+  			</ion-content>
+  		</ion-modal-view>
+  	</ion-view>
+</div>
