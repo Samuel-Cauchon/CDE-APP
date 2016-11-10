@@ -1,24 +1,10 @@
-<div ng-show="currentLanguage != 'french'">
-	<ion-view view-title="Options">
-		<ion-modal-view>
-  			<ion-header-bar>
-    			<h1 class="title">Options</h1>
-  			</ion-header-bar>
-	 		<ion-content class="padding">
-	  			<button class="button button-block button-calm col text-center" ng-click="goFrench()">Appuyer pour continuer en Français!</button>
-	  		</ion-content>
-	  	</ion-modal-view>
-	  </ion-view>
-</div>
-<div ng-show="currentLanguage == 'french'">
-	<ion-view view-title="Options">
-		<ion-modal-view>
-		  	<ion-header-bar>
-		    	<h1 class="title">Options</h1>
-		  	</ion-header-bar>
-  			<ion-content class="padding">
-  				<button class="button button-block button-calm col text-center" ng-click="goEnglish()">Press to go in English!</button>
-  			</ion-content>
-  		</ion-modal-view>
-  	</ion-view>
-</div>
+<ion-view view-title="Options">
+	<ion-modal-view>
+		<ion-header-bar>
+  			<h1 class="title">Options</h1>
+		</ion-header-bar>
+ 		<ion-content class="padding">
+  			<button class="button button-block button-calm col text-center" ng-click="goFrench()">Appuyer pour continuer en Français!</button>
+  		</ion-content>
+  	</ion-modal-view>
+ </ion-view>
