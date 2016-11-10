@@ -27,7 +27,6 @@
               <div class="card" style="margin-top:1%">
               <div class="user-post">{{item.name}}<br></div>
               <div class="comment-date">{{item.date}}<br></div>
-                  </br>
               <div class="comment-content">{{item.content}}<br></div>
                   </br>
               <button class="button" id="likeButton" ng-click="like(item.likes, item.id)">
@@ -37,7 +36,7 @@
                 <i class="ion-chatbubble"></i>
                 Comment</button>
               </br>
-              <label class="item item-input">
+              <label class="item item-input" id="commentBoxFrame">
                 <input type="text" id="commentsBox" placeholder="Write a reply...">
               </label>
                 <ion-item ng-repeat="comment in entry" ng-if="item.id == comment.commentid">
