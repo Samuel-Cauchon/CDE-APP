@@ -18,27 +18,33 @@
         <ion-item id="cardSchedule" class="item-stable item-schedule"
                   ng-click="toggleGroup(entity);getIdOfEvent(entity.id)"
                   ng-class="{active: isGroupShown(entity)}">
-          <i class="ion-android-arrow-dropdown icon-large-size icon-right activated " ng-class="isGroupShown(entity) ? 'icon ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i>
+          <i style="color:#111E45;" class="ion-android-arrow-dropdown icon-large-size icon-right activated " ng-class="isGroupShown(entity) ? 'icon ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i>
           &nbsp;
           <div class="font-size-small" style="display:inline-block">{{entity.starttime}} - {{entity.endtime}}</div>
           <div class="font-size-title capitalize" id="openBox">{{entity.name}}</div>
         </ion-item>
         <ion-item class="item-accordion border-white"
                   ng-if="isGroupShown(entity)">
+            <br>
           <h2 class="title-bigger"><b>Description:</b></h2>
-          <h3 class="bigger openBox">{{ entity.description }}</h3>
+          <h3 style="white-space:normal; border-bottom: solid #2C75BC;
+    padding-bottom: 20px;" class="bigger openBox">{{ entity.description }}</h3>
+            <br>
           <h2 class="title-bigger"><b>Where:</b></h2>
-          <h3 class="bigger openBox">{{ entity.place }}</h3>
+          <h3 style="white-space:normal; border-bottom: solid #2C75BC;
+    padding-bottom: 20px;" class="bigger openBox">{{ entity.place }}</h3>
+            <br>
           <span ng-if="entity.speaker != null">
           <h2><b>Speaker(s)</b></h2>
           <h3 class="bigger openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
           <h2><b>Users Attending ({{ numberOfPeopleAttending || 0 }}):</b></h2>
-          <ion-scroll style="height:115px" class="scrollVertical" direction="y">
+          <ion-scroll style="white-space:normal; border-bottom: solid #2C75BC;
+    padding-bottom: 20px;" style="height:115px" class="scrollVertical" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
-                  <h3 class="bigger openBox">{{ n }}</h3>
+                  <h3 class="bigger openBox">- {{ n }}</h3>
                 </div>
               </div>
             </div>
@@ -54,7 +60,7 @@
           <button class="button button-assertive buttonLogin"
                   ng-click="registerForEvent(entity.id)"
                   type="button"
-                  style="display: block; margin: 0 auto">
+                  style="display: block; margin: 0 auto; ">
             Register
           </button>
 
