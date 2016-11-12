@@ -18,10 +18,10 @@
         <ion-item id="cardSchedule" class="item-stable item-schedule"
                   ng-click="toggleGroup(entity);getIdOfEvent(entity.id)"
                   ng-class="{active: isGroupShown(entity)}">
-          <i style="color:#111E45;" class="ion-android-arrow-dropdown icon-large-size icon-right activated " ng-class="isGroupShown(entity) ? 'icon ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i>
+          <i style="color:white" class="ion-android-arrow-dropdown icon-large-size icon-right activated " ng-class="isGroupShown(entity) ? 'icon ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i>
           &nbsp;
           <div class="font-size-small" style="display:inline-block">{{entity.starttime}} - {{entity.endtime}}</div>
-          <div class="font-size-title capitalize" id="openBox">{{entity.name}}</div>
+          <div class="font-size-title capitalize" id="openBox"> {{entity.name}}</div>
         </ion-item>
         <ion-item class="item-accordion border-white"
                   ng-if="isGroupShown(entity)">
