@@ -493,11 +493,11 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   $scope.imageUrl = null;
   $scope.filename = null;
     $scope.currentPic = null;
-    
+
      DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
          $scope.currentPic = dataImg[0]['photo'];
      })
-    
+
     $scope.btnText = "Upload";
 
 
@@ -505,7 +505,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   var baseActionUrl = baseUrl + 'action/'
   var objectName = 'user';
   var filesActionName = 'img';
-    
+
     $scope.file_changed = function(element) {
         console.log("weeee!!")
         $scope.$apply(function(scope) {
@@ -538,7 +538,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             //console.log(reader.readAsDataURL(photofile));
         });
     };
-    
+
     $scope.cancelUpload = function() {
         $scope.btnText = "Upload";
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
@@ -561,9 +561,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
                 })
             };
         })
-            
-            
-            
+
+
+
 
 //        console.log($scope.previousPic)
 
@@ -574,7 +574,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
         var imageExist = false;
         var file = fileInput.files[0];
         var reader = new FileReader();
-        
+
 
 //        DatabaseService.searchImg(file.name).success(function(data){
 //            if (data[0] == undefined){
@@ -994,7 +994,13 @@ $scope.updatedProfile = {
 	$scope.postComment = function(id) {
         console.log("!!!!");
         console.log(id);
-		var comment = document.getElementById("commentsBox").value;
+		var comment = "";
+		if (id == 0){
+			comment = document.getElementById(0).value;
+		}
+		else{
+			comment = document.getElementById("commentsBox").value;
+		}
 		var timestamp = new Date();
 		var day = formatNumber(timestamp.getDate());
 		var month = formatNumber(timestamp.getMonth()+1);
@@ -1009,6 +1015,7 @@ $scope.updatedProfile = {
 			console.log("comment saved");
 			$scope.refreshNewsfeed();
 			document.getElementById("commentsBox").value = null;
+			document.getElementById(0).value = null;
 		})
 		.error(function (data, status, header, config) {
 			$scope.ServerResponse =  htmlDecode("Data: " + data +
