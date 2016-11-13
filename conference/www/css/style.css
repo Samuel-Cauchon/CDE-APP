@@ -255,6 +255,8 @@ img.blank-profile {
     white-space: normal;
     border-top: 1px solid;
     padding-top: 15px;
+    box-shadow: inset 0 -3px 0 0 #111E45;
+    padding-bottom: 20px;
 }
 
 
@@ -345,6 +347,10 @@ img.blank-profile {
 #commentBoxFrame{
     margin-bottom: -1px;
     margin-right: 12px;
+/*
+    box-shadow: inset 0 -3px 0 0 #2C75BC;
+    padding-bottom: 15px;
+*/
 }
 
 #postButton{
