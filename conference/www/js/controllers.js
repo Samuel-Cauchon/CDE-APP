@@ -992,7 +992,9 @@ $scope.updatedProfile = {
 
 
 	$scope.postComment = function(id) {
-		var comment = document.getElementById(id).value;
+        console.log("!!!!");
+        console.log(id);
+		var comment = document.getElementById("commentsBox").value;
 		var timestamp = new Date();
 		var day = formatNumber(timestamp.getDate());
 		var month = formatNumber(timestamp.getMonth()+1);
@@ -1006,7 +1008,7 @@ $scope.updatedProfile = {
 			$scope.ServerResponse = data;
 			console.log("comment saved");
 			$scope.refreshNewsfeed();
-			document.getElementById(id).value = null;
+			document.getElementById("commentsBox").value = null;
 		})
 		.error(function (data, status, header, config) {
 			$scope.ServerResponse =  htmlDecode("Data: " + data +
