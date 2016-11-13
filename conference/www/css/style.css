@@ -140,6 +140,11 @@ div.item.item-avatar.profile-avatar > img.blank-profile {
 }
 div.profile-avatar {
 	padding-left: 0;
+  white-space: inherit;
+}
+
+div.profile-avatar h1 {
+  white-space: normal;
 }
 
 div.profile-telephone > div {
