@@ -4,8 +4,9 @@
 			<div class="profile-img" id="wide">
 				<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
 			</div>
-            <i class="ion-camera icon-large-size float-Right" id="narrow"></i>
-			<div class="item item-avatar profile-avatar" align="center" id="info">
+ 			<i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="startEditPhoto()" ng-show="editPhoto == null"></i>
+            <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="endEditPhoto()" ng-show="editPhoto != null"></i>
+            <div class="item item-avatar profile-avatar" align="center" id="info">
 				<!--<img class="blank-profile" src="blank-profile.png" />-->
 				<div ng-show="editName == null">
 					<h1 style="display:inline;">
@@ -30,31 +31,17 @@
           <i class="ion-ios-checkmark icon-medium-size" ng-click="endEditProfession()"></i>
 				</div>
 			</div>
+			<div ng-show="editPhoto != null">
+				<form role="form" name="uploadForm">
+					<div class="row">
+						<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
+					</div>
+					<div class="row">
+						<button class="button" ng-click="imageChanged()">Choisir</button>
+					</div>
+				</form>
+			</div>
 
-			<!--<div class="item item-icon-left profile-telephone" align="center">-->
-				<!--<i class="icon ion-ios-telephone"></i>-->
-				<!--<div ng-show="editPhone == null">-->
-					<!--{{profile.phonenumber}}-->
-					<!--<i class="ion-edit" ng-click="startEditPhone()"></i>-->
-				<!--</div>-->
-				<!--<div ng-show="editPhone != null">-->
-					<!--(<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberRegional">)</input>-->
-					<!--<input size="3" maxlength="3" ng-model="updatedProfile.newPhonenumberFirstPart">-</input>-->
-					<!--<input size="4" maxlength="4" ng-model="updatedProfile.newPhonenumberSecondPart"></input>-->
-					<!--<i class="ion-ios-checkmark icon-medium-size" ng-click="endEditPhone()"></i>-->
-				<!--</div>-->
-			<!--</div>-->
-
-<!--
-			<form role="form" name="uploadForm">
-				<div class="row">
-					<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
-				</div>
-				<div class="row">
-					<button class="button" ng-click="imageChanged()">Submit</button>
-				</div>
-			</form>
--->
             </br>
 
 			<div class="item item-body">
@@ -64,7 +51,6 @@
                         <i class="ion-edit" ng-click="startEditDescription()"></i>
                     </p>
 
-<!--					<button class="button float-Right" ng-click="startEditDescription()"><i class="ion-edit"></i>   Edit</button>-->
 				</div>
 				<div class="edit-description" ng-show="editDescription != null" class="edit-description">
 					<textarea maxlength="250" placeholder="250 caractères maximum" ng-model="updatedProfile.newDescription"></textarea>

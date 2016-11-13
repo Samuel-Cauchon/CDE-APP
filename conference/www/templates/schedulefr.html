@@ -21,18 +21,18 @@
           <i style="color:#111E45;" class="ion-android-arrow-dropdown icon-large-size icon-right activated " ng-class="isGroupShown(entity) ? 'icon ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i>
           &nbsp;
           <div class="font-size-small" style="display:inline-block">{{entity.starttime}} - {{entity.endtime}}</div>
-          <div class="font-size-title capitalize" id="openBox">{{entity.name}}</div>
+          <div class="font-size-title capitalize" id="openBox">{{entity.name_fr}}</div>
         </ion-item>
         <ion-item class="item-accordion border-white"
                   ng-if="isGroupShown(entity)">
             <br>
           <h2 class="title-bigger"><b>Description:</b></h2>
           <h3 style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" class="bigger openBox">{{ entity.description }}</h3>
+    padding-bottom: 20px;" class="bigger openBox">{{ entity.description_fr }}</h3>
             <br>
           <h2 class="title-bigger"><b>Où:</b></h2>
           <h3 style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" class="bigger openBox">{{ entity.place }}</h3>
+    padding-bottom: 20px;" class="bigger openBox">{{ entity.place_fr }}</h3>
             <br>
           <span ng-if="entity.speaker != null" ng-click="redirectToSpeakerFr(entity.speaker)">
           <h2><b>Conférenciers</b></h2>
