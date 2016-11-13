@@ -17,7 +17,7 @@
           </h2>
 				</div>
 				<div class="edit-name" ng-show="editName != null">
-					<input ng-model="updatedProfile.newName" placeholder="25 characters maximum" maxlength="25"></input>
+					<input id="editName" ng-model="updatedProfile.newName" placeholder="25 characters maximum" maxlength="25"></input>
 					<i class="ion-ios-checkmark icon-medium-size" ng-click="endEditName()"></i>
 				</div>
 				<div  class="edit-profession" ng-show="editProfession == null">
@@ -33,14 +33,19 @@
 			</div>
 
 			<div ng-show="editPhoto != null">
-				<form role="form" name="uploadForm">
+<!--				<form name="uploadForm">-->
 					<div class="row">
-						<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
+                        <label style="margin-left: 23%;" class="add-photo-btn"><i style="padding-right: 10px;" class="icon ion-upload"></i>{{btnText}}<span>
+						<input id="fileInput" type="file" accept="*/*" ng-model="filename" onchange="angular.element(this).scope().file_changed(this)" />
 					</div>
+                    <button style="margin-left: 24%; width: 26%;" class="button" ng-click="cancelUpload()">Cancel</button>        
+                    <button style="width: 25%;" class="button" ng-click="imageChanged()">Submit</button>
+<!--
 					<div class="row">
 						<button class="button" ng-click="imageChanged()">Submit</button>
 					</div>
-				</form>
+-->
+<!--				</form>-->
 			</div>
 
             </br>

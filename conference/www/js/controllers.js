@@ -492,52 +492,127 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   $scope.editName = null;
   $scope.imageUrl = null;
   $scope.filename = null;
+    $scope.currentPic = null;
+    
+     DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
+         $scope.currentPic = dataImg[0]['photo'];
+     })
+    
+    $scope.btnText = "Upload";
+
 
   var baseUrl = '/1/objects/';
   var baseActionUrl = baseUrl + 'action/'
   var objectName = 'user';
   var filesActionName = 'img';
+    
+    $scope.file_changed = function(element) {
+        console.log("weeee!!")
+        $scope.$apply(function(scope) {
+            console.log("yaho!")
+            var photofile = element.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                console.log("hmmm...")
+                // handle onload
+            };
+            if(photofile != undefined){
+                reader.onload = function(e) {
+                    console.log("image changed!");
+                    upload(photofile.name).then(function(res) {
+//                        $scope.imageUrl = res.data.url;
+//                        $scope.filename = file.name;
+//                        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+//
+//                        })
+                        $scope.profile.imgName = photofile.name;
+//                    }, function(err){
+//                        alert(err.data);
+                    });
+                }
+                console.log(photofile)
+                reader.readAsDataURL(photofile);
+                $scope.btnText = "Uploaded!";
+            }
+//            console.log(photofile)
+            //console.log(reader.readAsDataURL(photofile));
+        });
+    };
+    
+    $scope.cancelUpload = function() {
+        $scope.btnText = "Upload";
+        DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
+            $scope.profile.imgName = dataImg[0]['photo'];
+            console.log(dataImg[0]['photo']);
+            console.log("!!!");
+            console.log($scope.profile.imgName);
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                console.log("image changed!");
+                upload($scope.currentPic).then(function(res) {
+////                        $scope.imageUrl = res.data.url;
+////                        $scope.filename = file.name;
+////                        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+////
+////                        })
+                        $scope.profile.imgName = $scope.currentPic
+////                    }, function(err){
+////                        alert(err.data);
+                })
+            };
+        })
+            
+            
+            
+
+//        console.log($scope.previousPic)
+
+    }
 
   // input file onchange callback
-  $scope.imageChanged = function() {
-    var imageExist = false;
-    var file = fileInput.files[0];
-    var reader = new FileReader();
+    $scope.imageChanged = function() {
+        var imageExist = false;
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        
 
-    DatabaseService.searchImg(file.name).success(function(data){
-      if (data[0] == undefined){
-        imageExist = true;
-      }
-      else {
-        imageExist = false;
-      }
-      //read file content
-      if (imageExist == true){
-        reader.onload = function(e) {
-        upload(file.name, e.currentTarget.result).then(function(res) {
-          $scope.imageUrl = res.data.url;
-          $scope.filename = file.name;
-          DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-          })
-          $scope.profile.imgName = file.name;
-        },  function(err){
-              alert(err.data);
-            });
-        }
-        reader.readAsDataURL(file);
-      }
-      else {
-        alert("Change the name of the image! // Veuillez changer le nom de l'image!");
-      }
-      $scope.editPhoto = null;
-    })
-  };
+//        DatabaseService.searchImg(file.name).success(function(data){
+//            if (data[0] == undefined){
+//                imageExist = true;
+//            }
+//            else {
+//                imageExist = false;
+//            }
+            //read file content
+//            if (imageExist == true){
+                reader.onload = function(e) {
+                    console.log("image changed!");
+                    upload(file.name).then(function(res) {
+                        $scope.imageUrl = res.data.url;
+                        $scope.filename = file.name;
+                        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+
+                        })
+                        $scope.profile.imgName = file.name;
+//                    }, function(err){
+//                        alert(err.data);
+                    });
+                }
+                console.log(file)
+                reader.readAsDataURL(file);
+//            }
+//            else {
+//                alert("Change the name of the image! // Veuillez changer le nom de l'image!");
+//            }
+            $scope.editPhoto = null;
+//        })
+};
 
   function upload(filename, filedata) {
     // By calling the files action with POST method in will perform
     // an upload of the file into Backand Storage
     return $http({
-      method: 'POST',
+//      method: 'POST',
       url : Backand.getApiUrl() + baseActionUrl +  objectName,
       params:{
         "name": filesActionName
@@ -548,7 +623,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
       // you need to provide the file name and the file data
       data: {
         "filename": filename,
-        "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
+//        "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
       }
     });
   };
@@ -562,10 +637,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   }
 
     $scope.startEditPhoto = function(){
+        $scope.btnText = "Upload";
       $scope.editPhoto = "1";
     }
 
     $scope.endEditPhoto = function(){
+        $scope.btnText = "Upload";
       $scope.editPhoto = null;
     }
 
@@ -657,6 +734,11 @@ $scope.updatedProfile = {
 
 
 }
+
+
+//    $scope.previousPic = $scope.profile.imgName;
+//    console.log("!!!!!");
+//    console.log($scope.profile.imgName);
 
   $scope.userMap = [];
   var eventList = {};

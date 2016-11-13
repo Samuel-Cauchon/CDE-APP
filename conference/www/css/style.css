@@ -460,3 +460,62 @@ table.supporters{
     margin-left: -10px;
     
 }
+
+#fileInput{
+    width: 70%;
+    margin-top: 4px;
+}
+
+input[type=file] {
+    display: none;
+        z-index: 999;
+    line-height: 0;
+    font-size: 50px;
+    position: absolute;
+    opacity: 0;
+    filter: alpha(opacity = 0);-ms-filter: "alpha(opacity=0)";
+    cursor: pointer;
+    margin: 0;
+    padding:0;
+    left:0;
+
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.add-photo-btn{
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    text-align:center;
+    color:#fff;display:block;
+    width:197px;
+    height:31px;
+    font-size:18px;
+    line-height:30px;
+    float:left;
+    background-color: #111e45;
+    border: none;
+    color: white;
+        position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0 12px;
+    min-width: 52px;
+    min-height: 47px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    vertical-align: top;
+    text-align: center;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    line-height: 42px;
+    cursor: pointer;
+}
+
