@@ -449,3 +449,8 @@ table.supporters{
   margin-right: auto;
   margin-left: auto;
 }
+
+#profilesListCard{
+    margin-left: 10px;
+    margin-right: 10px;
+}
