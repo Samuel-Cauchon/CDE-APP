@@ -862,6 +862,7 @@ $scope.updatedProfile = {
         DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function(dbd){
           var spEvents = dbd.data;
           console.log(spEvents);
+          console.log("speaker events logged");
           spEvents.forEach(function (item) {
             if ($scope.userMap.indexOf(item) == -1) {
               $scope.userMap.push(eventList[item.event].name);
