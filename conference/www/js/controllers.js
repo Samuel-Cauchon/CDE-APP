@@ -484,14 +484,14 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
     }
 
     $scope.redirectToSpeaker = function(spName){
-      AuthService.userSelected = spName;
+      AuthService.speakerName = spName;
       AuthService.isSpeaker = true;
       $location.path("/homeMenu/userProfile");
       $route.reload();
     }
 
     $scope.redirectToSpeakerFr = function(spName){
-      AuthService.userSelected = spName;
+      AuthService.speakerName = spName;
       AuthService.isSpeaker = true;
       $location.path("/homeMenu/userProfilefr");
       $route.reload();
@@ -854,18 +854,15 @@ $scope.updatedProfile = {
         console.log(currentUser)
       })
     }
-    // console.log(currentUser);
 
     MainEvents.getPeopleAttending().success(function(data){
       if(AuthService.isSpeaker == true) {
         console.log(AuthService.speakerName);
         DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function(dbd){
           var spEvents = dbd.data;
-          console.log(spEvents);
-          console.log("speaker events logged");
-          spEvents.forEach(function (item) {
+          dbd.forEach(function (item) {
             if ($scope.userMap.indexOf(item) == -1) {
-              $scope.userMap.push(eventList[item.event].name);
+              $scope.userMap.push(dbd[dbd.indexOf(item)]['name']);
             }
           })
         })
