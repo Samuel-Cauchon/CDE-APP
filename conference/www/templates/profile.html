@@ -44,13 +44,13 @@
 			</div>
 
             </br>
-                                                                    
+
 			<div class="item item-body">
 				<div ng-show="editDescription == null">
 					<p>
                         {{profile.description || "Tell us a little about yourself and what you want to learn this weekend!"}}
-                        <i class="ion-edit" ng-click="startEditDescription()"></i>   
-                    </p>                                                                                                 
+                        <i class="ion-edit" ng-click="startEditDescription()"></i>
+                    </p>
 				</div>
 				<div class="edit-description" ng-show="editDescription != null" class="edit-description">
 					<textarea maxlength="250" placeholder="250 characters maximum" ng-model="updatedProfile.newDescription"></textarea>
@@ -61,7 +61,7 @@
 			</div>
 			</br>
 			<div>
-				<h3 style="text-align: center">Your registered events</h3>
+				<h3 style="text-align: center">Events</h3>
                 <br/>
 				<ion-scroll style="height:200px; margin-right: 10px;" class="scrollVertical" direction="y">
 					<div class="list">

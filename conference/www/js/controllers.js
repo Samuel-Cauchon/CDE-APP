@@ -677,13 +677,7 @@ $scope.updatedProfile = {
     }
 
     var currentUser = "";
-    // if($scope.isUser == 1) {
       currentUser = AuthService.uid;
-    // } else {
-    //   DatabaseService.getID(AuthService.userSelected).success(function(data){
-    //     currentUser = data[0]['id'];
-    //   })
-    // }
 
     MainEvents.getPeopleAttending().success(function(data){
       var mapOfEvents = data.data;

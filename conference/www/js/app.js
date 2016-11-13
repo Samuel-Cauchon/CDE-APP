@@ -146,15 +146,15 @@ angular.module('App', ['ionic', 'App.controllers', 'App.services', 'App.directiv
 		}
 	})
 
-	  .state('homeMenu.map', {
-	    url: '/map',
-	    views: {
-	      'menuContent': {
-	        templateUrl: 'templates/map.html',
-	        controller: 'MapCtrl'
-	      }
-	    }
-	  })
+	  // .state('homeMenu.map', {
+	  //   url: '/map',
+	  //   views: {
+	  //     'menuContent': {
+	  //       templateUrl: 'templates/map.html',
+	  //       controller: 'MapCtrl'
+	  //     }
+	  //   }
+	  // })
 
 	  .state('homeMenu.schedule', {
 	  	url: '/schedule',
