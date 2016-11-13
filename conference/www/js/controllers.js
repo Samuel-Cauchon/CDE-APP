@@ -186,15 +186,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             });
 			return false;
 		}
-    DatabaseService.searchUser($scope.dataEnteredRegister.username).success(function(dataUser){
-      console.log(dataUser);
-      if(dataUser[0]['username'] != null){
-        var alertPopup = $ionicPopup.alert({
-          title: 'This username is already registered.'
-        });
-        return false;
-      }
-    });
     if($scope.dataEnteredRegister.password.length < 6) {
       var alertPopup = $ionicPopup.alert({
         title: 'Please enter a password having at least 6 characters.'
@@ -226,6 +217,11 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 			  //		MainEvents.setUserId(AuthService.uid);
 			})
 		}
+    else if(dataUser[0] != null){
+        var alertPopup = $ionicPopup.alert({
+          title: 'This username is already registered.'
+        });
+    }
 	})
 	};
 
