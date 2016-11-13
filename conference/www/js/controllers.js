@@ -150,6 +150,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
 	$scope.setUserSelected = function(userChosen){
 		AuthService.userSelected = userChosen;
+    AuthService.isSpeaker = false;
 	}
 })
 
@@ -159,8 +160,10 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 		$scope.speakersInfo = dataAllInfo;
 	})
 
-	$scope.setSpeakerSelected = function(speaker){
+	$scope.setSpeakerSelected = function(speaker, spname){
 		AuthService.userSelected = speaker;
+    AuthService.speakerName = spname ;
+    AuthService.isSpeaker = true;
 	}
 
 })
@@ -243,7 +246,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 	};
 })
 
-  .controller('EventsCtrl', function($scope, MainEvents, $ionicPopover) {
+  .controller('EventsCtrl', function($scope, MainEvents, $ionicPopover, AuthService, $location, $route) {
 
     var peopleAttendingEachEvent = {};
     $scope.map = {};
@@ -488,6 +491,19 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
       }
     }
 
+    $scope.redirectToSpeaker = function(spName){
+      AuthService.userSelected = spName;
+      AuthService.isSpeaker = true;
+      $location.path("/homeMenu/userProfile");
+      $route.reload();
+    }
+
+    $scope.redirectToSpeakerFr = function(spName){
+      AuthService.userSelected = spName;
+      AuthService.isSpeaker = true;
+      $location.path("/homeMenu/userProfilefr");
+      $route.reload();
+    }
 
 
   })
@@ -757,21 +773,36 @@ $scope.updatedProfile = {
     }
 
     var currentUser = "";
-    DatabaseService.getID(AuthService.userSelected).success(function(data){
-      currentUser = data[0]['id'];
-      console.log(currentUser)
-    })
+    if(AuthService.isSpeaker == false) {
+      DatabaseService.getID(AuthService.userSelected).success(function (data) {
+        currentUser = data[0]['id'];
+        console.log(currentUser)
+      })
+    }
     // console.log(currentUser);
 
     MainEvents.getPeopleAttending().success(function(data){
-      var mapOfEvents = data.data;
-      mapOfEvents.forEach(function(item) {
-        if(currentUser == item.user) {
-          if ($scope.userMap.indexOf(item) == -1) {
-            $scope.userMap.push(eventList[item.event].name);
+      if(AuthService.isSpeaker == true) {
+        console.log(AuthService.speakerName);
+        DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function(dbd){
+          var spEvents = dbd.data;
+          console.log(spEvents);
+          spEvents.forEach(function (item) {
+            if ($scope.userMap.indexOf(item) == -1) {
+              $scope.userMap.push(eventList[item.event].name);
+            }
+          })
+        })
+      } else {
+        var mapOfEvents = data.data;
+        mapOfEvents.forEach(function (item) {
+          if (currentUser == item.user) {
+            if ($scope.userMap.indexOf(item) == -1) {
+              $scope.userMap.push(eventList[item.event].name);
+            }
           }
-        }
-      })
+        })
+      }
       $scope.userMap = removeDuplicates($scope.userMap);
       console.log($scope.userMap);
       $scope.userEvents = function(){

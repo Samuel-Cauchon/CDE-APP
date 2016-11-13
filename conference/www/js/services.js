@@ -418,8 +418,19 @@ angular.module('App.services', ['backand'])
             }
           }
         });
-      }
+      },
 
+      getSpeakerEvents: function(user){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getSpeakerEvents',
+          params: {
+            parameters: {
+              username: user
+            }
+          }
+        });
+      }
       /*uploadImage: function (filename, filedata) {
 
        var baseUrl = '/1/objects/';
@@ -482,6 +493,8 @@ angular.module('App.services', ['backand'])
     var currentUser;
     var uid;
     var userSelected;
+    var speakerName;
+    var isSpeaker;
     return {
     };
   })

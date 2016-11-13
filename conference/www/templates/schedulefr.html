@@ -34,7 +34,7 @@
           <h3 style="white-space:normal; border-bottom: solid #2C75BC;
     padding-bottom: 20px;" class="bigger openBox">{{ entity.place }}</h3>
             <br>
-          <span ng-if="entity.speaker != null">
+          <span ng-if="entity.speaker != null" ng-click="redirectToSpeakerFr(entity.speaker)">
           <h2><b>Conférenciers</b></h2>
           <h3 class="bigger openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
           </span>
