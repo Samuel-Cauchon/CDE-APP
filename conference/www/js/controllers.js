@@ -843,7 +843,8 @@ $scope.updatedProfile = {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
       eventList[eventArr[i].id] = {
-        name: eventArr[i].name
+        name: eventArr[i].name,
+        name_fr: eventArr[i].name_fr
       };
     }
 
@@ -879,11 +880,16 @@ $scope.updatedProfile = {
           })
         }
       } else {
+
         var mapOfEvents = data.data;
         mapOfEvents.forEach(function (item) {
           if (currentUser == item.user) {
             if ($scope.userMap.indexOf(item) == -1) {
-              $scope.userMap.push(eventList[item.event].name);
+              if($rootScope.currentLanguage == "english") {
+                $scope.userMap.push(eventList[item.event].name);
+              } else {
+                $scope.userMap.push(eventList[item.event].name_fr);
+              }
             }
           }
         })
