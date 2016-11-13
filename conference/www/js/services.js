@@ -430,6 +430,18 @@ angular.module('App.services', ['backand'])
             }
           }
         });
+      },
+
+      getSpeakerEventsFr: function(user){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getSpeakerEventsFr',
+          params: {
+            parameters: {
+              username: user
+            }
+          }
+        });
       }
       /*uploadImage: function (filename, filedata) {
 

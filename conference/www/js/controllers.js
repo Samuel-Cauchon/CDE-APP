@@ -810,7 +810,7 @@ $scope.updatedProfile = {
 })
 
 
-.controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, MainEvents) {
+.controller('UserProfileCtrl', function ($scope, DatabaseService, AuthService, MainEvents, $rootScope) {
 
 
 	$scope.profile = {
@@ -858,14 +858,26 @@ $scope.updatedProfile = {
     MainEvents.getPeopleAttending().success(function(data){
       if(AuthService.isSpeaker == true) {
         console.log(AuthService.speakerName);
-        DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function(dbd){
-          var spEvents = dbd.data;
-          dbd.forEach(function (item) {
-            if ($scope.userMap.indexOf(item) == -1) {
-              $scope.userMap.push(dbd[dbd.indexOf(item)]['name']);
-            }
+        if($rootScope.currentLanguage == "english") {
+          DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function (dbd) {
+            var spEvents = dbd.data;
+            dbd.forEach(function (item) {
+              if ($scope.userMap.indexOf(item) == -1) {
+                $scope.userMap.push(dbd[dbd.indexOf(item)]['name']);
+              }
+            })
           })
-        })
+        }
+        else {
+          DatabaseService.getSpeakerEventsFr(AuthService.speakerName).success(function (dbd) {
+            var spEvents = dbd.data;
+            dbd.forEach(function (item) {
+              if ($scope.userMap.indexOf(item) == -1) {
+                $scope.userMap.push(dbd[dbd.indexOf(item)]['name_fr']);
+              }
+            })
+          })
+        }
       } else {
         var mapOfEvents = data.data;
         mapOfEvents.forEach(function (item) {
