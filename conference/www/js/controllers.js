@@ -533,6 +533,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
       else {
         alert("Change the name of the image! // Veuillez changer le nom de l'image!");
       }
+      $scope.editPhoto = null;
     })
   };
 
