@@ -129,6 +129,7 @@ margin-left: 4%;
 
 #row{
         background-color: white;
+        white-space: normal;
 }
 
 div.item.item-avatar.profile-avatar > img.blank-profile {
