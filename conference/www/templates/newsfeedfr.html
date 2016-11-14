@@ -13,10 +13,10 @@
         Bonjour {{userName}} !
       </div>
 
-          
-                    
+
+
     <div class="item item-input-inset">
-        <label class="item item-input-wrapper">   
+        <label class="item item-input-wrapper">
             <input type="text" id=0 placeholder="À quoi pensez-vous?">
         </label>
         <button class="button" id="postButton" ng-click="postComment(0)">Publier</button>
@@ -39,7 +39,7 @@
               <label class="item item-input" id="commentBoxFrame">
                 <input type="text" id="commentsBox" placeholder="À vous de répondre...">
               </label>
-                <ion-item ng-repeat="comment in entry" ng-if="item.id == comment.commentid">
+                <ion-item ng-repeat="comment in comments" ng-if="item.id == comment.commentid">
                   {{comment.name}}<br>
                   <div class="comment-date">{{comment.date}}<br></div>
                   <div class="comment-content">{{comment.content}}<br></div>
@@ -47,6 +47,7 @@
                 </div>
             </ion-item>
           </ion-list>
+          <button class="button" style="margin-left: 20%" ng-click="showMore()">Autres Commentaires</button>
         </div>
     </ion-content>
 </ion-view>
