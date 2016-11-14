@@ -27,24 +27,22 @@
                   ng-if="isGroupShown(entity)">
             <br>
           <h2 class="title-bigger"><b>Description:</b></h2>
-          <h3 style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" class="bigger openBox">{{ entity.description_fr }}</h3>
+          <h3 class="bigger openBox schedule-spacing">{{ entity.description_fr }}</h3>
             <br>
           <h2 class="title-bigger"><b>Où:</b></h2>
-          <h3 style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" class="bigger openBox">{{ entity.place_fr }}</h3>
+          <h3 class="bigger openBox schedule-spacing">{{ entity.place_fr }}</h3>
             <br>
           <span ng-if="entity.speaker != null" ng-click="redirectToSpeakerFr(entity.speaker)">
           <h2><b>Conférenciers</b></h2>
-          <h3 class="bigger openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
+          <h3 class="bigger openBox schedule-spacing">{{ entity.speaker }} {{ entity.attending }}  </h3>
+            <br>
           </span>
-          <h2 style="margin-top:4%"><b>Utilisateur(e)s inscrit(e)s ({{ numberOfPeopleAttending || 0 }}):</b></h2>
-          <ion-scroll style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" style="height:115px" class="scrollVertical" direction="y">
+          <h2 class="title-bigger"><b>Utilisateur(e)s inscrit(e)s ({{ calculateNumberOfPeopleAttending() }}):</b></h2>
+          <ion-scroll style="height:115px" class="scrollVertical schedule-spacing" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
-                  <h3 class="bigger openBox">- {{ n }}</h3>
+                  <h3 class="bigger openBox"> {{ n }}</h3>
                 </div>
               </div>
             </div>
@@ -83,7 +81,7 @@
       <ion-radio ng-repeat="item in datesFrench"
                  ng-value="item.value"
                  ng-model="defaultDate.clientSide"
-                 ng-class="text-align-center ">
+                 class="text-align-center ">
         {{ item.text }}
       </ion-radio>
     </ion-content>
