@@ -828,11 +828,11 @@ $scope.updatedProfile = {
 			DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataImg){
 				DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
 					DatabaseService.getName(AuthService.userSelected).success(function(dataname){
-						$scope.profile.imgName = dataImg[0]['photo'];
 						$scope.profile.name = dataname[0]['name'];
 						$scope.profile.phonenumber = dataphone[0]['phonenumber'];
 						$scope.profile.profession = dataprofession[0]['profession'];
 						$scope.profile.description = datadescription[0]['description'];
+						$scope.profile.imgName = dataImg[0]['photo'];
 					})
 				})
 			})
@@ -980,7 +980,7 @@ $scope.updatedProfile = {
 })
 
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
+.controller('NewsfeedCtrl', function($scope, $rootScope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
 
 	$scope.entry = [];
 	$scope.comments = [];
@@ -1043,7 +1043,13 @@ $scope.updatedProfile = {
 	};
 
 	$scope.postComment = function(id) {
-		var comment = document.getElementById(id).value;
+		var comment = "";
+		if($rootScope.currentLanguage == "french"){
+			comment = document.getElementById(id+"-fr").value;
+		}
+		else {
+			comment = document.getElementById(id).value;
+		}
 		var timestamp = new Date();
 		var day = formatNumber(timestamp.getDate());
 		var month = formatNumber(timestamp.getMonth()+1);
@@ -1057,7 +1063,11 @@ $scope.updatedProfile = {
 			$scope.ServerResponse = data;
 			console.log("comment saved");
 			$scope.refreshNewsfeed();
-			document.getElementById(id).value = null;
+			if($rootScope.currentLanguage == "french"){
+				document.getElementById(id+"-fr").value = null;
+			} else {
+				document.getElementById(id).value = null;
+			}
 		})
 		.error(function (data, status, header, config) {
 			$scope.ServerResponse =  htmlDecode("Data: " + data +
