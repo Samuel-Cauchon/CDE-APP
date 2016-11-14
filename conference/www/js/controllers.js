@@ -524,7 +524,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
     var baseActionUrl = baseUrl + 'action/'
     var objectName = 'user';
     var filesActionName = 'img';
-    
+
     // input file onchange callback
   $scope.imageChanged = function() {
     var imageExist = false;
@@ -1038,6 +1038,8 @@ $scope.updatedProfile = {
 .controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
 
 	$scope.entry = [];
+	$scope.comments = [];
+	var count = 1;
   var currentToken = "";
 	var uid = AuthService.uid;
   $scope.userName = "";
@@ -1055,6 +1057,8 @@ $scope.updatedProfile = {
 	})
 
 	$scope.refreshNewsfeed = function () {
+		// $scope.entry = [];
+		// $scope.comments = [];
 		retrieveInfo();
     //$scope.pushNotification();
     $scope.$broadcast('scroll.refreshComplete');
@@ -1088,6 +1092,10 @@ $scope.updatedProfile = {
 		return month+" "+day+" at "+hour+":"+min;
 	};
 
+	$scope.showMore = function() {
+		count++;
+		retrieveInfo();
+	};
 
 	$scope.postComment = function(id) {
         console.log("!!!!");
@@ -1143,14 +1151,34 @@ $scope.updatedProfile = {
 
   function retrieveInfo(){
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
-      for (i=0; i < data.length; i++){
+			var counter = 0;
+      for (i=0; i < 10*count; i++){
           $scope.entry[i] = {name:data[i]['name'],
                             date:formatDate(data[i]['date']),
                             content:data[i]['content'],
                             commentid: data[i]['commentid'],
                             id: data[i]['id'],
                             likes: data[i]['likes']};
+				//console.log($scope.entry);
       }
+			for (i=0; i<$scope.entry.length; i++){
+				DatabaseService.getCommentForPost($scope.entry[i].id).success(function(commentData){
+					//console.log($scope.entry[i].id);
+					//console.log(commentData);
+					//console.log(commentData.length);
+					console.log("i is", i);
+					for(j=0; j<commentData.length; j++){
+						$scope.comments[counter] = {name:commentData[j]['name'],
+	                            	date:formatDate(commentData[j]['date']),
+	                            	content:commentData[j]['content'],
+	                            	commentid: commentData[j]['commentid'],
+	                            	id: commentData[j]['id']};
+						console.log("j is ", j);
+						counter++;
+					};
+					console.log($scope.comments);
+				});
+			}
     })
     .error(function (data, status, header, config) {
         $scope.ServerResponse =  htmlDecode("Data: " + data +

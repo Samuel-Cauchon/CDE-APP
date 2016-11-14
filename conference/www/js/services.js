@@ -356,6 +356,18 @@ angular.module('App.services', ['backand'])
         });
       },
 
+      getCommentForPost: function(id){
+        return $http ({
+          method: 'GET',
+          url: Backand.getApiUrl() + '/1/query/data/getCommentsForPost',
+          params: {
+            parameters: {
+              id: id
+            }
+          }
+        });
+      },
+
       getMaxId: function(){
         return $http ({
           method: 'GET',
