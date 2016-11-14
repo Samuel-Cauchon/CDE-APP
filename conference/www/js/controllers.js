@@ -319,7 +319,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
         MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
       console.log("User Arr", userArr);
       MainEvents.getPeopleAttending().success(function (data) {
-        console.log("DATAAAA", data);
         var mapOfEventToUser = data.data;
         console.log("Map of event to user", mapOfEventToUser);
         console.log("Peopel attending each event", peopleAttendingEachEvent);
