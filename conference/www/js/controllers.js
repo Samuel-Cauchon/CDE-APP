@@ -504,62 +504,28 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
   })
 
-  .controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents, $http, Backand) {
+.controller('ProfileCtrl', function ($scope, DatabaseService, AuthService, $rootScope, MainEvents, $http, Backand) {
 
-    $scope.editPhoto = null;
-    $scope.editDescription = null;
-    $scope.editProfession = null;
-    $scope.editName = null;
-    $scope.imageUrl = null;
-    $scope.filename = null;
+  $scope.editPhoto = null;
+  $scope.editDescription = null;
+  $scope.editProfession = null;
+  $scope.editName = null;
+  $scope.imageUrl = null;
+  $scope.filename = null;
+        $scope.btnText = "Upload";
+    
     $scope.currentPic = null;
 
      DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
          $scope.currentPic = dataImg[0]['photo'];
      })
 
-    $scope.btnText = "Upload";
-
-    var baseUrl = '/1/objects/';
-    var baseActionUrl = baseUrl + 'action/'
-    var objectName = 'user';
-    var filesActionName = 'img';
-
-    // input file onchange callback
-  $scope.imageChanged = function() {
-    var imageExist = false;
-    var file = fileInput.files[0];
-    var reader = new FileReader();
-
-    DatabaseService.searchImg(file.name).success(function(data){
-      if (data[0] == undefined){
-        imageExist = true;
-      }
-      else {
-        imageExist = false;
-      }
-      //read file content
-      if (imageExist == true){
-        reader.onload = function(e) {
-        upload(file.name, e.currentTarget.result).then(function(res) {
-          $scope.imageUrl = res.data.url;
-          $scope.filename = file.name;
-          DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-          })
-          $scope.profile.imgName = file.name;
-        },  function(err){
-              alert(err.data);
-            });
-        }
-        reader.readAsDataURL(file);
-      }
-      else {
-        alert("Change the name of the image! // Veuillez changer le nom de l'image!");
-      }
-    })
-  };
-
-    $scope.file_changed = function(element) {
+  var baseUrl = '/1/objects/';
+  var baseActionUrl = baseUrl + 'action/'
+  var objectName = 'user';
+  var filesActionName = 'img';
+    
+$scope.file_changed = function(element) {
         console.log("weeee!!")
         $scope.$apply(function(scope) {
             console.log("yaho!")
@@ -571,28 +537,65 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             };
             if(photofile != undefined){
                 reader.onload = function(e) {
-                    console.log("image changed!");
-                    upload2(photofile.name).then(function(res) {
-//                        $scope.imageUrl = res.data.url;
-//                        $scope.filename = file.name;
-//                        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-//
-//                        })
-                        $scope.profile.imgName = photofile.name;
-//                    }, function(err){
-//                        alert(err.data);
-                    });
-                }
+        upload(photofile.name, e.currentTarget.result).then(function(res) {
+          $scope.imageUrl = res.data.url;
+          $scope.filename = photofile.name;
+//          DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+//          })
+          $scope.profile.imgName = photofile.name;
+        },  function(err){
+              alert(err.data);
+            });
+        }
+        reader.readAsDataURL(photofile);
+                console.log("FOUUND A FILE!")
                 console.log(photofile)
-                reader.readAsDataURL(photofile);
+//                reader.readAsDataURL(photofile);
                 $scope.btnText = "Uploaded!";
             }
 //            console.log(photofile)
-            //console.log(reader.readAsDataURL(photofile));
+//            console.log(reader.readAsDataURL(photofile));
         });
-    };
+    };    
+
+  // input file onchange callback
+  $scope.imageChanged = function() {
+        DatabaseService.updateImg(AuthService.currentUser, $scope.profile.imgName).success(function(data){
+          })
+        $scope.btnText = "Upload";
+//    var imageExist = false;
+//    var file = fileInput.files[0];
+//    var reader = new FileReader();
 //
-    $scope.cancelUpload = function() {
+//    DatabaseService.searchImg(file.name).success(function(data){
+//      if (data[0] == undefined){
+//        imageExist = true;
+//      }
+//      else {
+//        imageExist = false;
+//      }
+//      //read file content
+//      if (imageExist == true){
+//        reader.onload = function(e) {
+//        upload(file.name, e.currentTarget.result).then(function(res) {
+//          $scope.imageUrl = res.data.url;
+//          $scope.filename = file.name;
+////          DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
+////          })
+//          $scope.profile.imgName = file.name;
+//        },  function(err){
+//              alert(err.data);
+//            });
+//        }
+//        reader.readAsDataURL(file);
+//      }
+//      else {
+//        alert("Change the name of the image! // Veuillez changer le nom de l'image!");
+//      }
+//    })
+  };
+    
+        $scope.cancelUpload = function() {
         $scope.btnText = "Upload";
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
             $scope.profile.imgName = dataImg[0]['photo'];
@@ -602,7 +605,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             var reader = new FileReader();
             reader.onload = function(e) {
                 console.log("image changed!");
-                upload2($scope.currentPic).then(function(res) {
+                upload($scope.currentPic).then(function(res) {
 ////                        $scope.imageUrl = res.data.url;
 ////                        $scope.filename = file.name;
 ////                        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
@@ -614,74 +617,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
                 })
             };
         })
+        }
 
-
-
-
-//        console.log($scope.previousPic)
-
-    }
-//
-//  // input file onchange callback
-//    $scope.imageChanged = function() {
-//        var imageExist = false;
-//        var file = fileInput.files[0];
-//        var reader = new FileReader();
-//
-//
-////        DatabaseService.searchImg(file.name).success(function(data){
-////            if (data[0] == undefined){
-////                imageExist = true;
-////            }
-////            else {
-////                imageExist = false;
-////            }
-//            //read file content
-////            if (imageExist == true){
-//                reader.onload = function(e) {
-//                    console.log("image changed!");
-//                    upload(file.name).then(function(res) {
-//                        $scope.imageUrl = res.data.url;
-//                        $scope.filename = file.name;
-//                        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-//
-//                        })
-//                        $scope.profile.imgName = file.name;
-////                    }, function(err){
-////                        alert(err.data);
-//                    });
-//                }
-//                console.log(file)
-//                reader.readAsDataURL(file);
-////            }
-////            else {
-////                alert("Change the name of the image! // Veuillez changer le nom de l'image!");
-////            }
-//            $scope.editPhoto = null;
-////        })
-//};
-
-  function upload2(filename, filedata) {
-    // By calling the files action with POST method in will perform
-    // an upload of the file into Backand Storage
-    return $http({
-//      method: 'POST',
-      url : Backand.getApiUrl() + baseActionUrl +  objectName,
-      params:{
-        "name": filesActionName
-      },
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      // you need to provide the file name and the file data
-      data: {
-        "filename": filename,
-//        "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
-      }
-    });
-  };
-
-      function upload(filename, filedata) {
+  function upload(filename, filedata) {
     // By calling the files action with POST method in will perform
     // an upload of the file into Backand Storage
     return $http({
@@ -710,12 +648,10 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   }
 
     $scope.startEditPhoto = function(){
-        $scope.btnText = "Upload";
       $scope.editPhoto = "1";
     }
 
     $scope.endEditPhoto = function(){
-        $scope.btnText = "Upload";
       $scope.editPhoto = null;
     }
 
@@ -808,11 +744,6 @@ $scope.updatedProfile = {
 
 }
 
-
-//    $scope.previousPic = $scope.profile.imgName;
-//    console.log("!!!!!");
-//    console.log($scope.profile.imgName);
-
   $scope.userMap = [];
   var eventList = {};
   // $scope.isUser = 1;
@@ -825,7 +756,13 @@ $scope.updatedProfile = {
     }
 
     var currentUser = "";
+    // if($scope.isUser == 1) {
       currentUser = AuthService.uid;
+    // } else {
+    //   DatabaseService.getID(AuthService.userSelected).success(function(data){
+    //     currentUser = data[0]['id'];
+    //   })
+    // }
 
     MainEvents.getPeopleAttending().success(function(data){
       var mapOfEvents = data.data;
@@ -856,6 +793,14 @@ $scope.updatedProfile = {
     return arr;
 
   }
+})
+
+.controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
+
+	$scope.setUserSelected = function(user){
+		AuthService.userSelected = user;
+	}
+
 })
 
 .controller('UsersCtrl', function ($scope, DatabaseService, AuthService, $rootScope) {
