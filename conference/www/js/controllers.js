@@ -341,7 +341,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
         console.log("$scope.map", $scope.map);
         MainEvents.setMapOfEventsToUsers($scope.map);
         $scope.getMappingOfEventToUsers = function (id) {
-          console.log("Id gotten", id);
           $scope.calculateNumberOfPeopleAttending = function(){
             var length;
             if($scope.map[id]){
@@ -351,7 +350,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             else {
               length = 0;
             }
-            console.log("LENGTH INSIDE FCN", length);
             return length;
           }
           if ($scope.map[id]) {
@@ -390,12 +388,9 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
       if (uid && mapOfIdsToUsernames && eventId && mapOfEventsToRegister) {
         var username = mapOfIdsToUsernames[uid].name;
         console.log("Username", username);
-        console.log("Map of events to register", mapOfEventsToRegister);
         for (var key in mapOfEventsToRegister) {
           var obj = mapOfEventsToRegister[key];
-          console.log("OBJ", obj);
           if (obj.indexOf(username) !== -1) {
-            console.log("HEREEEE");
             $scope.mapUserRegisteredToEvent[key]= ({'value': true});
           }
           else{
@@ -404,7 +399,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
         }
 
         //$scope.mapUserRegisteredToEvent = removeDuplicates($scope.mapUserRegisteredToEvent);
-        console.log("MAPP", $scope.mapUserRegisteredToEvent)
       }
     }
 
@@ -449,7 +443,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 
       if(ind == 1){
         $scope.events = MainEvents.getEventArrayWithFixedTiming('second')
-        console.log("Scope.events second day", $scope.events);
       }
 
       if(ind == 2){
@@ -464,14 +457,14 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
     }
 
     $scope.registerForEvent = function(eventId) {
-      var uid = MainEvents.getUserId();
+      var uid = AuthService.uid;
+      console.log("UID", uid);
       console.log("UID register", uid);
       console.log("Event ID", eventId);
       var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
       var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
       console.log("REGISTER FOR EVENT", mapOfEventsToUsers[eventId] === undefined);
       var username = userNamesArrForEachId[uid].name;
-      console.log("mapOfEventTOUsers", mapOfEventsToUsers);
       if (username && eventId && mapOfEventsToUsers) {
         if ((mapOfEventsToUsers[eventId] === undefined) || (mapOfEventsToUsers[eventId].indexOf(username) == -1)) {
           console.log("HERE");

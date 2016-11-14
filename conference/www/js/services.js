@@ -568,12 +568,12 @@ angular.module('App.services', ['backand'])
         console.log("hi");
         return DatabaseService.getData('1/objects/user', {});
       },
-      setEventId: function (id) {
-        eventId = id;
-      },
-      getEventId: function () {
-        return eventId;
-      },
+      //setEventId: function (id) {
+      //  eventId = id;
+      //},
+      //getEventId: function () {
+      //  return eventId;
+      //},
       getPeopleAttendingEvent: function () {
         if (eventId) {
           console.log(DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {}));
