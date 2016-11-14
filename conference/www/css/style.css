@@ -528,4 +528,7 @@ border-bottom: solid #2C75BC;
 padding-bottom: 20px;"
 }
 
-
+.sponsors-spacing {
+  border-bottom:1px solid;
+  border-color:#B2B2B7;
+}
