@@ -319,6 +319,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
         MainEvents.setPeopleAttendingEachEvent(peopleAttendingEachEvent);
       console.log("User Arr", userArr);
       MainEvents.getPeopleAttending().success(function (data) {
+        console.log("DATAAAA", data);
         var mapOfEventToUser = data.data;
         console.log("Map of event to user", mapOfEventToUser);
         console.log("Peopel attending each event", peopleAttendingEachEvent);
@@ -342,6 +343,18 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
         MainEvents.setMapOfEventsToUsers($scope.map);
         $scope.getMappingOfEventToUsers = function (id) {
           console.log("Id gotten", id);
+          $scope.calculateNumberOfPeopleAttending = function(){
+            var length;
+            if($scope.map[id]){
+              console.log("INSIDE CALCULATE NUMBER OF PEOPEL ATTENDING IF");
+              length = removeDuplicates($scope.map[id]).length;
+            }
+            else {
+              length = 0;
+            }
+            console.log("LENGTH INSIDE FCN", length);
+            return length;
+          }
           if ($scope.map[id]) {
           //  console.log("$scope.map[id]", (removeDuplicates($scope.map[id])).length);
             $scope.numberOfPeopleAttending = (removeDuplicates($scope.map[id])).length;
