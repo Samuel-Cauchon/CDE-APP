@@ -254,6 +254,9 @@ img.blank-profile {
 	font-weight: bold;
 }
 
+.font-weight-400{
+  font-size: 30px !important;
+}
 
 .comment-content {
     width: 96%;

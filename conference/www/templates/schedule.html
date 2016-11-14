@@ -37,12 +37,12 @@
           <h3 class="bigger openBox schedule-spacing">{{ entity.speaker }} {{ entity.attending }}  </h3>
             <br>
           </span>
-          <h2 ng-class="title-bigger"><b>Users Attending ({{ calculateNumberOfPeopleAttending() }}):</b></h2>
+          <h2 class="title-bigger"><b>Users Attending ({{ calculateNumberOfPeopleAttending() }}):</b></h2>
           <ion-scroll style="height:100px" class="scrollVertical schedule-spacing" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
-                  <h3 class="bigger openBox">- {{ n }}</h3>
+                  <h3 class="bigger openBox"> {{ n }}</h3>
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@
       <ion-radio ng-repeat="item in dates"
                  ng-value="item.value"
                  ng-model="defaultDate.clientSide"
-                 ng-class="text-align-center ">
+                 class="text-align-center ">
         {{ item.text }}
       </ion-radio>
     </ion-content>
