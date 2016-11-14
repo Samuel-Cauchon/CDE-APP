@@ -513,7 +513,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   $scope.imageUrl = null;
   $scope.filename = null;
         $scope.btnText = "Upload";
-    
+
     $scope.currentPic = null;
 
      DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
@@ -524,7 +524,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   var baseActionUrl = baseUrl + 'action/'
   var objectName = 'user';
   var filesActionName = 'img';
-    
+
 $scope.file_changed = function(element) {
         console.log("weeee!!")
         $scope.$apply(function(scope) {
@@ -556,7 +556,7 @@ $scope.file_changed = function(element) {
 //            console.log(photofile)
 //            console.log(reader.readAsDataURL(photofile));
         });
-    };    
+    };
 
   // input file onchange callback
   $scope.imageChanged = function() {
@@ -594,7 +594,7 @@ $scope.file_changed = function(element) {
 //      }
 //    })
   };
-    
+
         $scope.cancelUpload = function() {
         $scope.btnText = "Upload";
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
@@ -1043,15 +1043,7 @@ $scope.updatedProfile = {
 	};
 
 	$scope.postComment = function(id) {
-        console.log("!!!!");
-        console.log(id);
-		var comment = "";
-		if (id == 0){
-			comment = document.getElementById(0).value;
-		}
-		else{
-			comment = document.getElementById("commentsBox").value;
-		}
+		var comment = document.getElementById(id).value;
 		var timestamp = new Date();
 		var day = formatNumber(timestamp.getDate());
 		var month = formatNumber(timestamp.getMonth()+1);
@@ -1065,8 +1057,7 @@ $scope.updatedProfile = {
 			$scope.ServerResponse = data;
 			console.log("comment saved");
 			$scope.refreshNewsfeed();
-			document.getElementById("commentsBox").value = null;
-			document.getElementById(0).value = null;
+			document.getElementById(id).value = null;
 		})
 		.error(function (data, status, header, config) {
 			$scope.ServerResponse =  htmlDecode("Data: " + data +
@@ -1111,17 +1102,17 @@ $scope.updatedProfile = {
 					//console.log($scope.entry[i].id);
 					//console.log(commentData);
 					//console.log(commentData.length);
-					console.log("i is", i);
+					//console.log("i is", i);
 					for(j=0; j<commentData.length; j++){
 						$scope.comments[counter] = {name:commentData[j]['name'],
 	                            	date:formatDate(commentData[j]['date']),
 	                            	content:commentData[j]['content'],
 	                            	commentid: commentData[j]['commentid'],
 	                            	id: commentData[j]['id']};
-						console.log("j is ", j);
+						//console.log("j is ", j);
 						counter++;
 					};
-					console.log($scope.comments);
+					//console.log($scope.comments);
 				});
 			}
     })
