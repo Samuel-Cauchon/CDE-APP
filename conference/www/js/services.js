@@ -576,7 +576,7 @@ angular.module('App.services', ['backand'])
       //},
       getPeopleAttendingEvent: function () {
         if (eventId) {
-          console.log(DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {}));
+          //console.log(DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {}));
           return DatabaseService.getData('/1/objects/event/' + eventId + '?deep=true', {});
         }
       },

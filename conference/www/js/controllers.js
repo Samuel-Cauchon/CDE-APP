@@ -459,11 +459,10 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
     $scope.registerForEvent = function(eventId) {
       var uid = AuthService.uid;
       console.log("UID", uid);
-      console.log("UID register", uid);
       console.log("Event ID", eventId);
       var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
       var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
-      console.log("REGISTER FOR EVENT", mapOfEventsToUsers[eventId] === undefined);
+     // console.log("REGISTER FOR EVENT", mapOfEventsToUsers[eventId] === undefined);
       var username = userNamesArrForEachId[uid].name;
       if (username && eventId && mapOfEventsToUsers) {
         if ((mapOfEventsToUsers[eventId] === undefined) || (mapOfEventsToUsers[eventId].indexOf(username) == -1)) {

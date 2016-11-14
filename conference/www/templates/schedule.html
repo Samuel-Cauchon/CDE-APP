@@ -27,20 +27,18 @@
                   ng-if="isGroupShown(entity)">
             <br>
           <h2 class="title-bigger"><b>Description:</b></h2>
-          <h3 style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" class="bigger openBox">{{ entity.description }}</h3>
+          <h3 class="bigger openBox schedule-spacing">{{ entity.description }}</h3>
             <br>
           <h2 class="title-bigger"><b>Where:</b></h2>
-          <h3 style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" class="bigger openBox">{{ entity.place }}</h3>
+          <h3 class="bigger openBox schedule-spacing">{{ entity.place }}</h3>
             <br>
           <span ng-if="entity.speaker != null" ng-click="redirectToSpeaker(entity.speaker)">
-          <h2><b>Speaker(s)</b></h2>
-          <h3 class="bigger openBox">{{ entity.speaker }} {{ entity.attending }}  </h3>
+          <h2 class="title-bigger"><b>Speaker(s)</b></h2>
+          <h3 class="bigger openBox schedule-spacing">{{ entity.speaker }} {{ entity.attending }}  </h3>
+            <br>
           </span>
-          <h2 style="margin-top:4%"><b>Users Attending ({{ calculateNumberOfPeopleAttending() }}):</b></h2>
-          <ion-scroll style="white-space:normal; border-bottom: solid #2C75BC;
-    padding-bottom: 20px;" style="height:115px" class="scrollVertical" direction="y">
+          <h2 ng-class="title-bigger"><b>Users Attending ({{ calculateNumberOfPeopleAttending() }}):</b></h2>
+          <ion-scroll style="height:100px" class="scrollVertical schedule-spacing" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
