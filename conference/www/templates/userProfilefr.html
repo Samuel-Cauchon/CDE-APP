@@ -43,7 +43,9 @@
 
 			<div class="item item-body">
 				<div>
-          <h2 class="font-weight-400">Biography</h2>
+					<div ng-if="profile.speaker">
+          	<h2 class="font-weight-400">Biographie</h2>
+					</div>
 					<p>
                         {{profile.description || "Aucune description n'a été choisie"}}
                     </p>
@@ -51,7 +53,12 @@
 			</div>
 
 			<div>
-				<h2 style="margin-left:5%">Evénements</h2>
+				<div ng-if="profile.speaker">
+					<h2 style="margin-left:5%">Événements</h2>
+				</div>
+				<div ng-if="!profile.speaker">
+					<h2 style="margin-left:5%">Événements inscrits</h2>
+				</div>
                 <br/>
 				<ion-scroll style="height:200px; margin-right: 10px;" class="scrollVertical" direction="y">
 					<div class="list">

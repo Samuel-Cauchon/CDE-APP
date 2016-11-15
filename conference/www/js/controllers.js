@@ -512,7 +512,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   $scope.editName = null;
   $scope.imageUrl = null;
   $scope.filename = null;
-        $scope.btnText = "Upload";
+	if($rootScope.currentLanguage == "english"){
+  	$scope.btnText = "Upload";
+	}
+	else {
+		$scope.btnText = "Sélectionner";
+	}
 
     $scope.currentPic = null;
 
@@ -551,8 +556,13 @@ $scope.file_changed = function(element) {
                 console.log("FOUUND A FILE!")
                 console.log(photofile)
 //                reader.readAsDataURL(photofile);
-                $scope.btnText = "Uploaded!";
-            }
+				if($rootScope.currentLanguage == "english"){
+					$scope.btnText = "Uploaded!";
+				}
+				else {
+					$scope.btnText = "Sélectionné";
+				}
+    }
 //            console.log(photofile)
 //            console.log(reader.readAsDataURL(photofile));
         });
@@ -562,7 +572,12 @@ $scope.file_changed = function(element) {
   $scope.imageChanged = function() {
         DatabaseService.updateImg(AuthService.currentUser, $scope.profile.imgName).success(function(data){
           })
-        $scope.btnText = "Upload";
+					if($rootScope.currentLanguage == "english"){
+						$scope.btnText = "Upload";
+					}
+					else {
+						$scope.btnText = "Sélectionner";
+					}
 //    var imageExist = false;
 //    var file = fileInput.files[0];
 //    var reader = new FileReader();
@@ -596,7 +611,12 @@ $scope.file_changed = function(element) {
   };
 
         $scope.cancelUpload = function() {
-        $scope.btnText = "Upload";
+					if($rootScope.currentLanguage == "english"){
+						$scope.btnText = "Upload";
+					}
+					else {
+						$scope.btnText = "Sélectionner";
+					}
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
             $scope.profile.imgName = dataImg[0]['photo'];
             console.log(dataImg[0]['photo']);
@@ -780,8 +800,8 @@ function updateUserEvents() {
         }
       })
       $scope.userMap = removeDuplicates($scope.userMap);
-      // console.log($scope.userMap);
-      $scope.userEvents = function () {
+      console.log($scope.userMap);
+      $scope.userEvents = function(){
         return $scope.userMap;
       }
     })
@@ -827,7 +847,8 @@ function updateUserEvents() {
 		name:"",
 		phonenumber:"",
 		profession:"",
-		description:""
+		description:"",
+		speaker:AuthService.isSpeaker
 	}
 
 	DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
@@ -835,11 +856,11 @@ function updateUserEvents() {
 			DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataImg){
 				DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
 					DatabaseService.getName(AuthService.userSelected).success(function(dataname){
-						$scope.profile.imgName = dataImg[0]['photo'];
 						$scope.profile.name = dataname[0]['name'];
 						$scope.profile.phonenumber = dataphone[0]['phonenumber'];
 						$scope.profile.profession = dataprofession[0]['profession'];
 						$scope.profile.description = datadescription[0]['description'];
+						$scope.profile.imgName = dataImg[0]['photo'];
 					})
 				})
 			})
@@ -994,7 +1015,7 @@ function updateUserEvents() {
 })
 
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
+.controller('NewsfeedCtrl', function($scope, $rootScope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
 
 	$scope.entry = [];
 	$scope.comments = [];
@@ -1057,14 +1078,12 @@ function updateUserEvents() {
 	};
 
 	$scope.postComment = function(id) {
-        console.log("!!!!");
-        console.log(id);
 		var comment = "";
-		if (id == 0){
-			comment = document.getElementById(0).value;
+		if($rootScope.currentLanguage == "french"){
+			comment = document.getElementById(id+"-fr").value;
 		}
-		else{
-			comment = document.getElementById("commentsBox").value;
+		else {
+			comment = document.getElementById(id).value;
 		}
 		var timestamp = new Date();
 		var day = formatNumber(timestamp.getDate());
@@ -1079,8 +1098,11 @@ function updateUserEvents() {
 			$scope.ServerResponse = data;
 			console.log("comment saved");
 			$scope.refreshNewsfeed();
-			document.getElementById("commentsBox").value = null;
-			document.getElementById(0).value = null;
+			if($rootScope.currentLanguage == "french"){
+				document.getElementById(id+"-fr").value = null;
+			} else {
+				document.getElementById(id).value = null;
+			}
 		})
 		.error(function (data, status, header, config) {
 			$scope.ServerResponse =  htmlDecode("Data: " + data +
@@ -1111,7 +1133,14 @@ function updateUserEvents() {
   function retrieveInfo(){
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
 			var counter = 0;
-      for (i=0; i < 10*count; i++){
+			console.log(data);
+			var posts = 0;
+			if(data.length<10*count){
+				posts=data.length;
+			} else {
+				posts = 10*count;
+			}
+      for (i=0; i < posts; i++){
           $scope.entry[i] = {name:data[i]['name'],
                             date:formatDate(data[i]['date']),
                             content:data[i]['content'],
@@ -1125,17 +1154,17 @@ function updateUserEvents() {
 					//console.log($scope.entry[i].id);
 					//console.log(commentData);
 					//console.log(commentData.length);
-					console.log("i is", i);
+					//console.log("i is", i);
 					for(j=0; j<commentData.length; j++){
 						$scope.comments[counter] = {name:commentData[j]['name'],
 	                            	date:formatDate(commentData[j]['date']),
 	                            	content:commentData[j]['content'],
 	                            	commentid: commentData[j]['commentid'],
 	                            	id: commentData[j]['id']};
-						console.log("j is ", j);
+						//console.log("j is ", j);
 						counter++;
 					};
-					console.log($scope.comments);
+					//console.log($scope.comments);
 				});
 			}
     })

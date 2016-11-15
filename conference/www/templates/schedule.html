@@ -37,7 +37,7 @@
           <h3 class="bigger openBox schedule-spacing">{{ entity.speaker }} {{ entity.attending }}  </h3>
             <br>
           </span>
-          <h2 class="title-bigger"><b>Users Attending ({{ calculateNumberOfPeopleAttending() }}):</b></h2>
+          <h2 class="title-bigger"><b>{{ calculateNumberOfPeopleAttending() }} Delegate(s) Attending:</b></h2>
           <ion-scroll style="height:100px" class="scrollVertical schedule-spacing" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >

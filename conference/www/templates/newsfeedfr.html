@@ -17,7 +17,7 @@
 
     <div class="item item-input-inset">
         <label class="item item-input-wrapper">
-            <input type="text" id=0 placeholder="À quoi pensez-vous?">
+            <input type="text" id="0-fr" placeholder="À quoi pensez-vous?">
         </label>
         <button class="button" id="postButton" ng-click="postComment(0)">Publier</button>
     </div>
@@ -37,7 +37,7 @@
                 Commenter</button>
               </br>
               <label class="item item-input" id="commentBoxFrame">
-                <input type="text" id="commentsBox" placeholder="À vous de répondre...">
+                <input type="text" style="background-color: #EEEEEE;margin-left: -17px;padding: 17px;min-height: 47px" id={{item.id.toString()+"-fr"}} placeholder="À vous de répondre...">
               </label>
                 <ion-item ng-repeat="comment in comments" ng-if="item.id == comment.commentid">
                   {{comment.name}}<br>
