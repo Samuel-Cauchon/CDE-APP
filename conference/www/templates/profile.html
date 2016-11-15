@@ -6,9 +6,12 @@
 			</div>
             <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="startEditPhoto()" ng-show="editPhoto == null"></i>
             <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="endEditPhoto()" ng-show="editPhoto != null"></i>
+            <br>
+            <br>
 			<div class="item item-avatar profile-avatar" align="center" id="info">
 				<!--<img class="blank-profile" src="blank-profile.png" />-->
 				<div ng-show="editName == null">
+                                <br>
 					<h1 style="display:inline;">
 						{{profile.name || "Your name"}}
 					</h1>

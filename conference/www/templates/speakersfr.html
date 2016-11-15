@@ -1,8 +1,8 @@
 <ion-view view-title="Conférenciers">
 	<ion-modal-view>
 		<ion-content class="padding">
-		<div class="list card">
-				<div class="item item-avatar profile-avatar" ng-repeat="s in speakersInfo | orderBy: 'name'">
+		<div style="margin-left: 10px; margin-right: 10px;" class="list card">
+				<div id="item_avatar" class="item item-avatar profile-avatar" ng-repeat="s in speakersInfo | orderBy: 'name'">
 					<a class="item item-avatar" ng-href="#/homeMenu/userProfilefr" ng-click="setSpeakerSelected(s.username, s.name)">
 				      	<img ng-show="s.photo != null" ng-src="https://files.backand.io/cdeapp/{{s.photo}}" />
 						<img ng-show="s.photo == null" ng-src="blank-profile.png" />
