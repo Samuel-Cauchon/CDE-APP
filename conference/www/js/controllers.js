@@ -850,7 +850,8 @@ $scope.updatedProfile = {
 		name:"",
 		phonenumber:"",
 		profession:"",
-		description:""
+		description:"",
+		speaker:AuthService.isSpeaker
 	}
 
 	DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
