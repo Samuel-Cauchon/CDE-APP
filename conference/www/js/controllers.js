@@ -743,11 +743,16 @@ $scope.updatedProfile = {
 
 
 }
+  $scope.$on('$ionicView.enter', function () {
+    updateUserEvents();
+    console.log("page opened");
+  })
 
+function updateUserEvents() {
   $scope.userMap = [];
   var eventList = {};
   // $scope.isUser = 1;
-  DatabaseService.getAllEvents().success(function(data) {
+  DatabaseService.getAllEvents().success(function (data) {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
       eventList[eventArr[i].id] = {
@@ -759,14 +764,14 @@ $scope.updatedProfile = {
     var currentUser = "";
     currentUser = AuthService.uid;
 
-    MainEvents.getPeopleAttending().success(function(data){
+    MainEvents.getPeopleAttending().success(function (data) {
       var mapOfEvents = data.data;
       console.log($rootScope.currentLanguage);
-      mapOfEvents.forEach(function(item) {
-        if(currentUser == item.user) {
+      mapOfEvents.forEach(function (item) {
+        if (currentUser == item.user) {
           console.log(eventList[item.event]);
           if ($scope.userMap.indexOf(item) == -1) {
-            if($rootScope.currentLanguage == "english") {
+            if ($rootScope.currentLanguage == "english") {
               $scope.userMap.push(eventList[item.event].name);
             } else {
               $scope.userMap.push(eventList[item.event].name_fr);
@@ -776,11 +781,12 @@ $scope.updatedProfile = {
       })
       $scope.userMap = removeDuplicates($scope.userMap);
       // console.log($scope.userMap);
-      $scope.userEvents = function(){
+      $scope.userEvents = function () {
         return $scope.userMap;
       }
     })
   });
+}
 
   function removeDuplicates(arr){
     var temp = [];
@@ -840,69 +846,77 @@ $scope.updatedProfile = {
 		})
 	})
 
-  $scope.userMap = [];
-  var eventList = {};
-  DatabaseService.getAllEvents().success(function(data) {
-    var eventArr = data;
-    for (var i = 0; i < eventArr.length; i++) {
-      eventList[eventArr[i].id] = {
-        name: eventArr[i].name,
-        name_fr: eventArr[i].name_fr
-      };
-    }
+  $scope.$on('$ionicView.enter', function () {
+    updatePeopleEvents();
+    console.log("page opened");
+  })
 
-    var currentUser = "";
-    if(AuthService.isSpeaker == false) {
-      DatabaseService.getID(AuthService.userSelected).success(function (data) {
-        currentUser = data[0]['id'];
-        console.log(currentUser)
-      })
-    }
+  function updatePeopleEvents() {
+    $scope.userMap = [];
+    var eventList = {};
+    DatabaseService.getAllEvents().success(function (data) {
+      var eventArr = data;
+      for (var i = 0; i < eventArr.length; i++) {
+        eventList[eventArr[i].id] = {
+          name: eventArr[i].name,
+          name_fr: eventArr[i].name_fr
+        };
+      }
 
-    MainEvents.getPeopleAttending().success(function(data){
-      if(AuthService.isSpeaker == true) {
-        console.log(AuthService.speakerName);
-        if($rootScope.currentLanguage == "english") {
-          DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function (dbd) {
-            var spEvents = dbd.data;
-            dbd.forEach(function (item) {
-              if ($scope.userMap.indexOf(item) == -1) {
-                $scope.userMap.push(dbd[dbd.indexOf(item)]['name']);
-              }
-            })
-          })
-        }
-        else {
-          DatabaseService.getSpeakerEventsFr(AuthService.speakerName).success(function (dbd) {
-            var spEvents = dbd.data;
-            dbd.forEach(function (item) {
-              if ($scope.userMap.indexOf(item) == -1) {
-                $scope.userMap.push(dbd[dbd.indexOf(item)]['name_fr']);
-              }
-            })
-          })
-        }
-      } else {
-        var mapOfEvents = data.data;
-        mapOfEvents.forEach(function (item) {
-          if (currentUser == item.user) {
-            if ($scope.userMap.indexOf(item) == -1) {
-              if($rootScope.currentLanguage == "english") {
-                $scope.userMap.push(eventList[item.event].name);
-              } else {
-                $scope.userMap.push(eventList[item.event].name_fr);
-              }
-            }
-          }
+      var currentUser = "";
+      if (AuthService.isSpeaker == false) {
+        DatabaseService.getID(AuthService.userSelected).success(function (data) {
+          currentUser = data[0]['id'];
+          console.log(currentUser)
         })
       }
-      $scope.userMap = removeDuplicates($scope.userMap);
-      console.log($scope.userMap);
-      $scope.userEvents = function(){
-        return $scope.userMap;
-      }
-    })
-  });
+
+      MainEvents.getPeopleAttending().success(function (data) {
+        if (AuthService.isSpeaker == true) {
+          console.log(AuthService.speakerName);
+          if ($rootScope.currentLanguage == "english") {
+            DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function (dbd) {
+              var spEvents = dbd.data;
+              dbd.forEach(function (item) {
+                if ($scope.userMap.indexOf(item) == -1) {
+                  $scope.userMap.push(dbd[dbd.indexOf(item)]['name']);
+                }
+              })
+            })
+          }
+          else {
+            DatabaseService.getSpeakerEventsFr(AuthService.speakerName).success(function (dbd) {
+              var spEvents = dbd.data;
+              dbd.forEach(function (item) {
+                if ($scope.userMap.indexOf(item) == -1) {
+                  $scope.userMap.push(dbd[dbd.indexOf(item)]['name_fr']);
+                }
+              })
+            })
+          }
+        } else {
+          var mapOfEvents = data.data;
+          mapOfEvents.forEach(function (item) {
+            console.log(eventList[item.event]);
+            if (currentUser == item.user) {
+              if ($scope.userMap.indexOf(item) == -1) {
+                if ($rootScope.currentLanguage == "english") {
+                  $scope.userMap.push(eventList[item.event].name);
+                } else {
+                  $scope.userMap.push(eventList[item.event].name_fr);
+                }
+              }
+            }
+          })
+        }
+        $scope.userMap = removeDuplicates($scope.userMap);
+        console.log($scope.userMap);
+        $scope.userEvents = function () {
+          return $scope.userMap;
+        }
+      })
+    });
+  }
 
   function removeDuplicates(arr){
     var temp = [];
