@@ -1129,7 +1129,14 @@ $scope.updatedProfile = {
   function retrieveInfo(){
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
 			var counter = 0;
-      for (i=0; i < 10*count; i++){
+			console.log(data);
+			var posts = 0;
+			if(data.length<10*count){
+				posts=data.length;
+			} else {
+				posts = 10*count;
+			}
+      for (i=0; i < posts; i++){
           $scope.entry[i] = {name:data[i]['name'],
                             date:formatDate(data[i]['date']),
                             content:data[i]['content'],
