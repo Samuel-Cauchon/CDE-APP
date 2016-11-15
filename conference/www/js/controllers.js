@@ -513,7 +513,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   $scope.imageUrl = null;
   $scope.filename = null;
         $scope.btnText = "Upload";
-    
+
     $scope.currentPic = null;
 
      DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
@@ -524,7 +524,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   var baseActionUrl = baseUrl + 'action/'
   var objectName = 'user';
   var filesActionName = 'img';
-    
+
 $scope.file_changed = function(element) {
         console.log("weeee!!")
         $scope.$apply(function(scope) {
@@ -556,7 +556,7 @@ $scope.file_changed = function(element) {
 //            console.log(photofile)
 //            console.log(reader.readAsDataURL(photofile));
         });
-    };    
+    };
 
   // input file onchange callback
   $scope.imageChanged = function() {
@@ -594,7 +594,7 @@ $scope.file_changed = function(element) {
 //      }
 //    })
   };
-    
+
         $scope.cancelUpload = function() {
         $scope.btnText = "Upload";
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
@@ -751,30 +751,31 @@ $scope.updatedProfile = {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
       eventList[eventArr[i].id] = {
-        name: eventArr[i].name
+        name: eventArr[i].name,
+        name_fr: eventArr[i].name_fr
       };
     }
 
     var currentUser = "";
-    // if($scope.isUser == 1) {
-      currentUser = AuthService.uid;
-    // } else {
-    //   DatabaseService.getID(AuthService.userSelected).success(function(data){
-    //     currentUser = data[0]['id'];
-    //   })
-    // }
+    currentUser = AuthService.uid;
 
     MainEvents.getPeopleAttending().success(function(data){
       var mapOfEvents = data.data;
+      console.log($rootScope.currentLanguage);
       mapOfEvents.forEach(function(item) {
         if(currentUser == item.user) {
+          console.log(eventList[item.event]);
           if ($scope.userMap.indexOf(item) == -1) {
-            $scope.userMap.push(eventList[item.event].name);
+            if($rootScope.currentLanguage == "english") {
+              $scope.userMap.push(eventList[item.event].name);
+            } else {
+              $scope.userMap.push(eventList[item.event].name_fr);
+            }
           }
         }
       })
       $scope.userMap = removeDuplicates($scope.userMap);
-      console.log($scope.userMap);
+      // console.log($scope.userMap);
       $scope.userEvents = function(){
         return $scope.userMap;
       }
@@ -882,7 +883,6 @@ $scope.updatedProfile = {
           })
         }
       } else {
-
         var mapOfEvents = data.data;
         mapOfEvents.forEach(function (item) {
           if (currentUser == item.user) {
