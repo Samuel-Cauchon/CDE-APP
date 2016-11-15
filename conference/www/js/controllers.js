@@ -719,7 +719,11 @@ $scope.endEditDescription= function(){
 	var description = $scope.updatedProfile.newDescription.split("");
 	$scope.updatedProfile.newDescription = "";
 	for(i=0; i<description.length; i++){
-		if (description[i] == "\'"){
+		if ((description[i] == "\\") && (description[i+1] =="\'")){
+			$scope.updatedProfile.newDescription = $scope.updatedProfile.newDescription+description[i]+description[i+1];
+			i++;
+		}
+		else if(description[i] =="\'"){
 			$scope.updatedProfile.newDescription = $scope.updatedProfile.newDescription+"\\"+description[i];
 		}
 		else{
