@@ -716,6 +716,16 @@ $scope.file_changed = function(element) {
     }
 
 $scope.endEditDescription= function(){
+	var description = $scope.updatedProfile.newDescription.split("");
+	$scope.updatedProfile.newDescription = "";
+	for(i=0; i<description.length; i++){
+		if (description[i] == "\'"){
+			$scope.updatedProfile.newDescription = $scope.updatedProfile.newDescription+"\\"+description[i];
+		}
+		else{
+			$scope.updatedProfile.newDescription = $scope.updatedProfile.newDescription+description[i];
+		}
+	}
 	DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
 		DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
 			$scope.profile.description = datadescription[0]['description'];
