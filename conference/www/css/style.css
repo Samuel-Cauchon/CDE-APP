@@ -193,6 +193,10 @@ div.edit-description textarea {
 
 }
 
+.padding-5-button{
+  padding: 5px !important;
+}
+
 .bigger{
   font-size: 105% !important;
 }
