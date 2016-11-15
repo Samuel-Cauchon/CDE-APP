@@ -32,14 +32,20 @@
 				</div>
 			</div>
 			<div ng-show="editPhoto != null">
-				<form role="form" name="uploadForm">
+				<!-- <form role="form" name="uploadForm">
 					<div class="row">
 						<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
 					</div>
 					<div class="row">
 						<button class="button" ng-click="imageChanged()">Choisir</button>
 					</div>
-				</form>
+				</form> -->
+				<div class="row">
+											<label style="margin-left: 23%; width:58%" class="add-photo-btn"><i style="padding-right: 10px;" class="icon ion-upload"></i>{{btnText}}<span></span>
+					<input id="fileInput" type="file" accept="*/*" ng-model="filename" onchange="angular.element(this).scope().file_changed(this)" />
+				</div>
+									<button style="margin-left: 24%; width: 26%;" class="button" ng-click="cancelUpload()">Annuler</button>
+									<button style="width: 30%;" class="button" ng-click="imageChanged()">Soumettre</button>
 			</div>
 
             </br>

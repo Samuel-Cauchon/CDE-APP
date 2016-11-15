@@ -512,7 +512,12 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   $scope.editName = null;
   $scope.imageUrl = null;
   $scope.filename = null;
-        $scope.btnText = "Upload";
+	if($rootScope.currentLanguage == "english"){
+  	$scope.btnText = "Upload";
+	}
+	else {
+		$scope.btnText = "Choisir";
+	}
 
     $scope.currentPic = null;
 
@@ -551,8 +556,13 @@ $scope.file_changed = function(element) {
                 console.log("FOUUND A FILE!")
                 console.log(photofile)
 //                reader.readAsDataURL(photofile);
-                $scope.btnText = "Uploaded!";
-            }
+				if($rootScope.currentLanguage == "english"){
+					$scope.btnText = "Uploaded!";
+				}
+				else {
+					$scope.btnText = "Choix fait";
+				}
+    }
 //            console.log(photofile)
 //            console.log(reader.readAsDataURL(photofile));
         });
@@ -562,7 +572,12 @@ $scope.file_changed = function(element) {
   $scope.imageChanged = function() {
         DatabaseService.updateImg(AuthService.currentUser, $scope.profile.imgName).success(function(data){
           })
-        $scope.btnText = "Upload";
+					if($rootScope.currentLanguage == "english"){
+						$scope.btnText = "Upload";
+					}
+					else {
+						$scope.btnText = "Choisir";
+					}
 //    var imageExist = false;
 //    var file = fileInput.files[0];
 //    var reader = new FileReader();
@@ -596,7 +611,12 @@ $scope.file_changed = function(element) {
   };
 
         $scope.cancelUpload = function() {
-        $scope.btnText = "Upload";
+					if($rootScope.currentLanguage == "english"){
+						$scope.btnText = "Upload";
+					}
+					else {
+						$scope.btnText = "Choisir";
+					}
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
             $scope.profile.imgName = dataImg[0]['photo'];
             console.log(dataImg[0]['photo']);
