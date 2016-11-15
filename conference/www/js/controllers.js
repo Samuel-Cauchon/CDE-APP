@@ -516,7 +516,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   	$scope.btnText = "Upload";
 	}
 	else {
-		$scope.btnText = "Choisir";
+		$scope.btnText = "Sélectionner";
 	}
 
     $scope.currentPic = null;
@@ -560,7 +560,7 @@ $scope.file_changed = function(element) {
 					$scope.btnText = "Uploaded!";
 				}
 				else {
-					$scope.btnText = "Choix fait";
+					$scope.btnText = "Sélectionné";
 				}
     }
 //            console.log(photofile)
@@ -576,7 +576,7 @@ $scope.file_changed = function(element) {
 						$scope.btnText = "Upload";
 					}
 					else {
-						$scope.btnText = "Choisir";
+						$scope.btnText = "Sélectionner";
 					}
 //    var imageExist = false;
 //    var file = fileInput.files[0];
@@ -615,7 +615,7 @@ $scope.file_changed = function(element) {
 						$scope.btnText = "Upload";
 					}
 					else {
-						$scope.btnText = "Choisir";
+						$scope.btnText = "Sélectionner";
 					}
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
             $scope.profile.imgName = dataImg[0]['photo'];
@@ -769,11 +769,21 @@ $scope.updatedProfile = {
   // $scope.isUser = 1;
   DatabaseService.getAllEvents().success(function(data) {
     var eventArr = data;
-    for (var i = 0; i < eventArr.length; i++) {
-      eventList[eventArr[i].id] = {
-        name: eventArr[i].name
-      };
-    }
+		if($rootScope.currentLanguage == "english"){
+			for (var i = 0; i < eventArr.length; i++) {
+	      eventList[eventArr[i].id] = {
+	        name: eventArr[i].name
+	      };
+	    }
+		}
+		else {
+			for (var i = 0; i < eventArr.length; i++) {
+	      eventList[eventArr[i].id] = {
+	        name: eventArr[i].name_fr
+	      };
+	    }
+		}
+
 
     var currentUser = "";
     // if($scope.isUser == 1) {
