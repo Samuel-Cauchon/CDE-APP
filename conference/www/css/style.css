@@ -307,8 +307,8 @@ img.blank-profile {
 
 .bodyNewsfeed{
   @extends body;
-  margin-right:5%;
-  margin-left: 5%;
+  margin-right:0%;
+  margin-left: 0%;
   background-color: rgba(225,225,225,1);
 }
 
