@@ -4,11 +4,14 @@
 			<div class="profile-img" id="wide">
 				<img ng-show="profile.imgName != null" ng-src="https://files.backand.io/cdeapp/{{profile.imgName}}"/>
 			</div>
- 			<i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="startEditPhoto()" ng-show="editPhoto == null"></i>
+ 						<i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="startEditPhoto()" ng-show="editPhoto == null"></i>
             <i class="ion-camera icon-large-size float-Right" id="narrow" ng-click="endEditPhoto()" ng-show="editPhoto != null"></i>
+						<br>
+            <br>
             <div class="item item-avatar profile-avatar" align="center" id="info">
 				<!--<img class="blank-profile" src="blank-profile.png" />-->
 				<div ng-show="editName == null">
+                     <br>
 					<h1 style="display:inline;">
 						{{profile.name || "Votre nom"}}
 					</h1>
@@ -32,14 +35,20 @@
 				</div>
 			</div>
 			<div ng-show="editPhoto != null">
-				<form role="form" name="uploadForm">
+				<!-- <form role="form" name="uploadForm">
 					<div class="row">
 						<input id="fileInput" type="file" accept="*/*" ng-model="filename" />
 					</div>
 					<div class="row">
 						<button class="button" ng-click="imageChanged()">Choisir</button>
 					</div>
-				</form>
+				</form> -->
+				<div class="row">
+											<label style="margin-left: 23%; width:58%" class="add-photo-btn"><i style="padding-right: 10px;" class="icon ion-upload"></i>{{btnText}}<span></span>
+					<input id="fileInput" type="file" accept="*/*" ng-model="filename" onchange="angular.element(this).scope().file_changed(this)" />
+				</div>
+									<button style="margin-left: 24%; width: 26%;" class="button" ng-click="cancelUpload()">Annuler</button>
+									<button style="width: 30%;" class="button" ng-click="imageChanged()">Soumettre</button>
 			</div>
 
             </br>
@@ -62,7 +71,7 @@
 			</div>
                                                                     </br>
 			<div>
-				<h3 style="text-align: center">Evénements</h3>
+				<h3 style="text-align: center">Événements</h3>
                                               <br>
 				<ion-scroll style="height:200px; margin-right: 10px;" class="scrollVertical" direction="y">
 					<div class="list">
