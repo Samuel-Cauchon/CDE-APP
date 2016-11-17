@@ -333,10 +333,15 @@ img.blank-profile {
   margin-top: 10% !important;
 }
 
+
 .button{
   background-color: #111e45;
   border: none;
   color: white;
+}
+
+.padding-5-button{
+  padding: 5px !important;
 }
 
 #likeButton{

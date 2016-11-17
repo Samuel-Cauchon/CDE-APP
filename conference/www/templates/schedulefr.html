@@ -38,7 +38,7 @@
             <br>
           </span>
           <h2 class="title-bigger" id="openBox"><b>{{ calculateNumberOfPeopleAttending() }} délégué(e)s inscrit(e)s:</b></h2>
-          <ion-scroll style="height:115px" class="scrollVertical schedule-spacing" direction="y">
+          <ion-scroll style="height:120px" class="scrollVertical schedule-spacing" direction="y">
             <div class="list">
               <div ng-repeat="n in getMappingOfEventToUsers(entity.id) track by $index | orderBy "  >
                 <div class="item item-divider  item-people-attending" >
