@@ -2,8 +2,8 @@
 	<ion-modal-view>
 		<ion-content class="padding">
 		<div id="usersCard" class="list card">
-				<div id="item_avatar" class="item item-avatar profile-avatar" ng-repeat="u in usersInfo | orderBy: 'name'" >
-					<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(u.username)"> 
+				<div id="item_avatar" class="item item-avatar profile-avatar" ng-repeat="u in usersInfo | orderBy: 'name'" ng-if="u.speaker != true">
+					<a class="item item-avatar" ng-href="#/homeMenu/userProfile" ng-click="setUserSelected(u.username)">
 						<img ng-show="u.photo != null" ng-src="https://files.backand.io/cdeapp/{{u.photo}}" />
 						<img ng-show="u.photo == null" ng-src="blank-profile.png" />
 						<span>{{u.name}}</span>
