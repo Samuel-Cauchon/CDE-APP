@@ -158,10 +158,10 @@ div.profile-telephone > div {
 div.edit-profession {
 	position: relative;
 	margin-top: 10px;
-  width: auto;
+  width: 50%;
 }
 div.edit-name {
-  width: auto;
+  width: 50%;
 }
 
 div.edit-profession > h2 {
