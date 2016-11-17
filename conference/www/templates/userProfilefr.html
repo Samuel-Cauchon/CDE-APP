@@ -6,14 +6,17 @@
 			</div>
 			<div class="item item-avatar profile-avatar" align="center" id="info">
 				<div>
-					<h1 style="display:inline;">
+					<br>
+					<h1>
 						{{profile.name || "Aucun nom n'a été choisi"}}
 					</h1>
-					<h2>
+					<br>
+					<h2 id="profile-description">
 						{{profile.profession || "Aucune profession n'a été choisie"}}
 					</h2>
 				</div>
 			</div>
+			<br>
 
 			<!--<div class="item item-icon-left profile-telephone" align="center">-->
 				<!--<i class="icon ion-ios-telephone"></i>-->
@@ -51,13 +54,14 @@
                     </p>
 				</div>
 			</div>
+			<br>
 
-			<div>
+			<div class="item item-body">
 				<div ng-if="profile.speaker">
-					<h2 style="text-align:center;">Événements</h2>
+					<h2 class="font-weight-400">Événements</h2>
 				</div>
 				<div ng-if="!profile.speaker">
-					<h2 style="text-align:center;">Événements inscrits</h2>
+					<h2 class="font-weight-400">Événements inscrits</h2>
 				</div>
                 <br/>
 				<ion-scroll style="height:200px; margin-right: 10px;" class="scrollVertical" direction="y">

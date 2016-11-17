@@ -238,6 +238,10 @@ img.blank-profile {
     border-radius: 50%;
 }
 
+#profile-description{
+  white-space: normal;
+}
+
 .item.item-avatar > span {
 	display: block;
 	position: absolute;
