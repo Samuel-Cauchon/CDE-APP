@@ -159,6 +159,10 @@ div.edit-profession {
 	margin-top: 10px;
 }
 
+div.edit-profession > h2 {
+  white-space: normal;
+
+}
 div.profile-telephone {
 	padding-left: 0;
 }
