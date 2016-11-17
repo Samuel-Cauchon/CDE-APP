@@ -157,15 +157,12 @@ div.profile-telephone > div {
 div.edit-profession {
 	position: relative;
 	margin-top: 10px;
-  width: 50%;
 }
 div.edit-name {
-  width: 50%;
 }
 
 div.edit-profession > h2 {
   white-space: normal;
-  width: auto;
 }
 div.profile-telephone {
 	padding-left: 0;
