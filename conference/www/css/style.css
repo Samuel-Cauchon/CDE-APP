@@ -165,7 +165,7 @@ div.edit-name {
 
 div.edit-profession > h2 {
   white-space: normal;
-
+  width: auto;
 }
 div.profile-telephone {
 	padding-left: 0;
