@@ -219,25 +219,45 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 	function checkForm()
 	{
 		if($scope.dataEnteredRegister.username == "" || $scope.dataEnteredRegister.password == "" || $scope.dataEnteredRegister.name == "" ) {
-			var alertPopup = $ionicPopup.alert({
-                        title: 'Some extra information is required.'
-            });
-			return false;
+  	  if ($rootScope.currentLanguage != "french"){
+        var alertPopup = $ionicPopup.alert({
+          title: 'Some extra information is required.'
+        });
+      }
+      else{
+        var alertPopup = $ionicPopup.alert({
+          title: "D'autres informations doivent être ajoutées."
+        });
+      }
+      return false;
 		}
 		re = /^\w+$/;
 		if(!re.test($scope.dataEnteredRegister.username)) {
+        if ($rootScope.currentLanguage != "french"){
             var alertPopup = $ionicPopup.alert({
                 title: 'Please type your username as only letters, numbers and underscores.'
             });
+        }
+        else{
+          var alertPopup = $ionicPopup.alert({
+            title: "Tapper votre nom d'utilisateur avec des lettres, nombres et tirets bas."
+          });
+        }
 			return false;
 		}
     if($scope.dataEnteredRegister.password.length < 6) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Please enter a password having at least 6 characters.'
-      });
+      if ($rootScope.currentLanguage != "french"){
+        var alertPopup = $ionicPopup.alert({
+          title: 'Please enter a password having at least 6 characters.'
+        });
+      }
+      else{
+          var alertPopup = $ionicPopup.alert({
+            title: "Entrez un mot de passe qui contient au moins 6 charactères."
+          });
+      }
 		return false;
   }
-  console.log("NO ERROR FOUND!")
 	return true;
 	};
 
@@ -263,9 +283,17 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 			})
 		}
     else if(dataUser[0] != null){
+      if ($rootScope.currentLanguage != "french"){
         var alertPopup = $ionicPopup.alert({
           title: 'This username is already registered.'
         });
+      }
+      else{
+        var alertPopup = $ionicPopup.alert({
+          title: "Ce nom d'utilisateur est déjà utilisé."
+        });
+      }
+
     }
 	})
 	};
