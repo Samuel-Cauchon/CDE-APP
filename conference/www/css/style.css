@@ -143,7 +143,7 @@ div.item.item-avatar.profile-avatar > img.blank-profile {
 div.profile-avatar {
 	padding-left: 0;
   white-space: inherit;
-  width: 100%;
+  width: auto;
 }
 
 div.profile-avatar h1 {
