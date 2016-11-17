@@ -45,34 +45,69 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
 		DatabaseService.searchUser($scope.dataEntered.username).success(function(dataUser){
             //Check if the username exist...
             if($scope.dataEntered.username === "" && $scope.dataEntered.password === ""){
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Please enter a registered username and password.'
-                });
+                if ($rootScope.currentLanguage != "french"){
+                  var alertPopup = $ionicPopup.alert({
+                      title: 'Please enter a registered username and password.'
+                  });
+                }
+                else{
+                  var alertPopup = $ionicPopup.alert({
+                      title: "Veuillez entrer un nom d'utilisateur et un mot de passe enregistré."
+                  });
+                }
 //                alert("Please enter a registered username and password.")
             }
             else if ($scope.dataEntered.username === ""){
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Please enter a registered username.'
-                });
+                if ($rootScope.currentLanguage != "french"){
+                  var alertPopup = $ionicPopup.alert({
+                      title: 'Please enter a registered username.'
+                  });
+                }
+                 else{
+                  var alertPopup = $ionicPopup.alert({
+                      title: "Veuillez entrer un nom d'utilisateur enregistré."
+                  });
+                }
             }
             else if ($scope.dataEntered.password === ""){
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Please enter a registered password.'
-                });
+                if ($rootScope.currentLanguage != "french"){
+                  var alertPopup = $ionicPopup.alert({
+                      title: 'Please enter a registered password.'
+                  });
+                }
+                else{
+                  var alertPopup = $ionicPopup.alert({
+                      title: "Veuillez entrer un mot de passe enregistré."
+                  });
+                }
             }
             else {
                 if(dataUser.length === 0){
+                  if ($rootScope.currentLanguage != "french"){
                     var alertPopup = $ionicPopup.alert({
                         title: 'Please enter a registered username.'
                     });
+                  }
+                  else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: "Veuillez entrer un mot de passe enregistré."
+                    });
+                  }
                 }
                 else if (dataUser[0]['username'] === $scope.dataEntered.username){
                     DatabaseService.searchPass($scope.dataEntered.username, $scope.dataEntered.password).success(function(dataPass){
                         //Check if the password is correct.
                         if(dataPass.length === 0){
+                          if ($rootScope.currentLanguage != "french"){
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Please enter the password for your CDE account.'
                             });
+                          }
+                          else{
+                            var alertPopup = $ionicPopup.alert({
+                                title: "Veuillez entrer votre mot de passe de votre compte CDE."
+                            });
+                          }
                         }
                         else if (dataPass[0]['password'] === $scope.dataEntered.password){
                             AuthService.currentUser = $scope.dataEntered.username;
@@ -91,9 +126,16 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
                     });
                 }
                 else{
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Please enter a registered username.'
-                    });
+                    if ($rootScope.currentLanguage != "french"){
+                      var alertPopup = $ionicPopup.alert({
+                          title: 'Please enter a registered username.'
+                      });
+                    }
+                    else{
+                      var alertPopup = $ionicPopup.alert({
+                        title: "Veuillez entrer votre mot de passe de votre compte CDE."
+                      });
+                    }
                 }
             }
         });
