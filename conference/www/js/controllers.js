@@ -512,8 +512,13 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   $scope.editName = null;
   $scope.imageUrl = null;
   $scope.filename = null;
-        $scope.btnText = "Upload";
-    
+	if($rootScope.currentLanguage == "english"){
+  	$scope.btnText = "Upload";
+	}
+	else {
+		$scope.btnText = "Sélectionner";
+	}
+
     $scope.currentPic = null;
 
      DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
@@ -524,7 +529,7 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
   var baseActionUrl = baseUrl + 'action/'
   var objectName = 'user';
   var filesActionName = 'img';
-    
+
 $scope.file_changed = function(element) {
         console.log("weeee!!")
         $scope.$apply(function(scope) {
@@ -551,18 +556,28 @@ $scope.file_changed = function(element) {
                 console.log("FOUUND A FILE!")
                 console.log(photofile)
 //                reader.readAsDataURL(photofile);
-                $scope.btnText = "Uploaded!";
-            }
+				if($rootScope.currentLanguage == "english"){
+					$scope.btnText = "Uploaded!";
+				}
+				else {
+					$scope.btnText = "Sélectionné";
+				}
+    }
 //            console.log(photofile)
 //            console.log(reader.readAsDataURL(photofile));
         });
-    };    
+    };
 
   // input file onchange callback
   $scope.imageChanged = function() {
         DatabaseService.updateImg(AuthService.currentUser, $scope.profile.imgName).success(function(data){
           })
-        $scope.btnText = "Upload";
+					if($rootScope.currentLanguage == "english"){
+						$scope.btnText = "Upload";
+					}
+					else {
+						$scope.btnText = "Sélectionner";
+					}
 //    var imageExist = false;
 //    var file = fileInput.files[0];
 //    var reader = new FileReader();
@@ -594,9 +609,14 @@ $scope.file_changed = function(element) {
 //      }
 //    })
   };
-    
+
         $scope.cancelUpload = function() {
-        $scope.btnText = "Upload";
+					if($rootScope.currentLanguage == "english"){
+						$scope.btnText = "Upload";
+					}
+					else {
+						$scope.btnText = "Sélectionner";
+					}
         DatabaseService.GetProfileImg(AuthService.currentUser).success(function(dataImg){
             $scope.profile.imgName = dataImg[0]['photo'];
             console.log(dataImg[0]['photo']);
@@ -696,6 +716,20 @@ $scope.file_changed = function(element) {
     }
 
 $scope.endEditDescription= function(){
+	var description = $scope.updatedProfile.newDescription.split("");
+	$scope.updatedProfile.newDescription = "";
+	for(i=0; i<description.length; i++){
+		if ((description[i] == "\\") && (description[i+1] =="\'")){
+			$scope.updatedProfile.newDescription = $scope.updatedProfile.newDescription+description[i]+description[i+1];
+			i++;
+		}
+		else if(description[i] =="\'"){
+			$scope.updatedProfile.newDescription = $scope.updatedProfile.newDescription+"\\"+description[i];
+		}
+		else{
+			$scope.updatedProfile.newDescription = $scope.updatedProfile.newDescription+description[i];
+		}
+	}
 	DatabaseService.updateDescription(AuthService.currentUser, $scope.updatedProfile.newDescription).success(function(){
 		DatabaseService.GetDescription(AuthService.currentUser).success(function(datadescription){
 			$scope.profile.description = datadescription[0]['description'];
@@ -743,33 +777,39 @@ $scope.updatedProfile = {
 
 
 }
+  $scope.$on('$ionicView.enter', function () {
+    updateUserEvents();
+    console.log("page opened");
+  })
 
+function updateUserEvents() {
   $scope.userMap = [];
   var eventList = {};
   // $scope.isUser = 1;
-  DatabaseService.getAllEvents().success(function(data) {
+  DatabaseService.getAllEvents().success(function (data) {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
       eventList[eventArr[i].id] = {
-        name: eventArr[i].name
+        name: eventArr[i].name,
+        name_fr: eventArr[i].name_fr
       };
     }
 
     var currentUser = "";
-    // if($scope.isUser == 1) {
-      currentUser = AuthService.uid;
-    // } else {
-    //   DatabaseService.getID(AuthService.userSelected).success(function(data){
-    //     currentUser = data[0]['id'];
-    //   })
-    // }
+    currentUser = AuthService.uid;
 
-    MainEvents.getPeopleAttending().success(function(data){
+    MainEvents.getPeopleAttending().success(function (data) {
       var mapOfEvents = data.data;
-      mapOfEvents.forEach(function(item) {
-        if(currentUser == item.user) {
+      console.log($rootScope.currentLanguage);
+      mapOfEvents.forEach(function (item) {
+        if (currentUser == item.user) {
+          console.log(eventList[item.event]);
           if ($scope.userMap.indexOf(item) == -1) {
-            $scope.userMap.push(eventList[item.event].name);
+            if ($rootScope.currentLanguage == "english") {
+              $scope.userMap.push(eventList[item.event].name);
+            } else {
+              $scope.userMap.push(eventList[item.event].name_fr);
+            }
           }
         }
       })
@@ -780,6 +820,7 @@ $scope.updatedProfile = {
       }
     })
   });
+}
 
   function removeDuplicates(arr){
     var temp = [];
@@ -820,7 +861,8 @@ $scope.updatedProfile = {
 		name:"",
 		phonenumber:"",
 		profession:"",
-		description:""
+		description:"",
+		speaker:AuthService.isSpeaker
 	}
 
 	DatabaseService.GetPhoneNumber(AuthService.userSelected).success(function(dataphone){
@@ -828,81 +870,88 @@ $scope.updatedProfile = {
 			DatabaseService.GetProfileImg(AuthService.userSelected).success(function(dataImg){
 				DatabaseService.GetDescription(AuthService.userSelected).success(function(datadescription){
 					DatabaseService.getName(AuthService.userSelected).success(function(dataname){
-						$scope.profile.imgName = dataImg[0]['photo'];
 						$scope.profile.name = dataname[0]['name'];
 						$scope.profile.phonenumber = dataphone[0]['phonenumber'];
 						$scope.profile.profession = dataprofession[0]['profession'];
 						$scope.profile.description = datadescription[0]['description'];
+						$scope.profile.imgName = dataImg[0]['photo'];
 					})
 				})
 			})
 		})
 	})
 
-  $scope.userMap = [];
-  var eventList = {};
-  DatabaseService.getAllEvents().success(function(data) {
-    var eventArr = data;
-    for (var i = 0; i < eventArr.length; i++) {
-      eventList[eventArr[i].id] = {
-        name: eventArr[i].name,
-        name_fr: eventArr[i].name_fr
-      };
-    }
+  $scope.$on('$ionicView.enter', function () {
+    updatePeopleEvents();
+    console.log("page opened");
+  })
 
-    var currentUser = "";
-    if(AuthService.isSpeaker == false) {
-      DatabaseService.getID(AuthService.userSelected).success(function (data) {
-        currentUser = data[0]['id'];
-        console.log(currentUser)
-      })
-    }
+  function updatePeopleEvents() {
+    $scope.userMap = [];
+    var eventList = {};
+    DatabaseService.getAllEvents().success(function (data) {
+      var eventArr = data;
+      for (var i = 0; i < eventArr.length; i++) {
+        eventList[eventArr[i].id] = {
+          name: eventArr[i].name,
+          name_fr: eventArr[i].name_fr
+        };
+      }
 
-    MainEvents.getPeopleAttending().success(function(data){
-      if(AuthService.isSpeaker == true) {
-        console.log(AuthService.speakerName);
-        if($rootScope.currentLanguage == "english") {
-          DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function (dbd) {
-            var spEvents = dbd.data;
-            dbd.forEach(function (item) {
-              if ($scope.userMap.indexOf(item) == -1) {
-                $scope.userMap.push(dbd[dbd.indexOf(item)]['name']);
-              }
-            })
-          })
-        }
-        else {
-          DatabaseService.getSpeakerEventsFr(AuthService.speakerName).success(function (dbd) {
-            var spEvents = dbd.data;
-            dbd.forEach(function (item) {
-              if ($scope.userMap.indexOf(item) == -1) {
-                $scope.userMap.push(dbd[dbd.indexOf(item)]['name_fr']);
-              }
-            })
-          })
-        }
-      } else {
-
-        var mapOfEvents = data.data;
-        mapOfEvents.forEach(function (item) {
-          if (currentUser == item.user) {
-            if ($scope.userMap.indexOf(item) == -1) {
-              if($rootScope.currentLanguage == "english") {
-                $scope.userMap.push(eventList[item.event].name);
-              } else {
-                $scope.userMap.push(eventList[item.event].name_fr);
-              }
-            }
-          }
+      var currentUser = "";
+      if (AuthService.isSpeaker == false) {
+        DatabaseService.getID(AuthService.userSelected).success(function (data) {
+          currentUser = data[0]['id'];
+          console.log(currentUser)
         })
       }
-      $scope.userMap = removeDuplicates($scope.userMap);
-      console.log($scope.userMap);
-      $scope.userEvents = function(){
-        return $scope.userMap;
-      }
-    })
-  });
+
+      MainEvents.getPeopleAttending().success(function (data) {
+        if (AuthService.isSpeaker == true) {
+          console.log(AuthService.speakerName);
+          if ($rootScope.currentLanguage == "english") {
+            DatabaseService.getSpeakerEvents(AuthService.speakerName).success(function (dbd) {
+              var spEvents = dbd.data;
+              dbd.forEach(function (item) {
+                if ($scope.userMap.indexOf(item) == -1) {
+                  $scope.userMap.push(dbd[dbd.indexOf(item)]['name']);
+                }
+              })
+            })
+          }
+          else {
+            DatabaseService.getSpeakerEventsFr(AuthService.speakerName).success(function (dbd) {
+              var spEvents = dbd.data;
+              dbd.forEach(function (item) {
+                if ($scope.userMap.indexOf(item) == -1) {
+                  $scope.userMap.push(dbd[dbd.indexOf(item)]['name_fr']);
+                }
+              })
+            })
+          }
+        } else {
+          var mapOfEvents = data.data;
+          mapOfEvents.forEach(function (item) {
+            console.log(eventList[item.event]);
+            if (currentUser == item.user) {
+              if ($scope.userMap.indexOf(item) == -1) {
+                if ($rootScope.currentLanguage == "english") {
+                  $scope.userMap.push(eventList[item.event].name);
+                } else {
+                  $scope.userMap.push(eventList[item.event].name_fr);
+                }
+              }
+            }
+          })
+        }
+        $scope.userMap = removeDuplicates($scope.userMap);
+        console.log($scope.userMap);
+        $scope.userEvents = function () {
+          return $scope.userMap;
+        }
+      })
+    });
+  }
 
   function removeDuplicates(arr){
     var temp = [];
@@ -980,7 +1029,7 @@ $scope.updatedProfile = {
 })
 
 
-.controller('NewsfeedCtrl', function($scope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
+.controller('NewsfeedCtrl', function($scope, $rootScope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
 
 	$scope.entry = [];
 	$scope.comments = [];
@@ -1043,14 +1092,12 @@ $scope.updatedProfile = {
 	};
 
 	$scope.postComment = function(id) {
-        console.log("!!!!");
-        console.log(id);
 		var comment = "";
-		if (id == 0){
-			comment = document.getElementById(0).value;
+		if($rootScope.currentLanguage == "french"){
+			comment = document.getElementById(id+"-fr").value;
 		}
-		else{
-			comment = document.getElementById("commentsBox").value;
+		else {
+			comment = document.getElementById(id).value;
 		}
 		var timestamp = new Date();
 		var day = formatNumber(timestamp.getDate());
@@ -1065,8 +1112,11 @@ $scope.updatedProfile = {
 			$scope.ServerResponse = data;
 			console.log("comment saved");
 			$scope.refreshNewsfeed();
-			document.getElementById("commentsBox").value = null;
-			document.getElementById(0).value = null;
+			if($rootScope.currentLanguage == "french"){
+				document.getElementById(id+"-fr").value = null;
+			} else {
+				document.getElementById(id).value = null;
+			}
 		})
 		.error(function (data, status, header, config) {
 			$scope.ServerResponse =  htmlDecode("Data: " + data +
@@ -1097,7 +1147,14 @@ $scope.updatedProfile = {
   function retrieveInfo(){
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
 			var counter = 0;
-      for (i=0; i < 10*count; i++){
+			console.log(data);
+			var posts = 0;
+			if(data.length<10*count){
+				posts=data.length;
+			} else {
+				posts = 10*count;
+			}
+      for (i=0; i < posts; i++){
           $scope.entry[i] = {name:data[i]['name'],
                             date:formatDate(data[i]['date']),
                             content:data[i]['content'],
@@ -1111,17 +1168,17 @@ $scope.updatedProfile = {
 					//console.log($scope.entry[i].id);
 					//console.log(commentData);
 					//console.log(commentData.length);
-					console.log("i is", i);
+					//console.log("i is", i);
 					for(j=0; j<commentData.length; j++){
 						$scope.comments[counter] = {name:commentData[j]['name'],
 	                            	date:formatDate(commentData[j]['date']),
 	                            	content:commentData[j]['content'],
 	                            	commentid: commentData[j]['commentid'],
 	                            	id: commentData[j]['id']};
-						console.log("j is ", j);
+						//console.log("j is ", j);
 						counter++;
 					};
-					console.log($scope.comments);
+					//console.log($scope.comments);
 				});
 			}
     })

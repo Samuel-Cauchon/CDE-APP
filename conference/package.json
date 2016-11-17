@@ -26,7 +26,8 @@
     "cordova-plugin-splashscreen@~4.0.0",
     "cordova-plugin-statusbar@~2.2.0",
     "ionic-plugin-keyboard@~2.2.1",
-    "cordova-plugin-camera"
+    "cordova-plugin-camera",
+    "cordova-plugin-file"
   ],
   "cordovaPlatforms": [
     "ios",
