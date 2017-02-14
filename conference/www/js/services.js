@@ -207,18 +207,6 @@ angular.module('App.services', ['backand'])
         });
       },
 
-      getName: function(user){
-        return $http ({
-          method: 'GET',
-          url: Backand.getApiUrl() + '/1/query/data/getName',
-          params: {
-            parameters: {
-              username: user
-            }
-          }
-        });
-      },
-
       GetBirthday: function(user){
         return $http ({
           method: 'GET',
@@ -455,59 +443,6 @@ angular.module('App.services', ['backand'])
           }
         });
       }
-      /*uploadImage: function (filename, filedata) {
-
-       var baseUrl = '/1/objects/';
-       var baseActionUrl = baseUrl + 'action/'
-       var objectName = 'user';
-       var filesActionName = 'img';
-
-       // By calling the files action with POST method in will perform
-       // an upload of the file into Backand Storage
-       $http({
-       method: 'POST',
-       url : Backand.getApiUrl() + baseActionUrl +  objectName,
-       params:{
-       "name": filesActionName
-       },
-       headers: {
-       'Content-Type': 'application/json'
-       },
-       // you need to provide the file name and the file data
-       data: {
-       "filename": filename,
-       "filedata": filedata.substr(filedata.indexOf(',') + 1, filedata.length) //need to remove the file prefix type
-       }
-       });
-       },
-
-       deleteImage: function(filename){
-
-       var baseUrl = '/1/objects/';
-       var baseActionUrl = baseUrl + 'action/'
-       var objectName = 'user';
-       var filesActionName = 'img';
-       // By calling the files action with DELETE method in will perform
-       // a deletion of the file from Backand Storage
-       $http({
-       method: 'DELETE',
-       url : Backand.getApiUrl() + baseActionUrl +  objectName,
-       params:{
-       "name": filesActionName
-       },
-       headers: {
-       'Content-Type': 'application/json'
-       },
-       // you need to provide the file name
-       data: {
-       "filename": filename
-       }
-       }).then(function(){
-       // Reset the form
-       $scope.imageUrl = null;
-       document.getElementById('fileInput').value = "";
-       });
-       }*/
 
     }
 
@@ -521,35 +456,6 @@ angular.module('App.services', ['backand'])
     var isSpeaker;
     return {
     };
-  })
-
-  .factory('NewsfeedService', function(DatabaseService){
-    var name = "";
-    return {
-      getUserName: function(uid){
-        var params = {filter: [{"fieldName":"id","operator":"equals","value":uid}]};
-        return DatabaseService.getData('/1/objects/user', params);
-      }
-    }
-  })
-
-  .factory('PersonService', function($http){
-    var BASE_URL = "http://api.randomuser.me/";
-    var items = [];
-    return {
-      GetFeed: function(){
-        return $http.get(BASE_URL+'?results=5').then(function(response){
-          items = response.data.results;
-          return items;
-        });
-      },
-      GetNewUser: function(){
-        return $http.get(BASE_URL).then(function(response){
-          items = response.data.results;
-          return items;
-        });
-      }
-    }
   })
 
   .service('MainEvents', function(DatabaseService){

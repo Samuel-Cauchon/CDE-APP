@@ -423,10 +423,8 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             return length;
           }
           if ($scope.map[id]) {
-          //  console.log("$scope.map[id]", (removeDuplicates($scope.map[id])).length);
             $scope.numberOfPeopleAttending = (removeDuplicates($scope.map[id])).length;
             return removeDuplicates($scope.map[id]);
-            //$scope.checkIfUserHasRegisteredToEvent(id, $scope.map[id], peopleAttendingEachEvent);
           }
         }
       })
@@ -467,8 +465,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
             $scope.mapUserRegisteredToEvent[key] = ({'value': false});
           }
         }
-
-        //$scope.mapUserRegisteredToEvent = removeDuplicates($scope.mapUserRegisteredToEvent);
       }
     }
 
@@ -532,7 +528,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
       console.log("Event ID", eventId);
       var userNamesArrForEachId = MainEvents.getPeopleAttendingEachEvent();
       var mapOfEventsToUsers = MainEvents.getMapOfEventsToUsers();
-     // console.log("REGISTER FOR EVENT", mapOfEventsToUsers[eventId] === undefined);
       var username = userNamesArrForEachId[uid].name;
       if (username && eventId && mapOfEventsToUsers) {
         if ((mapOfEventsToUsers[eventId] === undefined) || (mapOfEventsToUsers[eventId].indexOf(username) == -1)) {
@@ -542,7 +537,6 @@ angular.module('App.controllers', ['ngCordova', 'App.services', 'App.directives'
               var serverResponse = data;
               $scope.refreshEvents();
               $scope.activateRegisteredButton();
-              //checkIfUserHasRegisteredToEvent(uid,userNamesArrForEachId, eventToRegister, mapOfEventsToUsers);
 
             })
             .error(function (data) {
@@ -615,8 +609,6 @@ $scope.file_changed = function(element) {
         upload(photofile.name, e.currentTarget.result).then(function(res) {
           $scope.imageUrl = res.data.url;
           $scope.filename = photofile.name;
-//          DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-//          })
           $scope.profile.imgName = photofile.name;
         },  function(err){
               alert(err.data);
@@ -625,7 +617,6 @@ $scope.file_changed = function(element) {
         reader.readAsDataURL(photofile);
                 console.log("FOUUND A FILE!")
                 console.log(photofile)
-//                reader.readAsDataURL(photofile);
 				if($rootScope.currentLanguage == "english"){
 					$scope.btnText = "Uploaded!";
 				}
@@ -633,8 +624,6 @@ $scope.file_changed = function(element) {
 					$scope.btnText = "Sélectionné";
 				}
     }
-//            console.log(photofile)
-//            console.log(reader.readAsDataURL(photofile));
         });
     };
 
@@ -648,36 +637,6 @@ $scope.file_changed = function(element) {
 					else {
 						$scope.btnText = "Sélectionner";
 					}
-//    var imageExist = false;
-//    var file = fileInput.files[0];
-//    var reader = new FileReader();
-//
-//    DatabaseService.searchImg(file.name).success(function(data){
-//      if (data[0] == undefined){
-//        imageExist = true;
-//      }
-//      else {
-//        imageExist = false;
-//      }
-//      //read file content
-//      if (imageExist == true){
-//        reader.onload = function(e) {
-//        upload(file.name, e.currentTarget.result).then(function(res) {
-//          $scope.imageUrl = res.data.url;
-//          $scope.filename = file.name;
-////          DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-////          })
-//          $scope.profile.imgName = file.name;
-//        },  function(err){
-//              alert(err.data);
-//            });
-//        }
-//        reader.readAsDataURL(file);
-//      }
-//      else {
-//        alert("Change the name of the image! // Veuillez changer le nom de l'image!");
-//      }
-//    })
   };
 
         $scope.cancelUpload = function() {
@@ -696,14 +655,7 @@ $scope.file_changed = function(element) {
             reader.onload = function(e) {
                 console.log("image changed!");
                 upload($scope.currentPic).then(function(res) {
-////                        $scope.imageUrl = res.data.url;
-////                        $scope.filename = file.name;
-////                        DatabaseService.updateImg(AuthService.currentUser, file.name).success(function(data){
-////
-////                        })
                         $scope.profile.imgName = $scope.currentPic
-////                    }, function(err){
-////                        alert(err.data);
                 })
             };
         })
@@ -855,7 +807,6 @@ $scope.updatedProfile = {
 function updateUserEvents() {
   $scope.userMap = [];
   var eventList = {};
-  // $scope.isUser = 1;
   DatabaseService.getAllEvents().success(function (data) {
     var eventArr = data;
     for (var i = 0; i < eventArr.length; i++) {
@@ -1038,41 +989,6 @@ function updateUserEvents() {
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicPlatform) {
-  // $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
-
-	// var options = {timeout: 10000, enableHighAccuracy: true};
-    //
-    // var script = window.document.createElement('script');
-    // script.src = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyDG8JKjni7gEZsFUhoke1xAfrU0Ok_SMTw&callback=InitMapCb';
-    // window.document.head.appendChild(script);
-    //
-	// $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    //
-    //
-	// 	var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    //
-	// 	var mapOptions = {
-	// 		center: latLng,
-	// 		zoom: 15,
-	// 		mapTypeId: google.maps.MapTypeId.ROADMAP
-	// 	};
-    //
-	// 	$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    //
-    // navigator.geolocation.getCurrentPosition(function(pos) {
-     //  map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-     //  var myLocation = new google.maps.Marker({
-     //    position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-     //    map: map,
-     //    title: "My Location"
-     //  });
-    // });
-    //
-    // $scope.map = map;
-    //
-	// }, function(error){
-	// 	console.log("Could not get location");
-	// });
 
   ionic.Platform.ready(function() {
     var myLatlng = new google.maps.LatLng(12.96,77.65);
@@ -1099,32 +1015,27 @@ function updateUserEvents() {
 })
 
 
-.controller('NewsfeedCtrl', function($scope, $rootScope, $http, DatabaseService, NewsfeedService, Backand, $timeout, AuthService) {
+.controller('NewsfeedCtrl', function($scope, $rootScope, $http, DatabaseService, Backand, $timeout, AuthService, $ionicPopup) {
 
 	$scope.entry = [];
 	$scope.comments = [];
-	var count = 1;
-  var currentToken = "";
-	var uid = AuthService.uid;
-  $scope.userName = "";
-  DatabaseService.getName(AuthService.currentUser).success(function(dataname){
-    $scope.userName = dataname[0]['name'];
-  })
+	var postCountMultiplier = 1;
+	var uid;
+  $scope.userName;
 
 	$scope.$on('$ionicView.enter', function () {
 		retrieveInfo();
 		DatabaseService.getName(AuthService.currentUser).success(function(dataname){
 	    $scope.userName = dataname[0]['name'];
 	  });
-    //$scope.pushNotification();
+		DatabaseService.getName(AuthService.currentUser).success(function(dataname){
+	    uid = dataname[0]['id'];
+	  });
 	  console.log("page opened");
 	})
 
 	$scope.refreshNewsfeed = function () {
-		// $scope.entry = [];
-		// $scope.comments = [];
 		retrieveInfo();
-    //$scope.pushNotification();
     $scope.$broadcast('scroll.refreshComplete');
     console.log("page refresh");
   }
@@ -1157,44 +1068,54 @@ function updateUserEvents() {
 	};
 
 	$scope.showMore = function() {
-		count++;
+		postCountMultiplier++;
 		retrieveInfo();
 	};
 
 	$scope.postComment = function(id) {
 		var comment = "";
+		var alert = "";
 		if($rootScope.currentLanguage == "french"){
 			comment = document.getElementById(id+"-fr").value;
+			alert = "Veuillez entrer un commentaire";
 		}
 		else {
 			comment = document.getElementById(id).value;
+			alert = "Please enter a comment";
 		}
-		var timestamp = new Date();
-		var day = formatNumber(timestamp.getDate());
-		var month = formatNumber(timestamp.getMonth()+1);
-		var year = timestamp.getFullYear();
-		var hours = formatNumber(timestamp.getHours());
-		var min = formatNumber(timestamp.getMinutes());
-		var sec = formatNumber(timestamp.getSeconds());
-		var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
-		var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
-		DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
-			$scope.ServerResponse = data;
-			console.log("comment saved");
-			$scope.refreshNewsfeed();
-			if($rootScope.currentLanguage == "french"){
-				document.getElementById(id+"-fr").value = null;
-			} else {
-				document.getElementById(id).value = null;
-			}
-		})
-		.error(function (data, status, header, config) {
-			$scope.ServerResponse =  htmlDecode("Data: " + data +
-				"\n\n\n\nstatus: " + status +
-				"\n\n\n\nheaders: " + header +
-				"\n\n\n\nconfig: " + config);
-			console.log("error saving comment");
-		});
+		if(comment == ""){
+			var alertPopup = $ionicPopup.alert({
+					title: alert
+			});
+		}
+		else{
+			var timestamp = new Date();
+			var day = formatNumber(timestamp.getDate());
+			var month = formatNumber(timestamp.getMonth()+1);
+			var year = timestamp.getFullYear();
+			var hours = formatNumber(timestamp.getHours());
+			var min = formatNumber(timestamp.getMinutes());
+			var sec = formatNumber(timestamp.getSeconds());
+			var date = ""+year+"-"+month+"-"+day+"T"+hours+":"+min+":"+sec;
+			var data = {"date": date, "uid": uid, "content": comment, "commentid": id, "likes": 0};
+			DatabaseService.newEntry('/1/objects/pushBoard', data).success(function(data){
+				$scope.ServerResponse = data;
+				console.log("comment saved");
+				$scope.refreshNewsfeed();
+				if($rootScope.currentLanguage == "french"){
+					document.getElementById(id+"-fr").value = null;
+				} else {
+					document.getElementById(id).value = null;
+				}
+			})
+			.error(function (data, status, header, config) {
+				$scope.ServerResponse =  htmlDecode("Data: " + data +
+					"\n\n\n\nstatus: " + status +
+					"\n\n\n\nheaders: " + header +
+					"\n\n\n\nconfig: " + config);
+				console.log("error saving comment");
+			});
+		}
 	}
 
   $scope.like = function(likesCounter, entryId){
@@ -1216,13 +1137,13 @@ function updateUserEvents() {
 
   function retrieveInfo(){
     DatabaseService.getData('/1/query/data/getUserNameFromID').success(function(data){
-			var counter = 0;
+			var commentCounter = 0;
 			console.log(data);
 			var posts = 0;
-			if(data.length<10*count){
+			if(data.length<10*postCountMultiplier){
 				posts=data.length;
 			} else {
-				posts = 10*count;
+				posts = 10*postCountMultiplier;
 			}
       for (i=0; i < posts; i++){
           $scope.entry[i] = {name:data[i]['name'],
@@ -1231,24 +1152,17 @@ function updateUserEvents() {
                             commentid: data[i]['commentid'],
                             id: data[i]['id'],
                             likes: data[i]['likes']};
-				//console.log($scope.entry);
       }
 			for (i=0; i<$scope.entry.length; i++){
 				DatabaseService.getCommentForPost($scope.entry[i].id).success(function(commentData){
-					//console.log($scope.entry[i].id);
-					//console.log(commentData);
-					//console.log(commentData.length);
-					//console.log("i is", i);
 					for(j=0; j<commentData.length; j++){
-						$scope.comments[counter] = {name:commentData[j]['name'],
+						$scope.comments[commentCounter] = {name:commentData[j]['name'],
 	                            	date:formatDate(commentData[j]['date']),
 	                            	content:commentData[j]['content'],
 	                            	commentid: commentData[j]['commentid'],
 	                            	id: commentData[j]['id']};
-						//console.log("j is ", j);
-						counter++;
+						commentCounter++;
 					};
-					//console.log($scope.comments);
 				});
 			}
     })
@@ -1260,70 +1174,6 @@ function updateUserEvents() {
             console.log("error getting data");
    });
  };
-
- var message = {};
- var events = [];
-
- // var push = new Ionic.Push({
- //   "debug": true
- // });
- //
- // push.register(function(token) {
- //   console.log("My Device token:",token.token);
- //   currentToken = token.token;
- //   push.saveToken(token);  // persist the token in the Ionic Platform
- // });
-
- // DatabaseService.getData('/1/query/data/getUserEventTimes').success(function(data){
- //   for(i=0; i<data.length; i++){
- //     if (data[i]['User'] == uid){
- //       events.push({eventName:data[i]['Name'], eventTime:formatDate(data[i]['Starttime'])});
- //       message = {
- //          "tokens": [currentToken],
- //          "profile": "conference",
- //          "notification": {
- //            "message": events[0].eventName+" starts in 30 min!"
- //           }
- //         }
- //     }
- //   }
-  //  console.log(events);
-  //  console.log(message);
- // });
-
-//sort events by most recent first
-//after notification is sent, pop most recent event
-//  $scope.pushNotification = function() {
-  //    console.log("the current token is", currentToken);
-	//		console.log(message);
-  //    console.log(events);
-  //     var timestamp = new Date();
-  //     var currentDay = timestamp.getDate();
-  //     var currentHours = timestamp.getHours();
-  //     var currentMin = timestamp.getMinutes();
-  //     var dayTimeResult = events[0].eventTime.split(" ");
-  //     var eventDay = parseInt(dayTimeResult[1]);
-  //     var eventTime = dayTimeResult[3];
-  //     var eventHours = parseInt(eventTime.split(":")[0]);
-  //     var eventMin = parseInt(eventTime.split(":")[1]);
-  //     console.log(currentDay+" current day and "+eventDay+" event day");
-  //     console.log(currentHours+" current hours and "+eventHours+" event hours");
-  //     if((currentDay == eventDay) && ((currentHours == eventHours) || ((currentHours + 1) == eventHours))){
-  //       console.log("we're posting a push");
-  // 			$http.defaults.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmYTAyYjU0ZS0wNmNmLTRmYmUtYmQ3MS0yMzBjMWQ0YmU1OGEifQ.w0RzP2rQjOFjYruB3jq-SHIdq8JOBGp2pFk_R_qzNGQ';
-  // 			$http.defaults.headers.common['Content-Type'] = 'application/json';
-  // 			$http.post("https://api.ionic.io/push/notifications", JSON.stringify(message)).success(function() {
-  // 				//pushed notification to user;
-  // 			})
-  // 			.error(function (data, status, header, config) {
-  // 			$scope.ServerResponse =  htmlDecode("Data: " + data +
-  // 				"\n\n\n\nstatus: " + status +
-  // 				"\n\n\n\nheaders: " + header +
-  // 				"\n\n\n\nconfig: " + config);
-  // 			console.log($scope.ServerResponse);
-  // 			});
-  //     }
-	// 	}
 })
 
 .controller('SearchCtrl', function($scope, $http, DatabaseService, SearchService) {
